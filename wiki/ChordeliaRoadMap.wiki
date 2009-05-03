@@ -4,7 +4,7 @@
 
 == Server side ==
   * Refactoring: German stuff out, English in.
-  * Extract properties of _spring-main.xml_ to _`*.properties_ files.
+  * Extract properties of _spring-main.xml_ to _`*`.properties_ files.
   * Enhance test cases.
   * Introduce code coverage.
   * Support individual projects.
