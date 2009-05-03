@@ -1,0 +1,12 @@
+#labels wiki,introduction,documentation
+#General introduction
+
+= Introduction to chordelia =
+This is the entry page of the chordelia documentation.
+
+Start from here for information on...
+
+  * [ChordeliaSetup ...how to setup chordelia to calculate chord permutations]
+  * [ChordeliaObjectives ...discover the objectives of chordelia]
+  * [ChordeliaRoadMap ...read the road map for further chordelia development]
+  * [ChordeliaHints ...get hints and tricks on running chordelia]
