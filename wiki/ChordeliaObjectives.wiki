@@ -1,0 +1,7 @@
+#summary Objectives of chordelia.
+
+= chordelia's objectives =
+
+  * Provide musicians with a chord reservoir for writing any sort of music.
+  * chordelia does neither force nor prohibit writing functional or non functional music.
+  * chordelia's based on notes/tones and not based on noises/sounds. 
