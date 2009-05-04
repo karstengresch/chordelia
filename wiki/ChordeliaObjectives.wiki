@@ -2,6 +2,13 @@
 
 = chordelia's objectives =
 
+== What it is meant for ==
+
   * Provide musicians with a chord reservoir for writing any sort of music.
   * chordelia does neither force nor prohibit writing functional or non functional music.
   * chordelia's based on notes/tones and not based on noises/sounds. 
+
+== How it works ==
+TO BE DONE: Explain more in detail.
+
+http://chordelia.googlecode.com/svn/branches/google-code-site/images/spicy_intervalls_final.png
