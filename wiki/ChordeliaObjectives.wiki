@@ -11,7 +11,7 @@
 == How it works ==
 First you need to put the eleven intervals within an octave space into an order. The order could be based on your individual feeling of the dissonance/consonance grade of each interval when be played as a chord. E.g. you might feel the small second the most dissonant interval within the octave space, maybe followed by a tritonus, then followed by the great seventh, then followed by the great second etc. etc.
 
-Based on your decision, chordelia will create permutations of all possible chords based on your interval in the following manner: Based on the intervals (two-tone chords) it will iterate through these chords and then put on each chord an interval based on your initial order. Here, all resulting chords containing any octave duplication will be eliminated.
+Based on your decision, chordelia will create permutations of all possible chords based on your interval in the following manner: Based on the intervals (two-tone chords) it will iterate through these chords and then add to each chord an interval based on your initial order. Here, all resulting chords containing an octave duplication will be eliminated.
 
 You can decide if your initial order shall be interpreted as starting with the most or less dissonant/spicy chord/interval (in your opinion). Additionally you can decide if chordelia shall add the next interval to the top or to the bottom of the iterated chord. 
 
