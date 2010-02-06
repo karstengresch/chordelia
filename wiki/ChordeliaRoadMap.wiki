@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Future plans, support needed.
 
 = Road Map for chordelia =
 
@@ -11,8 +11,9 @@
   * Support multi-reservoirs (i.e. several results of permutations).
   * Support interruption of calculation.
   * Support integrity checks.
-  * Check performance enhancements (especially batch runs, transactional stuff).
+  * Check performance enhancements (especially batch runs, transactional stuff, parallel actions).
   * Implementation that is not dependend on index based locking.
+  * Eventually move to Scala.
 
 == Client side ==
   * Eclipse GUI: Eclipse is _the_ platform for score creation and working with musical symbols.
