@@ -1,4 +1,4 @@
-#summary Objectives of chordelia.
+#summary What for - how - FUD
 
 = chordelia's objectives =
 
