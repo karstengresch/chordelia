@@ -1,0 +1,26 @@
+# Setup chordelia #
+This page gives you information on how to setup chordelia so you can let it calculate chord permutations based on your individual taste.
+
+## Prerequisites ##
+  * [Apache Maven (2.x)](http://maven.apache.org) needs to be installed. Check the instructions [here](http://maven.apache.org/download.html#Installation).
+  * You should use a JDK 1.6+ (latest stable version normally preferred).
+  * MySQL or other index-based locking database (not H2/HSQL-DB, not Derby).
+  * Make sure you have enough free disk space (min. ~50 GByte).
+  * Get a computer that is either superfast or can run for days without being interrupted.
+
+## SVN checkout ##
+  * Checkout the sourcecode from Google code.
+  * Run `mvn clean compile -Dmaven.test.skip=true`
+
+## DB Setup (for MySQL) ##
+  * Either create a database and user according to the settings in _spring-main.xml_ or adjust _spring-main.xml_.
+
+## Create a build with Maven ##
+  * Run mvn `assembly:assembly`.
+  * Make sure the created jar is fully functional.
+
+## Move the build to another directory ##
+  * TO DO: Describe _run.sh_.
+
+## Run chordelia ##
+  * TO DO: Describe command line parameters.
