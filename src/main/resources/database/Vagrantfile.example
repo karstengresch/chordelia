@@ -61,7 +61,7 @@ Vagrant.configure("2") do |config|
     #  On VirtualBox, we don't have guest additions or a functional vboxsf
     #  in CoreOS, so tell Vagrant that so it can be smarter.
     v.check_guest_additions = false
-    v.functional_vboxsf = false
+    v.functional_vboxsf     = false
   end
 
   # plugin conflict
@@ -95,13 +95,13 @@ Vagrant.configure("2") do |config|
       end
 
       if $expose_docker_tcp
-        config.vm.network "forwarded_port", guest : 2375, host : ($expose_docker_tcp + i - 1), auto_correct : true
+        config.vm.network "forwarded_port", guest: 2375, host: ($expose_docker_tcp + i - 1), auto_correct: true
       end
 
-      config.vm.network "forwarded_port", guest : 3306, host : 14572, auto_correct : false
+      config.vm.network "forwarded_port", guest: 3306, host: 14572, auto_correct: false
 
       $forwarded_ports.each do |guest, host|
-        config.vm.network "forwarded_port", guest : guest, host : host, auto_correct : true
+        config.vm.network "forwarded_port", guest: guest, host: host, auto_correct: true
       end
 
       ["vmware_fusion", "vmware_workstation"].each do |vmware|
@@ -119,7 +119,7 @@ Vagrant.configure("2") do |config|
       #end
 
       ip = "172.1.1.#{i+220}"
-      config.vm.network :private_network, ip : ip
+      config.vm.network :private_network, ip: ip
 
       # Uncomment below to enable NFS for sharing the host machine into the coreos-vagrant VM.
       # config.vm.synced_folder ".", "/home/core/share", id: "core", :nfs => true, :mount_options => ['nolock,vers=3,udp']
@@ -128,7 +128,7 @@ Vagrant.configure("2") do |config|
       # end
 
       if $share_home
-        config.vm.synced_folder ENV['HOME'], ENV['HOME'], id : "home", :nfs => true, :mount_options => ['nolock,vers=3,udp']
+        config.vm.synced_folder ENV['HOME'], ENV['HOME'], id: "home", :nfs => true, :mount_options => ['nolock,vers=3,udp']
       end
 
       if File.exist?(CLOUD_CONFIG_PATH)

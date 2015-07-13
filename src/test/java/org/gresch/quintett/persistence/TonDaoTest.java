@@ -12,11 +12,12 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import static org.junit.Assert.*;
 
@@ -24,21 +25,22 @@ import static org.junit.Assert.*;
 @ContextConfiguration(locations = {"classpath:spring-main-test.xml"})
 @TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
   TransactionalTestExecutionListener.class})
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+// @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional
 public class TonDaoTest {
+
+  @PersistenceContext
+  EntityManager entityManager;
 
   @Resource(name = "tonDao")
   private TonDao tonDao;
 
-  @Resource(name = "sessionFactory")
-  private SessionFactory sessionFactory;
 
   @Test
   public void testSetup() {
     assertTrue("Die Spring-Konfiguration sollte funktionieren.", true);
     assertNotNull("Bean 'tonDao' sollte instantiiert sein.", tonDao);
-    assertNotNull("Bean 'sessionFactory' sollte instantiiert sein.", sessionFactory);
+    assertNotNull("Bean 'entityManager' sollte instantiiert sein.", entityManager);
   }
 
   @Test
@@ -52,12 +54,12 @@ public class TonDaoTest {
     Ton ton1 = Tonumfang.getTon(Oktavlage.GROSZE, Name.C);
     ton1.setId(ton1.getAbstandZumEingestrichenenC());
     tonDao.makePersistentReadOnly(ton1);
-    sessionFactory.getCurrentSession().flush();
+    entityManager.unwrap(SessionFactory.class).getCurrentSession().flush();
     ton1.setAbstandZumEingestrichenenC(5);
-    assertFalse(sessionFactory.getCurrentSession().isDirty());
+    assertFalse(entityManager.unwrap(SessionFactory.class).getCurrentSession().isDirty());
     tonDao.refresh(ton1);
     assertFalse("Trotz Aenderung (auszer bei der Id) sollte Hibernate das Entity-Objekt vom Dirty-Checking ausgeschlossen haben.",
-      sessionFactory.getCurrentSession().isDirty());
+      entityManager.unwrap(SessionFactory.class).getCurrentSession().isDirty());
   }
 
   @Test

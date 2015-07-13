@@ -1,168 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
-    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-
-    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
-
-  <!--
-    <bean id="tonumfangInitialisierer" class="org.gresch.quintett.service.util.TonumfangInitialisiererImpl" init-method="initialisiereTonumfang" depends-on="kombinationsberechnungService,tonService" />
-  -->
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+      ">
   <context:annotation-config/>
   <context:component-scan base-package="org.gresch.quintett"/>
 
+  <jpa:repositories base-package="org.gresch.quintett"/>
+
+
   <aop:aspectj-autoproxy proxy-target-class="false"/>
-  <!--
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" autowire="no"> <property name="ignoreUnresolvablePlaceholders" value="true" /> <property name="locations"> <list>
-    <value>classpath:org.gresch.quintett.db.properties</value> </list> </property> </bean>
-  -->
-  <!-- TODO Alles in properties, dann unterschiedliche Property-Dateien -->
-  <!--
-  <bean id="h2dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-    <property name="driverClass" value="org.h2.Driver" />
-    <property name="jdbcUrl" value="jdbc:h2:tcp://localhost/quintett;MVCC=TRUE" />
-    <property name="user" value="sa" />
-    <property name="password" value="" />
-  </bean>
-  -->
-  <!-- H2 Stuff
-    <property name="acquireIncrement" value="1" />
-    <property name="minPoolSize" value="1" />
-    <property name="maxPoolSize" value="10" />
-   <property name="maxStatement" value="0" /> 
-    <property name="idleTestPeriod" value="30" />
-    <property name="idleConnectionTestPeriod" value="10" />
-    -->
-  <!--
-  ;MVCC=TRUE,FILE_LOCK=NO
-  <property name="jdbcUrl" value="jdbc:h2:quintett;LOG=2" />
-  <property name="jdbcUrl" value="jdbc:h2:quintett;FILE_LOCK=NO" />
-  <property name="jdbcUrl" value="jdbc:h2:tcp://localhost/quintett" />
-  <property name="jdbcUrl" value="jdbc:h2:tcp://linuxkg/quintett;LOG=2" />
-  />
-  -->
-  <!--
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-    <property name="driverClass" value="com.mysql.jdbc.Driver" />
-    <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/quintett" />
-    <property name="user" value="quintett" />
-    <property name="password" value="nonono" />
-  </bean>
-  -->
-  <!--
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-    <property name="driverClass" value="org.apache.derby.jdbc.EmbeddedDriver" />
-    <property name="jdbcUrl" value="jdbc:derby:databaseName;create=true" />
-    <property name="user" value="" />
-    <property name="password" value="" />
-  </bean>
-  -->
-  <!--
-     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-    <property name="driverClass" value="org.h2.Driver" />
-    <property name="jdbcUrl" value="jdbc:h2:tcp://localhost/quintett" />
-    <property name="user" value="sa" />
-    <property name="password" value="" />
-  </bean>
-  -->
-  <!--
-  <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-  <property name="driverClass" value="org.h2.Driver" />
-  <property name="jdbcUrl" value="jdbc:h2:mem:" />
-  <property name="user" value="sa" />
-  <property name="password" value="" />
-  </bean>
-  -->
-  <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-    <property name="driverClass" value="com.mysql.jdbc.Driver"/>
-    <property name="jdbcUrl" value="jdbc:mysql://192.168.99.100:49162/quintett"/>
-    <property name="user" value="quintett"/>
-    <property name="password" value="nonono"/>
-  </bean>
-  <!--
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-      <property name="driverClass" value="com.mysql.jdbc.Driver" />
-      <property name="jdbcUrl" value="jdbc:mysql://jdbc:mysql://192.168.99.100:49156" />
-      <property name="user" value="root" />
-      <property name="password" value="nonono" />
-    </bean>
-    -->
-
-  <!--
-  ;MVCC=TRUE
-    <bean abstract="true" id="otherdataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-    <property name="driverClassName" value="org.h2.Driver" />
-    <property name="url" value="jdbc:h2:tcp://localhost/quintett"/>
-    <property name="username" value="sa"/>
-    <property name="password" value=""/>
-  </bean>
-  -->
-
-  <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-    <property name="dataSource" ref="dataSource"/>
-    <property name="annotatedClasses">
-      <list>
-        <value>org.gresch.quintett.domain.tonmodell.Akkord</value>
-        <value>org.gresch.quintett.domain.tonmodell.Ton</value>
-        <value>org.gresch.quintett.domain.kombination.Kombinationsberechnung</value>
-      </list>
-    </property>
-
-
-    <property name="hibernateProperties">
+  <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+    <property name="poolName" value="springHikariCP"/>
+    <property name="connectionTestQuery" value="SELECT 1"/>
+    <property name="dataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource"/>
+    <property name="dataSourceProperties">
       <props>
-        <!--
-                <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-        -->
-        <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-        <!-- <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>-->
-        <!-- <prop key="hibernate.dialect">org.hibernate.dialect.DerbyTenSevenDialect</prop> -->
+        <prop key="url">jdbc:mysql://localhost:14572/mysql</prop>
+        <prop key="user">root</prop>
+        <prop key="password">nonono</prop>
+      </props>
+    </property>
+  </bean>
 
-        <!-- <prop key="hibernate.bytecode.provider">cglib</prop>
-       -->
-        <!--
-        <prop key="cache.provider_class">org.hibernate.cache.NoCacheProvider</prop>
-        -->
-        <!-- <prop key="hibernate.connection.release_mode">after_statement</prop>        
-        <prop key="hibernate.cache.use_second_level_cache">false</prop>
-        <prop key="hibernate.cache.use_query_cache">false</prop>-->
+  <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+    <constructor-arg ref="hikariConfig"/>
+  </bean>
+
+  <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+    <property name="entityManagerFactory" ref="entityManagerFactory"/>
+  </bean>
+
+  <bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+
+  <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
+    <property name="packagesToScan" value="org.gresch.quintett"/>
+    <property name="jpaProperties">
+      <props>
+        <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
         <prop key="hibernate.jdbc.use_scrollable_resultsets">true</prop>
         <prop key="hibernate.cache.use_second_level_cache">false</prop>
         <prop key="jdbc.batch_size">50</prop>
-        <!--<prop key="hibernate.show_sql">false</prop>
-        <prop key="hibernate.format_sql">true</prop>-->
         <prop key="hibernate.hbm2ddl.auto">create</prop>
-        <!--<prop key="hibernate.connection.release_mode">auto</prop>
-        <prop key="hibernate.connection.flush_before_completion">true</prop>
-        <prop key="hibernate.connection.auto_close_session">true</prop>-->
-        <!-- Drop and re-create the database schema on startup> 
-        <prop key="hbm2ddl.auto">create</property -->
-        <!-- prop key="hibernate.format_sql">true</property-->
-        <!--prop key="use_sql_com  ments">false</property-->
+        <prop key="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</prop>
       </props>
     </property>
-    <!--<property name="schemaUpdate" value="true" />-->
   </bean>
 
-  <!--
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-      <property name="dataSource" ref="dataSource" />
-    </bean>
-    -->
-  <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-    <property name="sessionFactory" ref="sessionFactory"/>
-    <property name="nestedTransactionAllowed" value="true"/>
-  </bean>
-
-  <!--
-		transaction-manager-Attribut kann man weglassen, so lange der
-		Transaction-Manager 'transactionManager' heiszt
-	-->
   <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="false"/>
 
   <bean id="persistenceExceptionTranslationPostProcessor"

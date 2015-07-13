@@ -13,9 +13,11 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
       ">
   <context:annotation-config/>
+
   <context:component-scan base-package="org.gresch.quintett"/>
 
   <jpa:repositories base-package="org.gresch.quintett"/>
+
 
   <aop:aspectj-autoproxy proxy-target-class="false"/>
   <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
