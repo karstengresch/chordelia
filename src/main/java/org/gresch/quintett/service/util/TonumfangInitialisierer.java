@@ -3,14 +3,11 @@ package org.gresch.quintett.service.util;
 import org.gresch.quintett.domain.tonmodell.Tonumfang;
 
 /**
- * 
  * Initialisiert den Tonumfang. Utility-Bean.
  *
  * @author KArsten Gresch
- * @version
  */
-public interface TonumfangInitialisierer
-{
+public interface TonumfangInitialisierer {
   /**
    * Initialisiert den {@link Tonumfang}
    */

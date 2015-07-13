@@ -15,8 +15,6 @@
 # sftp configuration file
 sftp-config.json
 
-target/
-.idea/
 
 ### Eclipse template
 *.pydevproject
@@ -84,7 +82,9 @@ hs_err_pid*
 *.log
 *~
 
+target/
 
+.vagrant/
 
 .idea/workspace.xml
 

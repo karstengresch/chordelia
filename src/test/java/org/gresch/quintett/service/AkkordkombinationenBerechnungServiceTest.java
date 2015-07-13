@@ -1,14 +1,5 @@
 package org.gresch.quintett.service;
 
-import static org.gresch.quintett.KombinationsberechnungParameter.CLI_PARAMETER_DB_ERSTELLEN;
-import static org.gresch.quintett.KombinationsberechnungParameter.CLI_PARAMETER_MAX_ANZAHL_TOENE;
-import static org.gresch.quintett.KombinationsberechnungParameter.CLI_PARAMETER_PERSISTENZ_LADEN;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import javax.annotation.Resource;
-
 import org.gresch.quintett.KombinationsberechnungParameter;
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
 import org.hibernate.FlushMode;
@@ -16,17 +7,27 @@ import org.hibernate.SessionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+
+import static org.gresch.quintett.KombinationsberechnungParameter.*;
+import static org.junit.Assert.*;
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring-main.xml" })
+@ContextConfiguration(locations = {"classpath:spring-main-test.xml"})
+@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
+  TransactionalTestExecutionListener.class})
 // If rollback set to false, tests will fail
 @TransactionConfiguration(defaultRollback = true)
 @Transactional
-public class AkkordkombinationenBerechnungServiceTest
-{
+public class AkkordkombinationenBerechnungServiceTest {
 
   @Resource(name = "akkordkombinationenBerechnungService")
   AkkordkombinationenBerechnungService akkordkombinationenBerechnungService;
@@ -44,18 +45,16 @@ public class AkkordkombinationenBerechnungServiceTest
   SessionFactory sessionFactory;
 
   @Test
-  public void testSetup()
-  {
+  public void testSetup() {
     assertTrue("Die Spring-Konfiguration sollte funktionieren.", true);
     assertNotNull("Bean 'akkordkombinationenBerechnungService' sollte instantiiert sein.", akkordkombinationenBerechnungService);
   }
 
   @Test
-  public void testBerechneUndPersistiereZweitonIntervalle() throws Exception
-  {
-    Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[] { CLI_PARAMETER_MAX_ANZAHL_TOENE, "2",
-                                                                                                                     CLI_PARAMETER_DB_ERSTELLEN, "j",
-                                                                                                                     CLI_PARAMETER_PERSISTENZ_LADEN, "n" });
+  public void testBerechneUndPersistiereZweitonIntervalle() throws Exception {
+    Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[]{CLI_PARAMETER_MAX_ANZAHL_TOENE, "2",
+      CLI_PARAMETER_DB_ERSTELLEN, "j",
+      CLI_PARAMETER_PERSISTENZ_LADEN, "n"});
     assertTrue("Id der Kombinationsberechnung sollte 1 sein", kombinationsberechnung.getId().equals(Integer.valueOf(1)));
     // Mindestens AesthetischeGewichtung und Basiston
     kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
@@ -71,18 +70,17 @@ public class AkkordkombinationenBerechnungServiceTest
     // TODO Klangschärfe prüfen
     // TODO Weitere Prüfungen, insb. korrekte Akkorde.
     // Cleanup;
-//    sessionFactory.getCurrentSession().evict(kombinationsberechnung);
+    //    sessionFactory.getCurrentSession().evict(kombinationsberechnung);
     sessionFactory.getCurrentSession().flush();
     sessionFactory.getCurrentSession().setFlushMode(flushModeOld);
   }
 
   @Test
-  public void testBerechneUndPersistiereDreitonIntervalle() throws Exception
-  {
+  public void testBerechneUndPersistiereDreitonIntervalle() throws Exception {
     // Delete previous
-    Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[] { CLI_PARAMETER_MAX_ANZAHL_TOENE, "3",
-                                                                                                                     CLI_PARAMETER_DB_ERSTELLEN, "j",
-                                                                                                                     CLI_PARAMETER_PERSISTENZ_LADEN, "n" });
+    Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[]{CLI_PARAMETER_MAX_ANZAHL_TOENE, "3",
+      CLI_PARAMETER_DB_ERSTELLEN, "j",
+      CLI_PARAMETER_PERSISTENZ_LADEN, "n"});
     assertTrue("Id der Kombinationsberechnung sollte 1 sein", kombinationsberechnung.getId().equals(Integer.valueOf(1)));
     kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
     FlushMode flushModeOld = sessionFactory.getCurrentSession().getFlushMode();
@@ -93,16 +91,16 @@ public class AkkordkombinationenBerechnungServiceTest
     sessionFactory.getCurrentSession().flush();
     sessionFactory.getCurrentSession().setFlushMode(flushModeOld);
     kombinationsberechnung = kombinationsberechnungService.getKombinationsBerechnung();
-    assertEquals("Wert für bereits berechnete Töne sollte auf 3 erhöht sein.", Integer.valueOf(3), Integer.valueOf(kombinationsberechnung.getBereitsBerechneteToene()));
+    assertEquals("Wert für bereits berechnete Töne sollte auf 3 erhöht sein.", Integer.valueOf(3),
+      Integer.valueOf(kombinationsberechnung.getBereitsBerechneteToene()));
     assertEquals("Genau 110 Klaenge sollten berechnet worden sein.", Integer.valueOf(110), Integer.valueOf(anzahlDreitonklaenge - 11));
   }
 
   @Test
-  public void testBerechneUndPersistiereViertonIntervalle() throws Exception
-  {
-    Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[] { CLI_PARAMETER_MAX_ANZAHL_TOENE, "4",
-                                                                                                                     CLI_PARAMETER_DB_ERSTELLEN, "j",
-                                                                                                                     CLI_PARAMETER_PERSISTENZ_LADEN, "n" });
+  public void testBerechneUndPersistiereViertonIntervalle() throws Exception {
+    Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[]{CLI_PARAMETER_MAX_ANZAHL_TOENE, "4",
+      CLI_PARAMETER_DB_ERSTELLEN, "j",
+      CLI_PARAMETER_PERSISTENZ_LADEN, "n"});
     assertTrue("Id der Kombinationsberechnung sollte 1 sein", kombinationsberechnung.getId().equals(Integer.valueOf(1)));
     kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
     int anzahlViertonklaenge = akkordKombinationenService.berechneUndPersistiereKombinationsberechnung();
@@ -116,11 +114,10 @@ public class AkkordkombinationenBerechnungServiceTest
   }
 
   //  @Test
-  public void testBerechneUndPersistiereFuenftonIntervalle() throws Exception
-  {
-    Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[] { CLI_PARAMETER_MAX_ANZAHL_TOENE, "5",
-                                                                                                                     CLI_PARAMETER_DB_ERSTELLEN, "j",
-                                                                                                                     CLI_PARAMETER_PERSISTENZ_LADEN, "n" });
+  public void testBerechneUndPersistiereFuenftonIntervalle() throws Exception {
+    Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[]{CLI_PARAMETER_MAX_ANZAHL_TOENE, "5",
+      CLI_PARAMETER_DB_ERSTELLEN, "j",
+      CLI_PARAMETER_PERSISTENZ_LADEN, "n"});
     assertTrue("Id der Kombinationsberechnung sollte 1 sein", kombinationsberechnung.getId().equals(Integer.valueOf(1)));
     kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
     int anzahlFuenftonklaenge = akkordKombinationenService.berechneUndPersistiereKombinationsberechnung();
@@ -130,11 +127,10 @@ public class AkkordkombinationenBerechnungServiceTest
   }
 
   //  @Test
-  public void testBerechneUndPersistiereSechstonIntervalle() throws Exception
-  {
-    Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[] { CLI_PARAMETER_MAX_ANZAHL_TOENE, "6",
-                                                                                                                     CLI_PARAMETER_DB_ERSTELLEN, "j",
-                                                                                                                     CLI_PARAMETER_PERSISTENZ_LADEN, "n" });
+  public void testBerechneUndPersistiereSechstonIntervalle() throws Exception {
+    Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[]{CLI_PARAMETER_MAX_ANZAHL_TOENE, "6",
+      CLI_PARAMETER_DB_ERSTELLEN, "j",
+      CLI_PARAMETER_PERSISTENZ_LADEN, "n"});
     assertTrue("Id der Kombinationsberechnung sollte 1 sein", kombinationsberechnung.getId().equals(Integer.valueOf(1)));
     kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
     int anzahlSechstonklaenge = akkordKombinationenService.berechneUndPersistiereKombinationsberechnung();
@@ -144,11 +140,10 @@ public class AkkordkombinationenBerechnungServiceTest
   }
 
   //  @Test
-  public void testBerechneUndPersistiereSiebentonIntervalle() throws Exception
-  {
-    Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[] { CLI_PARAMETER_MAX_ANZAHL_TOENE, "7",
-                                                                                                                     CLI_PARAMETER_DB_ERSTELLEN, "j",
-                                                                                                                     CLI_PARAMETER_PERSISTENZ_LADEN, "n" });
+  public void testBerechneUndPersistiereSiebentonIntervalle() throws Exception {
+    Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[]{CLI_PARAMETER_MAX_ANZAHL_TOENE, "7",
+      CLI_PARAMETER_DB_ERSTELLEN, "j",
+      CLI_PARAMETER_PERSISTENZ_LADEN, "n"});
     assertTrue("Id der Kombinationsberechnung sollte 1 sein", kombinationsberechnung.getId().equals(Integer.valueOf(1)));
     kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
     int anzahlSiebentonklaenge = akkordKombinationenService.berechneUndPersistiereKombinationsberechnung();
@@ -158,11 +153,10 @@ public class AkkordkombinationenBerechnungServiceTest
   }
 
   //  @Test
-  public void testBerechneUndPersistiereAchttonIntervalle() throws Exception
-  {
-    Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[] { CLI_PARAMETER_MAX_ANZAHL_TOENE, "8",
-                                                                                                                     CLI_PARAMETER_DB_ERSTELLEN, "j",
-                                                                                                                     CLI_PARAMETER_PERSISTENZ_LADEN, "n" });
+  public void testBerechneUndPersistiereAchttonIntervalle() throws Exception {
+    Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[]{CLI_PARAMETER_MAX_ANZAHL_TOENE, "8",
+      CLI_PARAMETER_DB_ERSTELLEN, "j",
+      CLI_PARAMETER_PERSISTENZ_LADEN, "n"});
     assertTrue("Id der Kombinationsberechnung sollte 1 sein", kombinationsberechnung.getId().equals(Integer.valueOf(1)));
     kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
     int anzahlAchttonklaenge = akkordKombinationenService.berechneUndPersistiereKombinationsberechnung();

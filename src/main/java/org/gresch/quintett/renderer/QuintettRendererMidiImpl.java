@@ -9,8 +9,7 @@ public class QuintettRendererMidiImpl extends QuintettRendererLilyPondImpl {
   public QuintettRendererMidiImpl() {
   }
 
-  public File rendereKombinationenInDatei(List<Integer> akkordIdList)
-  {
+  public File rendereKombinationenInDatei(List<Integer> akkordIdList) {
     return super.rendereKombinationenInDatei(akkordIdList, MIDI_SWITCH);
   }
 

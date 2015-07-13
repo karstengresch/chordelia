@@ -3,38 +3,37 @@
  */
 package org.gresch.quintett.domain.tonmodell;
 
+import org.apache.log4j.Logger;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SelectBeforeUpdate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.apache.log4j.Logger;
-import org.gresch.quintett.BasisTon;
-import org.hibernate.classic.Validatable;
-import org.hibernate.classic.ValidationFailure;
-
 /**
  * @author Karsten Skalenbezogene Repräsentation eines Tons, wobei C/Deses = 0, Cis/Des=1 etc. entspricht. Wird mit der Notennamenklasse kombiniert.
  */
+@SuppressWarnings("JpaDataSourceORMInspection")
+@DynamicUpdate
+@SelectBeforeUpdate
 @Entity
 @Table(name = "ton")
-public class Ton implements Validatable
-{
+public class Ton {
+  private static Logger _logger = Logger.getLogger(Ton.class);
   private Integer id;
   private String tonName = "";
   private String tonNameVollstaendig = "";
   //  private Integer abstandZumBasisTon = null;
   private Integer abstandZumEingestrichenenC = null;
   private Oktavlage oktavlage;
-  private static Logger _logger = Logger.getLogger(Ton.class);
 
-  public Ton()
-  {
+  public Ton() {
   }
 
   public Ton(Oktavlage xOktavlage,
-             String xTonName)
-  {
+             String xTonName) {
     // TODO Auf korrekten Namen prüfen.
     // TODO Auf leeren Namen prüfen.
     this.oktavlage = xOktavlage;
@@ -49,20 +48,16 @@ public class Ton implements Validatable
 
   @Id
   // @GeneratedValue(strategy = GenerationType.AUTO)
-  public Integer getId()
-  {
-    if (null == this.id)
-    {
-      if (!(null == this.abstandZumEingestrichenenC))
-      {
+  public Integer getId() {
+    if (null == this.id) {
+      if (!(null == this.abstandZumEingestrichenenC)) {
         this.id = this.abstandZumEingestrichenenC;
       }
     }
     return id;
   }
 
-  public void setId(Integer xId)
-  {
+  public void setId(Integer xId) {
     id = xId;
   }
 
@@ -110,17 +105,14 @@ public class Ton implements Validatable
    * @return Returns the oktavlage.
    */
   @Column(name = "oktavlage", unique = false, nullable = false)
-  public Oktavlage getOktavlage()
-  {
+  public Oktavlage getOktavlage() {
     return oktavlage;
   }
 
   /**
-   * @param oktavlage
-   *          The oktavlage to set.
+   * @param oktavlage The oktavlage to set.
    */
-  public void setOktavlage(Oktavlage oktavlage)
-  {
+  public void setOktavlage(Oktavlage oktavlage) {
     this.oktavlage = oktavlage;
   }
 
@@ -129,34 +121,28 @@ public class Ton implements Validatable
    */
   @Column(name = "ton_name", unique = false, nullable = false)
   // @org.hibernate.annotations.Index(name = "IDX_TON_NAME")
-  public String getTonName()
-  {
+  public String getTonName() {
     return tonName;
   }
 
   /**
-   * @param tonName
-   *          The tonName to set.
+   * @param tonName The tonName to set.
    */
-  public void setTonName(String tonName)
-  {
+  public void setTonName(String tonName) {
     this.tonName = tonName;
   }
 
   @Column(name = "abstand_c_eingestrichen", unique = false, nullable = false)
-  public Integer getAbstandZumEingestrichenenC()
-  {
+  public Integer getAbstandZumEingestrichenenC() {
     return abstandZumEingestrichenenC;
   }
 
   // TODO vom Ton oder Tonnamen ausgehen
-  public void setAbstandZumEingestrichenenC(Integer xAbstandC)
-  {
+  public void setAbstandZumEingestrichenenC(Integer xAbstandC) {
     this.abstandZumEingestrichenenC = xAbstandC;
   }
 
-  public void initialisiereDurchAbstandZumEingestrichenenC(Integer xAbstandC)
-  {
+  public void initialisiereDurchAbstandZumEingestrichenenC(Integer xAbstandC) {
     this.abstandZumEingestrichenenC = xAbstandC;
     this.setOktavlageDurchAbstandZumEingestrichenenC(xAbstandC);
     // TODO Abstand zum Basiston???
@@ -165,27 +151,21 @@ public class Ton implements Validatable
   }
 
   /* Prüft, ob Ton gültig ist und parst Oktavlage. */
-  public void setOktavlageByTonName(String xTonName)
-  {
+  public void setOktavlageByTonName(String xTonName) {
     int _tonNamenLaenge = xTonName.length();
     // TODO auf null und Leerstring prüfen.
     // TODO Hochkommata und Hochnummern berücksichtigen
-    if (!Name.istKorrekterName(xTonName))
-    {
+    if (!Name.istKorrekterName(xTonName)) {
       // TODO exception
     }
     String lagenSpezifizierer = "";
     // TODO switch
-    switch (_tonNamenLaenge)
-    {
+    switch (_tonNamenLaenge) {
       // abcdefgh/ABCDEFGH
       case 1:
-        if (Name.istKleinbuchstabe(xTonName))
-        {
+        if (Name.istKleinbuchstabe(xTonName)) {
           oktavlage = Oktavlage.KLEINE;
-        }
-        else
-        {
+        } else {
           oktavlage = Oktavlage.GROSZE;
         }
         break;
@@ -194,26 +174,16 @@ public class Ton implements Validatable
       case 2:
         lagenSpezifizierer = xTonName.substring(1);
         // TODO endsWith vielleicht besser?
-        if (lagenSpezifizierer.equals(Name.SUBKONTRA_SPEZIFIZIERER))
-        {
+        if (lagenSpezifizierer.equals(Name.SUBKONTRA_SPEZIFIZIERER)) {
           oktavlage = Oktavlage.SUBKONTRA;
-        }
-        else if (lagenSpezifizierer.equals(Name.KONTRA_SPEZIFIZIERER))
-        {
+        } else if (lagenSpezifizierer.equals(Name.KONTRA_SPEZIFIZIERER)) {
           oktavlage = Oktavlage.KONTRA;
-        }
-        else if (lagenSpezifizierer.equals("'"))
-        {
+        } else if (lagenSpezifizierer.equals("'")) {
           oktavlage = Oktavlage.EINGESTRICHEN;
-        }
-        else
-        {
-          if (Name.istKleinbuchstabe(xTonName))
-          {
+        } else {
+          if (Name.istKleinbuchstabe(xTonName)) {
             oktavlage = Oktavlage.KLEINE;
-          }
-          else
-          {
+          } else {
             oktavlage = Oktavlage.GROSZE;
           }
         }
@@ -224,26 +194,16 @@ public class Ton implements Validatable
       // AIS,CES,CIS,DES,DIS,EIS,FES,FIS,GES,GIS,HIS
       case 3:
         lagenSpezifizierer = xTonName.substring(2);
-        if (lagenSpezifizierer.equals(Name.SUBKONTRA_SPEZIFIZIERER))
-        {
+        if (lagenSpezifizierer.equals(Name.SUBKONTRA_SPEZIFIZIERER)) {
           oktavlage = Oktavlage.SUBKONTRA;
-        }
-        else if (lagenSpezifizierer.equals(Name.KONTRA_SPEZIFIZIERER))
-        {
+        } else if (lagenSpezifizierer.equals(Name.KONTRA_SPEZIFIZIERER)) {
           oktavlage = Oktavlage.KONTRA;
-        }
-        else if (lagenSpezifizierer.equals("'"))
-        {
+        } else if (lagenSpezifizierer.equals("'")) {
           oktavlage = Oktavlage.ZWEIGESTRICHEN;
-        }
-        else
-        {
-          if (Name.istKleinbuchstabe(xTonName))
-          {
+        } else {
+          if (Name.istKleinbuchstabe(xTonName)) {
             oktavlage = Oktavlage.KLEINE;
-          }
-          else
-          {
+          } else {
             oktavlage = Oktavlage.GROSZE;
           }
         }
@@ -254,27 +214,17 @@ public class Ton implements Validatable
       case 4:
         // Bleibt so, damit man ermitteln kann, ob drei-oder eingestrichen
         lagenSpezifizierer = xTonName.substring(2);
-        if (!lagenSpezifizierer.equals("'"))
-        {
-          if (xTonName.endsWith(Name.SUBKONTRA_SPEZIFIZIERER))
-          {
+        if (!lagenSpezifizierer.equals("'")) {
+          if (xTonName.endsWith(Name.SUBKONTRA_SPEZIFIZIERER)) {
             oktavlage = Oktavlage.SUBKONTRA;
-          }
-          else if (xTonName.endsWith(Name.KONTRA_SPEZIFIZIERER))
-          {
+          } else if (xTonName.endsWith(Name.KONTRA_SPEZIFIZIERER)) {
             oktavlage = Oktavlage.KONTRA;
-          }
-          else if (xTonName.endsWith("'"))
-          {
+          } else if (xTonName.endsWith("'")) {
             oktavlage = Oktavlage.EINGESTRICHEN;
           }
-        }
-        else if (!xTonName.substring(1).equals("'"))
-        {
+        } else if (!xTonName.substring(1).equals("'")) {
           oktavlage = Oktavlage.ZWEIGESTRICHEN;
-        }
-        else if (xTonName.substring(1).equals("'"))
-        {
+        } else if (xTonName.substring(1).equals("'")) {
           oktavlage = Oktavlage.DREIGESTRICHEN;
         }
         break;
@@ -283,16 +233,11 @@ public class Ton implements Validatable
       // ais'',ces'',cis'',des'',dis'',eis'',fes'',fis'',ges'',gis'',his''
       case 5:
         lagenSpezifizierer = xTonName.substring(2);
-        if (xTonName.endsWith("''''"))
-        {
+        if (xTonName.endsWith("''''")) {
           oktavlage = Oktavlage.VIERGESTRICHEN;
-        }
-        else if (xTonName.endsWith("'''") && !xTonName.substring(1).equals("'"))
-        {
+        } else if (xTonName.endsWith("'''") && !xTonName.substring(1).equals("'")) {
           oktavlage = Oktavlage.DREIGESTRICHEN;
-        }
-        else if (xTonName.endsWith("'''") && !lagenSpezifizierer.equals("'"))
-        {
+        } else if (xTonName.endsWith("'''") && !lagenSpezifizierer.equals("'")) {
           oktavlage = Oktavlage.ZWEIGESTRICHEN;
         }
         break;
@@ -301,16 +246,11 @@ public class Ton implements Validatable
       // ais''',ces''',cis''',des''',dis''',eis''',fes''',fis''',ges''',gis''',his'''
       case 6:
         lagenSpezifizierer = xTonName.substring(2);
-        if (xTonName.endsWith("'''''"))
-        {
+        if (xTonName.endsWith("'''''")) {
           // TODO TonumfangUeberschrittenException
-        }
-        else if (xTonName.endsWith("''''") && !xTonName.substring(1).equals("'"))
-        {
+        } else if (xTonName.endsWith("''''") && !xTonName.substring(1).equals("'")) {
           oktavlage = Oktavlage.VIERGESTRICHEN;
-        }
-        else if (xTonName.endsWith("'''") && !lagenSpezifizierer.equals("'"))
-        {
+        } else if (xTonName.endsWith("'''") && !lagenSpezifizierer.equals("'")) {
           oktavlage = Oktavlage.DREIGESTRICHEN;
         }
         break;
@@ -319,106 +259,71 @@ public class Ton implements Validatable
       // ais'''',ces'''',cis'''',des'''',dis'''',eis'''',fes'''',fis'''',ges'''',gis'''',his''''
       case 7:
         lagenSpezifizierer = xTonName.substring(2);
-        if (xTonName.endsWith("''''''"))
-        {
+        if (xTonName.endsWith("''''''")) {
           oktavlage = Oktavlage.SECHSGESTRICHEN;
-        }
-        else if (xTonName.endsWith("'''''") && !xTonName.substring(1).equals("'"))
-        {
+        } else if (xTonName.endsWith("'''''") && !xTonName.substring(1).equals("'")) {
           oktavlage = Oktavlage.FUENFGESTRICHEN;
-        }
-        else if (xTonName.endsWith("''''") && !lagenSpezifizierer.equals("'"))
-        {
+        } else if (xTonName.endsWith("''''") && !lagenSpezifizierer.equals("'")) {
           oktavlage = Oktavlage.VIERGESTRICHEN;
         }
         break;
       case 8:
         lagenSpezifizierer = xTonName.substring(2);
-        if (xTonName.endsWith("'''''''"))
-        {
+        if (xTonName.endsWith("'''''''")) {
           oktavlage = Oktavlage.SIEBENGESTRICHEN;
-        }
-        else if (xTonName.endsWith("''''''") && !xTonName.substring(1).equals("'"))
-        {
+        } else if (xTonName.endsWith("''''''") && !xTonName.substring(1).equals("'")) {
           oktavlage = Oktavlage.SECHSGESTRICHEN;
-        }
-        else if (xTonName.endsWith("'''''") && !lagenSpezifizierer.equals("'"))
-        {
+        } else if (xTonName.endsWith("'''''") && !lagenSpezifizierer.equals("'")) {
           oktavlage = Oktavlage.FUENFGESTRICHEN;
         }
         break;
       case 9:
         lagenSpezifizierer = xTonName.substring(2);
-        if (xTonName.endsWith("''''''''"))
-        {
+        if (xTonName.endsWith("''''''''")) {
           oktavlage = Oktavlage.ACHTGESTRICHEN;
-        }
-        else if (xTonName.endsWith("'''''''"))
-        {
+        } else if (xTonName.endsWith("'''''''")) {
           oktavlage = Oktavlage.SIEBENGESTRICHEN;
-        }
-        else if (xTonName.endsWith("''''''") && !xTonName.substring(1).equals("'"))
-        {
+        } else if (xTonName.endsWith("''''''") && !xTonName.substring(1).equals("'")) {
           oktavlage = Oktavlage.SECHSGESTRICHEN;
         }
         break;
       case 10:
         lagenSpezifizierer = xTonName.substring(2);
-        if (xTonName.endsWith("'''''''''"))
-        {
+        if (xTonName.endsWith("'''''''''")) {
           oktavlage = Oktavlage.NEUNGESTRICHEN;
-        }
-        else if (xTonName.endsWith("''''''''"))
-        {
+        } else if (xTonName.endsWith("''''''''")) {
           oktavlage = Oktavlage.ACHTGESTRICHEN;
-        }
-        else if (xTonName.endsWith("'''''''"))
-        {
+        } else if (xTonName.endsWith("'''''''")) {
           oktavlage = Oktavlage.SIEBENGESTRICHEN;
         }
         break;
       case 11:
         lagenSpezifizierer = xTonName.substring(2);
-        if (xTonName.endsWith("''''''''''"))
-        {
+        if (xTonName.endsWith("''''''''''")) {
           oktavlage = Oktavlage.ZEHNGESTRICHEN;
-        }
-        else if (xTonName.endsWith("'''''''''"))
-        {
+        } else if (xTonName.endsWith("'''''''''")) {
           oktavlage = Oktavlage.NEUNGESTRICHEN;
-        }
-        else if (xTonName.endsWith("''''''''"))
-        {
+        } else if (xTonName.endsWith("''''''''")) {
           oktavlage = Oktavlage.ACHTGESTRICHEN;
         }
         break;
       case 12:
         lagenSpezifizierer = xTonName.substring(2);
-        if (xTonName.endsWith("'''''''''''"))
-        {
+        if (xTonName.endsWith("'''''''''''")) {
           oktavlage = Oktavlage.ELFGESTRICHEN;
-        }
-        else if (xTonName.endsWith("''''''''''"))
-        {
+        } else if (xTonName.endsWith("''''''''''")) {
           oktavlage = Oktavlage.ZEHNGESTRICHEN;
-        }
-        else if (xTonName.endsWith("'''''''''"))
-        {
+        } else if (xTonName.endsWith("'''''''''")) {
           oktavlage = Oktavlage.NEUNGESTRICHEN;
         }
         break;
       case 13:
         lagenSpezifizierer = xTonName.substring(2);
-        if (xTonName.endsWith("''''''''''''"))
-        {
+        if (xTonName.endsWith("''''''''''''")) {
           oktavlage = Oktavlage.ZWOELFGESTRICHEN;
-        }
-        else if (xTonName.endsWith("'''''''''''"))
-        {
+        } else if (xTonName.endsWith("'''''''''''")) {
           oktavlage = Oktavlage.ELFGESTRICHEN;
-        }
-        else if (xTonName.endsWith("''''''''''"))
-        {
+        } else if (xTonName.endsWith("''''''''''")) {
           oktavlage = Oktavlage.ZEHNGESTRICHEN;
         }
         break;
@@ -428,89 +333,50 @@ public class Ton implements Validatable
     }
   }
 
-  public void setOktavlageDurchAbstandZumEingestrichenenC(Integer xAbstandC)
-  {
-    if (xAbstandC >= 0 && xAbstandC < 12)
-    {
+  public void setOktavlageDurchAbstandZumEingestrichenenC(Integer xAbstandC) {
+    if (xAbstandC >= 0 && xAbstandC < 12) {
       this.oktavlage = Oktavlage.EINGESTRICHEN;
-    }
-    else if (xAbstandC < 0 && xAbstandC >= -12)
-    {
+    } else if (xAbstandC < 0 && xAbstandC >= -12) {
       this.oktavlage = Oktavlage.KLEINE;
-    }
-    else if (xAbstandC < -12 && xAbstandC >= -24)
-    {
+    } else if (xAbstandC < -12 && xAbstandC >= -24) {
       this.oktavlage = Oktavlage.GROSZE;
-    }
-    else if (xAbstandC < -24 && xAbstandC >= -36)
-    {
+    } else if (xAbstandC < -24 && xAbstandC >= -36) {
       this.oktavlage = Oktavlage.KONTRA;
-    }
-    else if (xAbstandC < -36 && xAbstandC >= -48)
-    {
+    } else if (xAbstandC < -36 && xAbstandC >= -48) {
       this.oktavlage = Oktavlage.SUBKONTRA;
-    }
-    else if (xAbstandC >= 12 && xAbstandC < 24)
-    {
+    } else if (xAbstandC >= 12 && xAbstandC < 24) {
       this.oktavlage = Oktavlage.ZWEIGESTRICHEN;
-    }
-    else if (xAbstandC >= 24 && xAbstandC < 36)
-    {
+    } else if (xAbstandC >= 24 && xAbstandC < 36) {
       this.oktavlage = Oktavlage.DREIGESTRICHEN;
-    }
-    else if (xAbstandC >= 36 && xAbstandC < 48)
-    {
+    } else if (xAbstandC >= 36 && xAbstandC < 48) {
       this.oktavlage = Oktavlage.DREIGESTRICHEN;
-    }
-    else if (xAbstandC <= -48)
-    {
+    } else if (xAbstandC <= -48) {
       // TODO LowerIndexExceededException
       _logger.error("Ton.setOktavlageByAbstandC(): Unterer Tonbereich überschritten. : " + this.toString());
-    }
-    else if (xAbstandC >= 48 && xAbstandC < 60)
-    {
+    } else if (xAbstandC >= 48 && xAbstandC < 60) {
       this.oktavlage = Oktavlage.VIERGESTRICHEN;
-    }
-    else if (xAbstandC >= 60 && xAbstandC < 72)
-    {
+    } else if (xAbstandC >= 60 && xAbstandC < 72) {
       this.oktavlage = Oktavlage.FUENFGESTRICHEN;
-    }
-    else if (xAbstandC >= 72 && xAbstandC < 84)
-    {
+    } else if (xAbstandC >= 72 && xAbstandC < 84) {
       this.oktavlage = Oktavlage.SECHSGESTRICHEN;
-    }
-    else if (xAbstandC >= 84 && xAbstandC < 96)
-    {
+    } else if (xAbstandC >= 84 && xAbstandC < 96) {
       this.oktavlage = Oktavlage.SIEBENGESTRICHEN;
-    }
-    else if (xAbstandC >= 96 && xAbstandC < 108)
-    {
+    } else if (xAbstandC >= 96 && xAbstandC < 108) {
       this.oktavlage = Oktavlage.ACHTGESTRICHEN;
-    }
-    else if (xAbstandC >= 108 && xAbstandC < 120)
-    {
+    } else if (xAbstandC >= 108 && xAbstandC < 120) {
       this.oktavlage = Oktavlage.NEUNGESTRICHEN;
-    }
-    else if (xAbstandC >= 120 && xAbstandC < 132)
-    {
+    } else if (xAbstandC >= 120 && xAbstandC < 132) {
       this.oktavlage = Oktavlage.ZEHNGESTRICHEN;
-    }
-    else if (xAbstandC >= 132 && xAbstandC < 144)
-    {
+    } else if (xAbstandC >= 132 && xAbstandC < 144) {
       this.oktavlage = Oktavlage.ELFGESTRICHEN;
-    }
-    else if (xAbstandC >= 144 && xAbstandC < 156)
-    {
+    } else if (xAbstandC >= 144 && xAbstandC < 156) {
       this.oktavlage = Oktavlage.ZWOELFGESTRICHEN;
-    }
-    else if (xAbstandC > 156)
-    {
+    } else if (xAbstandC > 156) {
       // TODO UpperIndexExceededException
       _logger.error("Ton.setOktavlageByAbstandC(): Oberer Tonbereich überschritten. : " + this.toString());
     }
     // log.error("Ton.setOktavlageByAbstandC(): Oberer Tonbereich überschritten. : " + this.toString());
-    else
-    {
+    else {
       // TODO UnknownToneIndexException
       _logger.error("TonsetOktavlageDurchAbstandZumEingestrichenenC): Unbekannter Tonumfangsfehler. : " + this.toString());
     }
@@ -519,8 +385,7 @@ public class Ton implements Validatable
   /**
    * Die für den Ton interessanten Informationen. Überschreibt die Object.toString()-Methode.
    */
-  public String toString()
-  {
+  public String toString() {
     StringBuilder _toStringOutput = new StringBuilder("\n******* TON *******");
     _toStringOutput.append("\nTonname............   : " + this.getTonName());
     _toStringOutput.append("\nVollständiger Tonname : " + this.getTonNameVollstaendig());
@@ -531,29 +396,18 @@ public class Ton implements Validatable
     return _toStringOutput.toString();
   }
 
-  public int getAbstandBasisTonDurchAbstandZumEingestrichenenC(Ton xBasiston)
-  {
+  public int getAbstandBasisTonDurchAbstandZumEingestrichenenC(Ton xBasiston) {
     Integer _abstandBasisTonZumEingestrichenenC = xBasiston.getAbstandZumEingestrichenenC();
     return this.getAbstandZumEingestrichenenC() - _abstandBasisTonZumEingestrichenenC;
   }
 
   @Column(name = "tonname_vollstaendig", unique = false, nullable = false)
-  public String getTonNameVollstaendig()
-  {
+  public String getTonNameVollstaendig() {
     return tonNameVollstaendig;
   }
 
-  public void setTonNameVollstaendig(String tonNameVollstaendig)
-  {
+  public void setTonNameVollstaendig(String tonNameVollstaendig) {
     this.tonNameVollstaendig = tonNameVollstaendig;
-  }
-
-  public void validate() throws ValidationFailure
-  {
-    if (_logger.isDebugEnabled())
-    {
-      _logger.debug("Akkord-Hibernate: Validate()");
-    }
   }
 
   // public boolean onSave(Session arg0) throws CallbackException {
@@ -576,26 +430,22 @@ public class Ton implements Validatable
   // }
 
   @Override
-  public boolean equals(Object other)
-  {
+  public boolean equals(Object other) {
     if (this == other)
       return true;
     if (!(other instanceof Ton))
       return false;
     final Ton that = (Ton) other;
     // Muss dieselbe Anzahl an Tönen haben
-    if (!this.getTonName().equals(that.getTonName()))
-    {
+    if (!this.getTonName().equals(that.getTonName())) {
       return false;
     }
     // Muss vom selben Akkord abgeleitet sein - allerdings problematisch, wenn Konfusion in Akkord-Ids
-    if (!this.getOktavlage().equals(that.getOktavlage()))
-    {
+    if (!this.getOktavlage().equals(that.getOktavlage())) {
       return false;
     }
     // Muss dieselbe Klangschärfe haben
-    if (!this.getTonNameVollstaendig().equals(that.getTonNameVollstaendig()))
-    {
+    if (!this.getTonNameVollstaendig().equals(that.getTonNameVollstaendig())) {
       return false;
     }
     // Folgende Attribute schieden aus:
@@ -619,8 +469,7 @@ public class Ton implements Validatable
   }
 
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     int result = 14;
     result = 29 * result + getOktavlage().hashCode();
     result = 29 * result + getTonName().hashCode();

@@ -6,20 +6,19 @@
  */
 package org.gresch.quintett.domain.kombination;
 
+import org.gresch.quintett.domain.tonmodell.Akkord;
+
+import javax.persistence.*;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-import org.gresch.quintett.domain.tonmodell.Akkord;
 
 /*
  * TODO: Persistenz: - herausfinden, wie man Anzahl begrenzt (worst case: eigene Numerierung) - herausfinden, welches Objekt am sinnvollsten
  *
  *
  */
+
 /**
  * @author Karsten <br>
  *         Akkordkombinationen sind entsprechend einer ästhetischen Gewichtung sortierte, gültige (Tonverdopplungen vermeidende) Akkorde. Zur Nutzung einer
@@ -40,8 +39,8 @@ import org.gresch.quintett.domain.tonmodell.Akkord;
  */
 @Entity
 @Table(name = "akkordkombinationen")
-public class Akkordkombinationen
-{
+public class Akkordkombinationen {
+
   private static Integer anzahlToene = 0;
   //  private static AesthetischeGewichtung aesthetischeGewichtung;
   //  private static BasisTon basisTon;
@@ -49,13 +48,16 @@ public class Akkordkombinationen
   // Integer: Anzahl Töne; TreeSet: Akkorde
   // TODO Oder Hibernate-Collection-Mapping
   private static Map<Integer, TreeSet<Akkord>> akkordKombinationen = new TreeMap<Integer, TreeSet<Akkord>>();
+  @Id
+  @GeneratedValue
+  @Column(name = "id")
+  private int id;
   //  private final static Logger log = Logger.getLogger(Akkordkombinationen.class);
   //  // private static Ton _ton = null;
   //  private static StopWatch mainLoopStopWatch = new StopWatch();
   //  private static StopWatch cursorLoopStopWatch = new StopWatch();
 
   //  private KombinationsberechnungService kombinationsberechnungService = null;
-
   // private Boolean laden;// = kombinationsberechnungsInformationen.ladenAusDatenbankNuetzlich();
   @SuppressWarnings("unused")
   private Integer maxIdVonLetzerBerechnung = -1;
@@ -81,45 +83,38 @@ public class Akkordkombinationen
    *
    * @param anzahlToene
    */
-  public Akkordkombinationen()
-  {
+  public Akkordkombinationen() {
 
   }
 
   // Zugriffsmethoden
+
+  /**
+   * @return Map<Integer, TreeSet<Akkord>> - Alle Akkordkombinationen - Key gibt die Anzahl Töne im darauffolgenden TreeSet der Akkorde an.
+   */
+  public static Map<Integer, TreeSet<Akkord>> getAkkordKombinationen() {
+    return akkordKombinationen;
+  }
+
+  /**
+   * @return Map<Integer, TreeSet<Akkord>> - Alle Akkordkombinationen - Key gibt die Anzahl Töne im darauffolgenden TreeSet der Akkorde an.
+   */
+  public static TreeSet<Akkord> getAkkordeZuAnzahlToene(Integer xAnzahlToene) {
+    return akkordKombinationen.get(xAnzahlToene);
+  }
+
   /**
    * @return Returns the anzahlToene.
    */
-  public Integer getAnzahlToene()
-  {
+  public Integer getAnzahlToene() {
     return anzahlToene;
   }
 
   /**
-   *
    * @return Map<Integer, TreeSet<Akkord>> - Alle Akkordkombinationen - Key gibt die Anzahl Töne im darauffolgenden TreeSet der Akkorde an.
    */
-  public static Map<Integer, TreeSet<Akkord>> getAkkordKombinationen()
-  {
+  public Map<Integer, TreeSet<Akkord>> get() {
     return akkordKombinationen;
-  }
-
-  /**
-   *
-   * @return Map<Integer, TreeSet<Akkord>> - Alle Akkordkombinationen - Key gibt die Anzahl Töne im darauffolgenden TreeSet der Akkorde an.
-   */
-  public Map<Integer, TreeSet<Akkord>> get()
-  {
-    return akkordKombinationen;
-  }
-
-  /**
-   *
-   * @return Map<Integer, TreeSet<Akkord>> - Alle Akkordkombinationen - Key gibt die Anzahl Töne im darauffolgenden TreeSet der Akkorde an.
-   */
-  public static TreeSet<Akkord> getAkkordeZuAnzahlToene(Integer xAnzahlToene)
-  {
-    return akkordKombinationen.get(xAnzahlToene);
   }
 
   //  @Override

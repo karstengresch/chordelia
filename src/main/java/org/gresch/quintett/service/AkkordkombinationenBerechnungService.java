@@ -1,13 +1,11 @@
 package org.gresch.quintett.service;
 
-import java.util.List;
-
 import org.gresch.quintett.domain.kombination.AesthetischeGewichtung;
-import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
 import org.gresch.quintett.domain.tonmodell.Ton;
 
-public interface AkkordkombinationenBerechnungService
-{
+import java.util.List;
+
+public interface AkkordkombinationenBerechnungService {
 
   // FIXME Wenn es nur berechnen ist, sollte die Bezeichnung so bleiben, ansonsten berechneUndSpeichereKombinationen
 
@@ -20,13 +18,13 @@ public interface AkkordkombinationenBerechnungService
    * Sollte keine ästhetische Gewichtung vorher festgelegt worden sein, wird
    * der entsprechende Default verwendet!
    * <br />Siehe auch {@link #berechneUndPersistiereKombinationen(int, int, int, AesthetischeGewichtung)}.
-
+   * <p>
    * </p>
    *
    * @param basisAkkkordIdStart Niedrigste Akkord-Id für die jeweilige Reihe.
-   * @param basisAkkordIdEnde Höchste Akkord-Id.
-   * @param maxAnzahlToene Anzahl der Töne, bis zu denen Akkorde berechnet werden sollen.
-   * Muss zwischen 3 und 11 liegen.
+   * @param basisAkkordIdEnde   Höchste Akkord-Id.
+   * @param maxAnzahlToene      Anzahl der Töne, bis zu denen Akkorde berechnet werden sollen.
+   *                            Muss zwischen 3 und 11 liegen.
    * @throws Exception
    */
   int berechneUndPersistiereNachBasisAkkordBlock(int basisAkkkordIdStart, int basisAkkordIdEnde, int incrementorToene, int lastAkkordId) throws Exception;
@@ -41,10 +39,11 @@ public interface AkkordkombinationenBerechnungService
    * @param AesthetischeGewichtung
    * @throws Exception
    */
-//  int berechneUndPersistiereKombinationen(int akkordIdStart, int akkordIdEnde, int maxAnzahlToene, AesthetischeGewichtung AesthetischeGewichtung) throws Exception;
+  //  int berechneUndPersistiereKombinationen(int akkordIdStart, int akkordIdEnde, int maxAnzahlToene, AesthetischeGewichtung AesthetischeGewichtung) throws Exception;
 
   /**
    * Transponiert einen Akkord entsprechend dem angegebebeb Intervall
+   *
    * @param xTonList
    * @param xTranspositionsIntervall Das Intervall, um das transponiert werden soll.
    * @return
@@ -53,17 +52,17 @@ public interface AkkordkombinationenBerechnungService
 
   /**
    * Berechnet die initialen Zweitonklänge.
+   *
    * @return
    * @throws Exception
    */
-  public int runIncrementorToeneZwei() throws Exception;
-
+  int runIncrementorToeneZwei() throws Exception;
 
   /**
    * Berechnet die Akkordkombinationen anhand der gewünschten Anzahl an Tönen. Geht von vorhandenen
    * Kombinationsberechnungsinformationen aus. Ggf. wird der Default genommen.
    * @param anzahlToene
    */
-//  void berechneUndPersistiereKombinationen(int anzahlToene);
+  //  void berechneUndPersistiereKombinationen(int anzahlToene);
 
 }

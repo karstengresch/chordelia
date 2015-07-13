@@ -1,19 +1,9 @@
 package org.gresch.quintett.service;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.TreeSet;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gresch.quintett.AbsteigenderKlangschaerfenComparator;
-import org.gresch.quintett.AufsteigenderKlangschaerfenComparator;
-import org.gresch.quintett.BasisTon;
 import org.gresch.quintett.domain.kombination.AesthetischeGewichtung;
-import org.gresch.quintett.domain.kombination.AkkordIdRangeZwoelftonklaenge;
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
 import org.gresch.quintett.domain.tonmodell.Akkord;
 import org.gresch.quintett.domain.tonmodell.Ton;
@@ -23,43 +13,40 @@ import org.gresch.quintett.service.util.AkkordkombinationenBerechnungServiceHelp
 import org.hibernate.FlushMode;
 import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
-import org.hibernate.StatelessSession;
-import org.springframework.orm.hibernate3.SessionFactoryUtils;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.LinkedList;
+import java.util.List;
+
 @Service("akkordkombinationenBerechnungService")
-public class AkkordkombinationenBerechnungServiceImpl implements AkkordkombinationenBerechnungService
-{
+public class AkkordkombinationenBerechnungServiceImpl implements AkkordkombinationenBerechnungService {
 
+  public final static Log log = LogFactory.getLog(AkkordkombinationenBerechnungServiceImpl.class);
   // Spring-Beans
-  @Resource(name = "sessionFactory")
-  private org.hibernate.SessionFactory sessionFactory;
-
-  @Resource(name = "kombinationsberechnungService")
-  private KombinationsberechnungService kombinationsberechnungService;
+  @PersistenceContext
+  EntityManager entityManager;
 
   //  @Resource(name = "kombinationsberechnungDao")
   //  private KombinationsberechnungDao kombinationsberechnungDao;
   //
   //  @Resource(name = "tonService")
   //  private TonService tonService;
-
+  @Resource(name = "kombinationsberechnungService")
+  private KombinationsberechnungService kombinationsberechnungService;
   @Resource(name = "tonDao")
   private TonDao tonDao;
-
   @Resource(name = "akkordDao")
   private AkkordDao akkordDao;
-
   @Resource(name = "akkordKombinationenService")
   private AkkordKombinationenService akkordKombinationenService;
 
-  public final static Log log = LogFactory.getLog(AkkordkombinationenBerechnungServiceImpl.class);
-
-  public AkkordkombinationenBerechnungServiceImpl()
-  {
+  public AkkordkombinationenBerechnungServiceImpl() {
     // Beany
   }
 
@@ -74,24 +61,22 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
   /* ####### ALGORITHMUS BEGINNT HIER ####### */
   //(propagation = Propagation.REQUIRES_NEW)
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public int berechneUndPersistiereNachBasisAkkordBlock(int minBlockId, int maxBlockId, int incrementorToene, int lastAkkordId)
-  {
+  public int berechneUndPersistiereNachBasisAkkordBlock(int minBlockId, int maxBlockId, int incrementorToene, int lastAkkordId) {
 
     Kombinationsberechnung kombinationsberechnung = null;
     kombinationsberechnung = kombinationsberechnungService.getKombinationsBerechnung();
     boolean hatAbsteigendeKlangschaerfe = kombinationsberechnung.getHatAbsteigendeKlangschaerfe();
     // TODO assert anstelle dessen.
-    if(null == kombinationsberechnung)
-    {
+    if (null == kombinationsberechnung) {
       throw new RuntimeException("AkkordkombinationenBerechnungService: Kombinationsberechnung darf nicht null sein!");
     }
-    Session currentSession = sessionFactory.getCurrentSession();
-    //    Session session = sessionFactory.openSession();
-    //    Session internalSession = SessionFactoryUtils.getNewSession(sessionFactory); 
+    Session currentSession = entityManager.unwrap(SessionFactory.class).getCurrentSession();
+    //    Session session = entityManager.unwrap(SessionFactory.class).openSession();
+    //    Session internalSession = SessionFactoryUtils.getNewSession(sessionFactory);
     FlushMode flushModeOld = currentSession.getFlushMode();
     currentSession.setFlushMode(FlushMode.MANUAL);
     //    internalSession.setFlushMode(FlushMode.MANUAL);
-    //    StatelessSession session = sessionFactory.openStatelessSession();
+    //    StatelessSession session = entityManager.unwrap(SessionFactory.class).openStatelessSession();
     //    org.hibernate.Transaction tx = internalSession.beginTransaction();
     // ggf. delete from akkord where basisakkordId >= akkordIdStart
     // TODO Fehlerbehandlung für den Fall, dass basisAkkordIdStart > als max(basisAkkordId) from akkord
@@ -119,23 +104,20 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
     // log.info("Cursor ist: " + akkordCursor.)
     int incrementorCursorzeilen = 0;
 
-    while (akkordCursor.next())
-    {
+    while (akkordCursor.next()) {
       incrementorCursorzeilen++;
       Akkord akkordFromCursor = (Akkord) akkordCursor.get(0); // 0 für aktuellen Cursorzeiger
       // Permutationen nur für letzte Kombination berechnen
       if (null != akkordFromCursor && (akkordFromCursor.getAnzahlToene() == (incrementorToene - 1))) // da oberer Zähler 2-terminiert
       {
         // Einmal für erste Schleife - besser machen!
-        if (log.isDebugEnabled())
-        {
+        if (log.isDebugEnabled()) {
           log.debug("A~K~.berechneKombinationen(): In Schleife zwei: Akkord-Nr.: " + String.valueOf(incrementorAkkorde));
         }
         // TODO Schleife für die Intervalle, die oben oder unten hinzuzufügen sind.
         // TODO iterieren über Akkorde aus vorhergehender Schleife / KG 2006-03-23
 
-        for (incrementorIntervalle = 1; incrementorIntervalle < _anzahlIntervalle + 1; incrementorIntervalle++)
-        {
+        for (incrementorIntervalle = 1; incrementorIntervalle < _anzahlIntervalle + 1; incrementorIntervalle++) {
           //
           Akkord bufferAkkord = null;
           bufferAkkord = null;
@@ -143,37 +125,32 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
           Ton _ton = null;
           int fetchIntervall = -1;
           // _ton = new Ton();
-          if (log.isDebugEnabled())
-          {
+          if (log.isDebugEnabled()) {
             log.debug("A~K~.berechneKombinationen(): In Schleife drei: " + String.valueOf(incrementorIntervalle));
           }
           // TODO Sollte vorletzter sein ---> VON OBEN <---
           // Deshalb Umkehrung implementieren.
-          if (kombinationsberechnung.getHatAbsteigendeKlangschaerfe())
-          {
+          if (kombinationsberechnung.getHatAbsteigendeKlangschaerfe()) {
             // ******* TODO Akkord nach oben verschieben wg. gleichbleibendem Basiston! *******
-            if (log.isDebugEnabled())
-            {
+            if (log.isDebugEnabled()) {
               log.debug("Akkordkombinationen.berechneKombinationen(): _akkord.get(0).getAbstandZumEingestrichenenC(): "
-                  + bufferAkkord.getTonZuNummerNullbasiert(0).getAbstandZumEingestrichenenC());
+                + bufferAkkord.getTonZuNummerNullbasiert(0).getAbstandZumEingestrichenenC());
               log.debug("Akkordkombinationen.berechneKombinationen(): aesthetischeGewichtung.getGewichtung().get()   : "
-                  + AesthetischeGewichtung.getGewichtungSortierungIntervall().get(Integer.valueOf(incrementorIntervalle)));
+                + AesthetischeGewichtung.getGewichtungSortierung().get(Integer.valueOf(incrementorIntervalle)));
             }
             intervallEins = 0;
             intervallZwei = 0;
             intervallEins = bufferAkkord.getTonZuNummerNullbasiert(0).getAbstandZumEingestrichenenC();
-            intervallZwei = (Integer) AesthetischeGewichtung.getGewichtungSortierungIntervall().get(Integer.valueOf(incrementorIntervalle));
+            intervallZwei = AesthetischeGewichtung.getGewichtungSortierung().get(Integer.valueOf(incrementorIntervalle));
             // _ton.setAbstandZumEingestrichenenC(intervallEins - intervallZwei);
             // _ton = Tonumfang.getTon(intervallEins - intervallZwei);
             fetchIntervall = intervallEins - intervallZwei;
             _ton = tonDao.find((fetchIntervall));
-          }
-          else if (!kombinationsberechnung.getHatAbsteigendeKlangschaerfe())
-          {
+          } else if (!kombinationsberechnung.getHatAbsteigendeKlangschaerfe()) {
             intervallEins = 0;
             intervallZwei = 0;
             intervallEins = bufferAkkord.getTonZuNummerNullbasiert(bufferAkkord.getTonList().size() - 1).getAbstandZumEingestrichenenC();
-            intervallZwei = (Integer) AesthetischeGewichtung.getGewichtungSortierungIntervall().get(Integer.valueOf(incrementorIntervalle));
+            intervallZwei = AesthetischeGewichtung.getGewichtungSortierung().get(Integer.valueOf(incrementorIntervalle));
             // -1 für Sortierung von unten/aufsteigend: Immer nur das letzte Intervall betrachtend.
             // _ton.setAbstandZumEingestrichenenC(intervallEins + intervallZwei);
             // _ton = Tonumfang.getTon(intervallEins + intervallZwei);
@@ -182,8 +159,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
           List<Ton> _tonList;
           _tonList = new LinkedList<Ton>();
           // Prüfen!
-          if (kombinationsberechnung.getHatAbsteigendeKlangschaerfe())
-          {
+          if (kombinationsberechnung.getHatAbsteigendeKlangschaerfe()) {
             // ???
             _tonList.add(tonDao.findByExample((_ton)));
             //                  _tonList.add(tonDao.find(_ton.getId()));
@@ -197,9 +173,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
             _tonList = new LinkedList<Ton>();
             _tonList.addAll(_tonListBuffer);
             _tonListBuffer = null;
-          }
-          else if (!kombinationsberechnung.getHatAbsteigendeKlangschaerfe())
-          {
+          } else if (!kombinationsberechnung.getHatAbsteigendeKlangschaerfe()) {
             _tonList.add(tonDao.findByExample((_ton)));
             //                  _tonList.add(_ton);
             //                  _tonList.add(tonDao.find(_ton.getId()));
@@ -208,14 +182,14 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
           Akkord finalAkkord = null;
           finalAkkord = new Akkord();
           finalAkkord.setTonList(_tonList);
-          finalAkkord.setKlangschaerfe((akkordFromCursor.getKlangschaerfe() + kombinationsberechnung.getAesthetischeGewichtung().getKlangschaerfe(intervallZwei)));
+          finalAkkord.setKlangschaerfe(
+            (akkordFromCursor.getKlangschaerfe() + kombinationsberechnung.getAesthetischeGewichtung().getKlangschaerfe(intervallZwei)));
           finalAkkord.setAnzahlToene(_tonList.size());
           _tonList = null;
 
           incrementorAkkorde++;
           bufferAkkord = null;
-          if (AkkordkombinationenBerechnungServiceHelper.istEinErlaubterAkkord(finalAkkord))
-          {
+          if (AkkordkombinationenBerechnungServiceHelper.istEinErlaubterAkkord(finalAkkord)) {
             // Mit Generate-ID wird offenbar kein Batch unterstützt
             finalAkkord.setId(anzahlAkkorde + 1);
             int temporaereBasisAkkordId = -1;
@@ -223,60 +197,50 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
             finalAkkord.setBasisAkkordId(temporaereBasisAkkordId);
             int temporaereAkkordId = finalAkkord.getId();
 
-            if (akkordCursor.isLast())
-            {
-              if (log.isDebugEnabled())
-              {
+            if (akkordCursor.isLast()) {
+              if (log.isDebugEnabled()) {
                 log.debug("akkordCursor.isLast() at row number: " + akkordCursor.getRowNumber());
               }
             }
 
-            if (log.isDebugEnabled())
-            {
-              log.info("A~K.berechneKombinationen(): ID: " + finalAkkord.getId() + " - Anzahl Töne:" + finalAkkord.getAnzahlToene() + " - Klangschärfe: "
-                  + finalAkkord.getKlangschaerfe());
+            if (log.isDebugEnabled()) {
+              log.info("A~K.berechneKombinationen(): ID: " + finalAkkord.getId() + " - Anzahl Töne:" + finalAkkord.getAnzahlToene()
+                + " - Klangschärfe: "
+                + finalAkkord.getKlangschaerfe());
             }
 
             //                  saveAkkord(akkord2);
             akkordDao.makePersistentReadOnly(finalAkkord);
-            //                  sessionFactory.getCurrentSession().evict(finalAkkord);
+            //                  entityManager.unwrap(SessionFactory.class).getCurrentSession().evict(finalAkkord);
             anzahlAkkorde++;
 
-            //            sessionFactory.getCurrentSession().evict(finalAkkord);
+            //            entityManager.unwrap(SessionFactory.class).getCurrentSession().evict(finalAkkord);
 
             //                  if((anzahlAkkorde % 1000 == 0) || (incrementorToene == 3 && anzahlAkkorde % 1000 == 0))
             //                  {
-            //                    sessionFactory.evict(Akkord.class);
-            //                    FlushMode flushModeOld = sessionFactory.getCurrentSession().getFlushMode();
-            //                    sessionFactory.getCurrentSession().setFlushMode(FlushMode.MANUAL);
-            //                    sessionFactory.getCurrentSession().flush();
+            //                    entityManager.unwrap(SessionFactory.class).evict(Akkord.class);
+            //                    FlushMode flushModeOld = entityManager.unwrap(SessionFactory.class).getCurrentSession().getFlushMode();
+            //                    entityManager.unwrap(SessionFactory.class).getCurrentSession().setFlushMode(FlushMode.MANUAL);
+            //                    entityManager.unwrap(SessionFactory.class).getCurrentSession().flush();
             //                    log.info("flushNachBasiston (1)");
-            //                    sessionFactory.getCurrentSession().setFlushMode(flushModeOld);
+            //                    entityManager.unwrap(SessionFactory.class).getCurrentSession().setFlushMode(flushModeOld);
             //                    log.info("A~K~.berechneKombinationen(): Flush bei Anzahl Akkorde: " + String.valueOf(anzahlAkkorde));
             //
             //                  }
 
-            if ((anzahlAkkorde % 1000 == 0) && (anzahlAkkorde < 10000))
-            {
+            if ((anzahlAkkorde % 1000 == 0) && (anzahlAkkorde < 10000)) {
               log.info("A~K~.berechneKombinationen(): Anzahl Akkorde: " + String.valueOf(anzahlAkkorde));
-            }
-            else if ((anzahlAkkorde > 9999) && (anzahlAkkorde % 10000 == 0) && (anzahlAkkorde < 100000))
-            {
+            } else if ((anzahlAkkorde > 9999) && (anzahlAkkorde % 10000 == 0) && (anzahlAkkorde < 100000)) {
               log.info("A~K~.berechneKombinationen(): Anzahl Akkorde: " + String.valueOf(anzahlAkkorde));
-            }
-            else if ((anzahlAkkorde > 99999) && (anzahlAkkorde % 100000 == 0) && (anzahlAkkorde < 1000000))
-            {
+            } else if ((anzahlAkkorde > 99999) && (anzahlAkkorde % 100000 == 0) && (anzahlAkkorde < 1000000)) {
               log.info("A~K~.berechneKombinationen(): Anzahl Akkorde: " + String.valueOf(anzahlAkkorde));
-            }
-            else if ((anzahlAkkorde > 999999) && (anzahlAkkorde % 1000000 == 0))
-            {
+            } else if ((anzahlAkkorde > 999999) && (anzahlAkkorde % 1000000 == 0)) {
               log.info("A~K~.berechneKombinationen(): Anzahl Akkorde: " + String.valueOf(anzahlAkkorde));
             }
 
             // TODO DAO!
             // ((anzahlAkkorde != 0 && anzahlAkkorde % 1000 == 0) ||
-            if (akkordCursor.isLast())
-            {
+            if (akkordCursor.isLast()) {
               // TODO ggf Rollback hier
               // log.info("Vorm Kombinationsberechnungs-Flush: Zeilennummer des Akkord Cursors ist: " + (akkordCursor.getRowNumber()+1) + " - Anzahl Akkorde sind: " + anzahlAkkorde);
               Integer temporaereBasisAkkordKlangschaerfe = akkordFromCursor.getKlangschaerfe();
@@ -297,7 +261,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
     } // end while
 
     akkordCursor.close();
-    //    sessionFactory.getCurrentSession().evict(akkordCursor);
+    //    entityManager.unwrap(SessionFactory.class).getCurrentSession().evict(akkordCursor);
 
     //    ThreadLocalUtil.cleanupThreadLocals(null, "main", Thread.currentThread().getContextClassLoader());
     akkordCursor = null;
@@ -317,13 +281,12 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
 
   // Diese Dokumentation stehen lassen: propagationLevel = REQUIRES_NEW entfernt wegen Problemen mit kombinationsberechnung.
   @Transactional(propagation = Propagation.NESTED)
-  public int runIncrementorToeneZwei()
-  {
+  public int runIncrementorToeneZwei() {
     Kombinationsberechnung kombinationsberechnung = kombinationsberechnungService.getKombinationsBerechnung();
     // TODO Prüfen, ob Zweitonklänge bereits berechnet worden sind??? Ggf. löschen???
     Ton basisTon = kombinationsberechnung.getBasisTon();
-    if (null == basisTon || (null == basisTon.getAbstandZumEingestrichenenC() || StringUtils.isEmpty(basisTon.getTonName()) || null == basisTon.getOktavlage()))
-    {
+    if (null == basisTon || (null == basisTon.getAbstandZumEingestrichenenC() || StringUtils.isEmpty(basisTon.getTonName()) || null == basisTon
+      .getOktavlage())) {
       basisTon = kombinationsberechnung.getDefaultBasisTon();
       log.warn("Akkordkombinationen.runIncrementorToeneZwei(): Basiston auf Default gesetzt!!!");
     }
@@ -335,23 +298,19 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
     int anzahlAkkorde = 0; // die Anzahl der _hinzugefügten_ Akkorde, also der gültigen Akkorde. Zugleich Akkord-ID.;
     //    TreeSet<Akkord> _akkordSet = null;
     //    _akkordSet = getAkkordSet(_akkordSet);
-    ;
     // if (!laden)
     // {
-    if (log.isDebugEnabled())
-    {
+    if (log.isDebugEnabled()) {
       log.debug("A~K~.berechneKombinationen(): Zwei Töne!");
     }
     // Erstelle eine List aus Akkorden - anzahlIntervalle sollte eigentlich konstant 11 sein (wenn nicht vierteltönig etc.).
     log.info("A~K~.berechneKombinationen(): Neue AkkordList erstellt mit Anzahl Intervallen: " + String.valueOf(_anzahlIntervalle));
     // TODO XXX Auf- oder absteigend!!!
-    //    Transaction transaction = sessionFactory.getCurrentSession().beginTransaction();
-    for (incrementorIntervalle = 1; incrementorIntervalle < _anzahlIntervalle + 1; incrementorIntervalle++)
-    {
+    //    Transaction transaction = entityManager.unwrap(SessionFactory.class).getCurrentSession().beginTransaction();
+    for (incrementorIntervalle = 1; incrementorIntervalle < _anzahlIntervalle + 1; incrementorIntervalle++) {
       incrementorAkkorde++;
       // TODO: Weshalb zum Basiston??? Korrekterweise doch nur zum obersten/untersten Ton
-      if (log.isDebugEnabled())
-      {
+      if (log.isDebugEnabled()) {
         log.debug("A~K~.berechneKombinationen(): In Schleife zwei (zwei Töne): " + String.valueOf(incrementorIntervalle));
       }
       List<Ton> _tonList = null;
@@ -359,7 +318,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
       _tonList.add(tonDao.find(basisTon.getId())); // Ton #2 unten in iii-Schleife.
       //      _tonList.get(0).setAbstandZumBasisTon(0);
       Ton _ton = null;
-      Integer abstandZumBasiston = (Integer) AesthetischeGewichtung.getGewichtungSortierungIntervall().get(Integer.valueOf(incrementorIntervalle));
+      Integer abstandZumBasiston = AesthetischeGewichtung.getGewichtungSortierung().get(Integer.valueOf(incrementorIntervalle));
       _ton = tonDao.find((basisTon.getAbstandZumEingestrichenenC() + abstandZumBasiston));
       //      _ton.setAbstandZumBasisTon(abstandZumBasiston);
       // _tonList.add(_ton);
@@ -370,26 +329,21 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
       _akkord.setKlangschaerfe(kombinationsberechnung.getAesthetischeGewichtung().getKlangschaerfe(abstandZumBasiston));
       _akkord.setAnzahlToene(_tonList.size());
       _tonList = null;
-      if (AkkordkombinationenBerechnungServiceHelper.istEinErlaubterAkkord(_akkord))
-      {
+      if (AkkordkombinationenBerechnungServiceHelper.istEinErlaubterAkkord(_akkord)) {
         // Mit Generate-ID wird oft kein Batch unterstützt
         _akkord.setId(anzahlAkkorde + 1);
         kombinationsberechnung.setLetzteAkkordId(_akkord.getId());
         //        _akkordSet.add(_akkord);
-        if (log.isDebugEnabled())
-        {
+        if (log.isDebugEnabled()) {
           log.debug("A~K.berechneKombinationen(): Anzahl Töne:" + _akkord.getAnzahlToene() + " - Klangschärfe:" + _akkord.getKlangschaerfe());
         }
         // TODO: DAO!
-        if (kombinationsberechnung.getHatPersistenzSchreiben())
-        {
+        if (kombinationsberechnung.getHatPersistenzSchreiben()) {
           akkordDao.makePersistentReadOnly(_akkord);
         }
         anzahlAkkorde++;
         _akkord = null;
-      }
-      else
-      {
+      } else {
         _akkord = null;
         continue;
       }
@@ -398,10 +352,10 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
     // TODO DAO!
     kombinationsberechnung.setBereitsBerechneteToene(2);
     kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
-    FlushMode flushModeOld = sessionFactory.getCurrentSession().getFlushMode();
-    sessionFactory.getCurrentSession().setFlushMode(FlushMode.MANUAL);
-    sessionFactory.getCurrentSession().flush();
-    sessionFactory.getCurrentSession().setFlushMode(flushModeOld);
+    FlushMode flushModeOld = entityManager.unwrap(SessionFactory.class).getCurrentSession().getFlushMode();
+    entityManager.unwrap(SessionFactory.class).getCurrentSession().setFlushMode(FlushMode.MANUAL);
+    entityManager.unwrap(SessionFactory.class).getCurrentSession().flush();
+    entityManager.unwrap(SessionFactory.class).getCurrentSession().setFlushMode(flushModeOld);
     // Nicht mehr benötigt...
     //    akkordKombinationen.put(Integer.valueOf(incrementorToene), _akkordSet);
     // }
@@ -415,8 +369,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
 
   // XXX Remove if not needed!
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public void saveAkkord(Akkord akkord)
-  {
+  public void saveAkkord(Akkord akkord) {
     akkordDao.makePersistentReadOnly(akkord);
   }
 
@@ -424,67 +377,52 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
   // TODO Prüfen: In Util?
   //  @Transactional(propagation=Propagation.NESTED) => Check if needed (i.e. otherwise not threadsafe).
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public List<Ton> transponiere(List<Ton> xTonList, Integer xTranspositionsIntervall)
-  {
+  public List<Ton> transponiere(List<Ton> xTonList, Integer xTranspositionsIntervall) {
     Kombinationsberechnung kombinationsberechnung = kombinationsberechnungService.getKombinationsBerechnung();
     Ton basisTon = kombinationsberechnung.getBasisTon();
     List<Ton> _tonArrayBuffer = new LinkedList<Ton>();
     Ton _ton;
     int i;
 
-    if (null == xTonList)
-    {
+    if (null == xTonList) {
       log.error("AK.transponiere(): xTonList war null!");
       throw new RuntimeException();
-    }
-    else if (xTonList.size() < 2)
-    {
+    } else if (xTonList.size() < 2) {
       log.error("AK.transponiere(): xTonList war zu klein: " + xTonList.size() + "!");
       throw new RuntimeException();
     }
 
-    if (null == xTranspositionsIntervall)
-    {
+    if (null == xTranspositionsIntervall) {
       log.error("AK.transponiere(): xTranspositionsinterwall war null!");
       throw new RuntimeException();
     }
 
-    if (xTranspositionsIntervall > 0)
-    {
+    if (xTranspositionsIntervall > 0) {
       log.error("AK.transponiere(): xTranspositionsintervall war zu groß: " + xTranspositionsIntervall);
       //      log.error("Töne waren: \n" + (new Akkord().setTonList(xTonList)).toStringBuilder().toString());
       xTranspositionsIntervall *= -1;
       // throw new RuntimeException();
     }
     Integer _abstand = xTranspositionsIntervall * -1;
-    if (null == basisTon || null == basisTon.getId())
-    {
+    if (null == basisTon || null == basisTon.getId()) {
       basisTon = kombinationsberechnung.getDefaultBasisTon();
       log.warn("Akkordkombinationen.transponiere(): Basiston auf Default gesetzt!!! #3");
     }
 
-    for (i = 0; i < xTonList.size(); i++)
-    {
+    for (i = 0; i < xTonList.size(); i++) {
       _ton = null;
-      if (i == 0)
-      {
+      if (i == 0) {
         _ton = tonDao.find(basisTon.getId());
-      }
-      else
-      {
+      } else {
 
-        if (null == xTonList.get(i))
-        {
+        if (null == xTonList.get(i)) {
           log.error("AK.transponiere(): xTonList.get(i) war 'null' fuer: " + i);
           throw new RuntimeException();
         }
 
-        try
-        {
+        try {
           _ton = tonDao.find((xTonList.get(i).getAbstandZumEingestrichenenC() + _abstand));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
           log.error("Schwerer Fehler beim Transponieren: " + e.getMessage() + "\nProgramm beendet sich!");
           System.exit(-1);
         }
@@ -497,7 +435,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
       //        _ton.setId((tonService.getTonByExample(_ton)).getId());
       //      }
 
-      // Transaction _transaction = sessionFactory.getCurrentSession().beginTransaction();
+      // Transaction _transaction = entityManager.unwrap(SessionFactory.class).getCurrentSession().beginTransaction();
       _tonArrayBuffer.add(_ton);
       // _transaction.commit();
     }

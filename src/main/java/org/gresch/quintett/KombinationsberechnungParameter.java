@@ -1,11 +1,8 @@
 package org.gresch.quintett;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gresch.quintett.domain.kombination.AesthetischeGewichtung;
@@ -18,10 +15,10 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
-public class KombinationsberechnungParameter
-{
+import java.util.ArrayList;
+import java.util.List;
 
-  private final static Log log = LogFactory.getLog(KombinationsberechnungParameter.class);
+public class KombinationsberechnungParameter {
 
   /* ******* DEFAULTWERTE ******* */
   public static final String CLI_DEFAULTWERT_MAX_ANZAHL_TOENE = "5";
@@ -36,21 +33,33 @@ public class KombinationsberechnungParameter
   public static final String CLI_DEFAULTWERT_PERSISTENZ_LADEN = "j";
   public static final String CLI_DEFAULTWERT_PERSISTENZ_SCHREIBEN = "j";
   public static final String CLI_DEFAULTWERT_DB_ERSTELLEN = "n";
-  public static final String CLI_WARN_INTERVALLINFORMATIONEN = "Keine Intervallinformationen angegeben! Verwende Default: " + CLI_DEFAULTWERT_INTERVALLINFORMATIONEN;
-
+  public static final String CLI_WARN_INTERVALLINFORMATIONEN =
+    "Keine Intervallinformationen angegeben! Verwende Default: " + CLI_DEFAULTWERT_INTERVALLINFORMATIONEN;
   /* ******* CLI-INFORMATIONEN ******* */
-  public static final String CLI_AUSGABE_INTERVALLINFORMATIONEN = "Gewichtung in Kommata angeben.\r\n Den Intervallen sind dabei folgende Schlüssel zugeordnet:\r\n\r\n" + " 01   =   KLEINE SEKUNDE\n" + " 02   =   GROSZE SEKUNDE\n" + " 03   =   KLEINE TERZ\n" + " 04   =   GROSZE TERZ\n" + " 05   =   QUARTE\n"
-      + " 06   =   TRITONUS\n" + " 07   =   QUINTE\n" + " 08   =   KLEINE SEXTE\r\n" + " 09   =   GROSZE SEXTE\r\n" + " 10   =   KLEINE SEPTIME\r\n" + " 11   =   GROSZE SEPTIME\r\n\r\n\n" + ">>> \r\n" + "Beispiel (absteigend): 06,01,11,02,10,05,07,04,03,08,09\r\n\r\n" + ">>> \r\n" + "(Default: "
+  public static final String CLI_AUSGABE_INTERVALLINFORMATIONEN =
+    "Gewichtung in Kommata angeben.\r\n Den Intervallen sind dabei folgende Schlüssel zugeordnet:\r\n\r\n" + " 01   =   KLEINE SEKUNDE\n"
+      + " 02   =   GROSZE SEKUNDE\n" + " 03   =   KLEINE TERZ\n" + " 04   =   GROSZE TERZ\n" + " 05   =   QUARTE\n"
+      + " 06   =   TRITONUS\n" + " 07   =   QUINTE\n" + " 08   =   KLEINE SEXTE\r\n" + " 09   =   GROSZE SEXTE\r\n"
+      + " 10   =   KLEINE SEPTIME\r\n" + " 11   =   GROSZE SEPTIME\r\n\r\n\n" + ">>> \r\n"
+      + "Beispiel (absteigend): 06,01,11,02,10,05,07,04,03,08,09\r\n\r\n" + ">>> \r\n" + "(Default: "
       + CLI_DEFAULTWERT_INTERVALLINFORMATIONEN + ")\r\n";
-  public static final String CLI_AUSGABE_SORTIERUNG_INTERVALLINFORMATIONEN = "Absteigende Sortierung der Gewichtungsangabe? \r\nb   =   Absteigend:  \'zarteste\' Töne zuletzt (Default)\r\n" + "f   =   Aufsteigend: \'zarteste\' Töne zuerst\r\nn=nein=aufsteigend, j=ja=absteigend (Default = j).";
+  public static final String CLI_AUSGABE_SORTIERUNG_INTERVALLINFORMATIONEN =
+    "Absteigende Sortierung der Gewichtungsangabe? \r\nb   =   Absteigend:  \'zarteste\' Töne zuletzt (Default)\r\n"
+      + "f   =   Aufsteigend: \'zarteste\' Töne zuerst\r\nn=nein=aufsteigend, j=ja=absteigend (Default = j).";
   public static final String CLI_AUSGABE_SORTIERUNG_KLANGSCHAERFE = "Absteigende Sortierung der Klangschärfe? Von Basstönen aufwärts oder von Soprantönen abwärts? n=nein=aufsteigend, j=ja=absteigend (Default = j)";
   public static final String CLI_AUSGABE_SORTIERUNG_AUSGABE = "Sortierung der Akkorde in der Ausgabe? Absteigend von den Akkorden höchster Klangschärfe oder aufsteigend, von den Akkorden niedrigster Klangschärfe. n=nein=aufsteigend, j=ja=absteigend (Default = j).";
   public static final String CLI_AUSGABE_MAX_ANZAHL_TOENE = "Maximale Anzahl Töne im Mehrklang. (Default: 5)";
-  public static final String CLI_AUSGABE_GRUNDTON = "Grundton, wenn nicht angegeben. (Default: " + CLI_DEFAULTWERT_GRUNDTON + "). Möglichkeiten: C-D-E-F-G-A-H";
+  public static final String CLI_AUSGABE_GRUNDTON =
+    "Grundton, wenn nicht angegeben. (Default: " + CLI_DEFAULTWERT_GRUNDTON + "). Möglichkeiten: C-D-E-F-G-A-H";
   public static final String CLI_AUSGABE_RENDERER = "Renderer. Konsole (=k), MIDI (=m), Lilypond (=l). (Default: " + CLI_DEFAULTWERT_RENDERER + ")\r\n";
-  public static final String CLI_AUSGABE_PERSISTENZ_LADEN = "Sollen die Akkorde aus einer Datenbank geladen werden? n=nein, j=ja (Default = " + CLI_DEFAULTWERT_PERSISTENZ_LADEN + ").";
-  public static final String CLI_AUSGABE_DB_ERSTELLEN = "Wenn die Akkorde gespeichert werden sollen - soll eine neue Datenbank erstellt werden? \nIn diesem Fall würde eine bestehende Datenbank überschrieben werden! n=nein, j=ja (Default = " + CLI_DEFAULTWERT_DB_ERSTELLEN + ").";
-  public static final String CLI_AUSGABE_PERSISTENZ_SCHREIBEN = "Sollen die Akkorde in einer Datenbank gespeichert werden (zum späteren Laden)? n=nein, j=ja (Default = " + CLI_DEFAULTWERT_PERSISTENZ_SCHREIBEN + ").";
+  public static final String CLI_AUSGABE_PERSISTENZ_LADEN =
+    "Sollen die Akkorde aus einer Datenbank geladen werden? n=nein, j=ja (Default = " + CLI_DEFAULTWERT_PERSISTENZ_LADEN + ").";
+  public static final String CLI_AUSGABE_DB_ERSTELLEN =
+    "Wenn die Akkorde gespeichert werden sollen - soll eine neue Datenbank erstellt werden? \nIn diesem Fall würde eine bestehende Datenbank überschrieben werden! n=nein, j=ja (Default = "
+      + CLI_DEFAULTWERT_DB_ERSTELLEN + ").";
+  public static final String CLI_AUSGABE_PERSISTENZ_SCHREIBEN =
+    "Sollen die Akkorde in einer Datenbank gespeichert werden (zum späteren Laden)? n=nein, j=ja (Default = " + CLI_DEFAULTWERT_PERSISTENZ_SCHREIBEN
+      + ").";
   /* ******* PARAMETER ******* */
   public static final String CLI_PARAMETER_MAX_ANZAHL_TOENE = "-t";
   public static final String CLI_PARAMETER_SORTIERUNG_INTERVALLINFORMATIONEN = "-si";
@@ -63,9 +72,9 @@ public class KombinationsberechnungParameter
   public static final String CLI_PARAMETER_PERSISTENZ_LADEN = "-pl";
   public static final String CLI_PARAMETER_PERSISTENZ_SCHREIBEN = "-ps";
   public static final String CLI_PARAMETER_DB_ERSTELLEN = "-db";
+  private final static Log log = LogFactory.getLog(KombinationsberechnungParameter.class);
 
   // Das alles mit Kohsukes Tamaguchis args4j
-
   Kombinationsberechnung kombinationsberechnung;
 
   //  private static final String CLI_PARAMETER_SORTIERUNG_KLANGSCHAERFE = "sk";
@@ -112,20 +121,35 @@ public class KombinationsberechnungParameter
   @Argument
   private List<String> arguments = new ArrayList<String>();
 
-  public KombinationsberechnungParameter()
-  {
+  public KombinationsberechnungParameter() {
     //    throw new RuntimeException("Wie auch immer. Diese Klasse darf nicht instantiiert werden.");
   }
 
   //  public static Kombinationsberechnung parameterAuswerten
 
-  public Kombinationsberechnung processArguments(String[] args)
-  {
-    CmdLineParser parser = new CmdLineParser(this);
-    parser.setUsageWidth(180);
+  public static Kombinationsberechnung createDefaultKombinationsberechnung() {
+    //    return parameterAuswerten(args);
+    throw new RuntimeException("Noch nicht analysiert.");
+  }
 
-    try
-    {
+  public static Kombinationsberechnung parameterAuswerten(String[] args) {
+    log.info("KombinationsberechnungParameter() - Parameter: " + StringUtils.stripAll(args));
+    return new KombinationsberechnungParameter().processArguments(args);
+  }
+
+  /**
+   * @param options
+   */
+  static void printHelp(Options options) {
+    HelpFormatter formatter = new HelpFormatter();
+    formatter.printHelp("Kombinationsberechnung -a [-s -g -t]", options);
+  }
+
+  public Kombinationsberechnung processArguments(String[] args) {
+    CmdLineParser parser = new CmdLineParser(this);
+    // parser.setUsageWidth(180);
+
+    try {
       // parse the arguments.
       parser.parseArgument(args);
 
@@ -137,9 +161,7 @@ public class KombinationsberechnungParameter
       //      if (arguments.isEmpty())
       //        throw new CmdLineException("No argument is given");
 
-    }
-    catch (CmdLineException e)
-    {
+    } catch (CmdLineException e) {
       // if there's a problem in the command line,
       // you'll get this exception. this will report
       // an error message.
@@ -168,27 +190,6 @@ public class KombinationsberechnungParameter
     kombinationsberechnung.setArguments(args);
 
     return kombinationsberechnung;
-  }
-
-  public static Kombinationsberechnung createDefaultKombinationsberechnung()
-  {
-    //    return parameterAuswerten(args);
-    throw new RuntimeException("Noch nicht analysiert.");
-  }
-
-  public static Kombinationsberechnung parameterAuswerten(String[] args)
-  {
-    log.info("KombinationsberechnungParameter() - Paramter: " + StringUtils.stripAll(args));
-    return new KombinationsberechnungParameter().processArguments(args);
-  }
-
-  /**
-   * @param options
-   */
-  static void printHelp(Options options)
-  {
-    HelpFormatter formatter = new HelpFormatter();
-    formatter.printHelp("Kombinationsberechnung -a [-s -g -t]", options);
   }
 
 }

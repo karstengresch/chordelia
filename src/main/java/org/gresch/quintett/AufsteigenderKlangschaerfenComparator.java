@@ -9,32 +9,24 @@ import org.gresch.quintett.domain.tonmodell.Akkord;
  * Klangschärfe.<br>
  * Sortiert Akkorde aufsteigend, d.h. Akkorde gleicher Klangschärfe und Tonanzahl gelten als klangschärfer, wenn sich
  * das klangschärfere Intervall näher dem Grundton befindet.
- *   
- * @author Karsten
  *
+ * @author Karsten
  */
-public class AufsteigenderKlangschaerfenComparator implements java.util.Comparator<Akkord>
-{
+public class AufsteigenderKlangschaerfenComparator implements java.util.Comparator<Akkord> {
   private static Logger _logger = Logger.getLogger(AufsteigenderKlangschaerfenComparator.class);
 
-  public int compare(Akkord ersterAkkord, Akkord zweiterAkkord)
-  {
+  public int compare(Akkord ersterAkkord, Akkord zweiterAkkord) {
     Integer anzahlToene = ersterAkkord.getAnzahlToene();
-    if (anzahlToene.compareTo(zweiterAkkord.getAnzahlToene()) == 0)
-    {
+    if (anzahlToene.compareTo(zweiterAkkord.getAnzahlToene()) == 0) {
 
       // TODO prüfen, ob zwei-Ton-Akkord, dann nach aesthetischer Gewichtung sortieren!
-      if (anzahlToene > 2 && zweiterAkkord.getAnzahlToene() > 2)
-      {
+      if (anzahlToene > 2 && zweiterAkkord.getAnzahlToene() > 2) {
 
-        if (!ersterAkkord.getKlangschaerfe().equals(zweiterAkkord.getKlangschaerfe()))
-        {
+        if (!ersterAkkord.getKlangschaerfe().equals(zweiterAkkord.getKlangschaerfe())) {
           return (ersterAkkord.getKlangschaerfe().compareTo(zweiterAkkord.getKlangschaerfe()));
-        }
-        else
-        {
+        } else {
           // TODO !!!
-          /* 
+      /*
             So soll der Algorithmus funktionieren
             - Suche ersten Intervallunterschied und ermittle Klangschärfe anhand
               der Position entspr. der �sthetischen Gewichtung.
@@ -51,25 +43,24 @@ public class AufsteigenderKlangschaerfenComparator implements java.util.Comparat
           //          zwischenWertAkkord1 += Kombinationsberechnung.getAesthetischeGewichtung().getKlangschaerfe(ersterAkkord.getTonZuNummer(i).getAbstandZumBasisTon());
           //          zwischenWertAkkord2 += Kombinationsberechnung.getAesthetischeGewichtung().getKlangschaerfe(zweiterAkkord.getTonZuNummer(i).getAbstandZumBasisTon());
           //        }
-          Integer intervallErsterAkkord = ersterAkkord.getTonZuNummer(anzahlToene).getAbstandZumEingestrichenenC() - ersterAkkord.getTonZuNummer(anzahlToene - 1).getAbstandZumEingestrichenenC();
-          Integer intervallZweiterAkkord = zweiterAkkord.getTonZuNummer(anzahlToene).getAbstandZumEingestrichenenC() - zweiterAkkord.getTonZuNummer(anzahlToene - 1).getAbstandZumEingestrichenenC();
+          Integer intervallErsterAkkord =
+            ersterAkkord.getTonZuNummer(anzahlToene).getAbstandZumEingestrichenenC() - ersterAkkord.getTonZuNummer(anzahlToene - 1)
+              .getAbstandZumEingestrichenenC();
+          Integer intervallZweiterAkkord =
+            zweiterAkkord.getTonZuNummer(anzahlToene).getAbstandZumEingestrichenenC() - zweiterAkkord.getTonZuNummer(anzahlToene - 1)
+              .getAbstandZumEingestrichenenC();
           Integer result = intervallErsterAkkord.compareTo(intervallZweiterAkkord);
-          if (result == 0)
-          {
+          if (result == 0) {
             _logger.warn("AufsteigenderKlangschaerfenComparator.compare(): Gleiche Akkorde zum Vergleich erhalten!!!");
           }
           return result;
         }
-      }
-      else
-      {
+      } else {
         // TODO Sortierung nach aesthetischer Gewichtung
         return ersterAkkord.getKlangschaerfe().compareTo(zweiterAkkord.getKlangschaerfe());
 
       }
-    }
-    else
-    {
+    } else {
       _logger.warn("AufsteigenderKlangschaerfenComparator.compare(): Unterschiedliche Tonanzahl vorgefunden!");
       // TODO Prüfen - Exception oder zulassen oder wie folgend???
       return ersterAkkord.getAnzahlToene().compareTo(zweiterAkkord.getAnzahlToene());

@@ -1,10 +1,8 @@
 package org.gresch.quintett.service;
 
-import org.gresch.quintett.BasisTon;
 import org.gresch.quintett.domain.tonmodell.Ton;
 
-public interface TonService
-{
+public interface TonService {
 
   /**
    * Achtung! Setzt nicht den Abstand zum Basiston!
@@ -13,6 +11,7 @@ public interface TonService
 
   /**
    * Initialisiert den Tonumfang und setzt dabei den Abstand jedes Tons zum Basiston.
+   *
    * @param basisTon
    */
   void tonvorratInitialisieren(Ton basisTon);

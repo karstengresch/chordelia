@@ -2,8 +2,7 @@ package org.gresch.quintett.service;
 
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
 
-public interface KombinationsberechnungService
-{
+public interface KombinationsberechnungService {
 
   void kombinationenBerechnen() throws Exception;
 
@@ -18,6 +17,7 @@ public interface KombinationsberechnungService
 
   /**
    * Speichert eine Kombinationsberechnung
+   *
    * @param kombinationsberechnung
    */
   void saveKombinationsBerechnung(Kombinationsberechnung kombinationsberechnung);
@@ -36,6 +36,7 @@ public interface KombinationsberechnungService
 
   /**
    * Geht davon aus, dass eine bereits vorhandene Kombinationsberechnung vorhanden ist.
+   *
    * @param kombinationsberechnung
    */
   void updateKombinationsberechnung(Kombinationsberechnung kombinationsberechnung);

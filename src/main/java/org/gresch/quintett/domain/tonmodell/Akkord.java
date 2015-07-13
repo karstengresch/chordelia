@@ -4,113 +4,118 @@
  */
 package org.gresch.quintett.domain.tonmodell;
 
-import java.util.LinkedList;
+import org.apache.log4j.Logger;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SelectBeforeUpdate;
+
+import javax.persistence.*;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import org.apache.log4j.Logger;
-import org.gresch.quintett.domain.kombination.AkkordIdRangeZwoelftonklaenge;
-import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
-import org.hibernate.type.IntegerType;
-
+@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
+@DynamicUpdate
+@SelectBeforeUpdate
 @Table(name = "akkord")
-public class Akkord 
-{
+public class Akkord {
+  private static Logger _logger = Logger.getLogger(Akkord.class);
+  // TODO Implikationen von static im Kontext prüfen.
+  private static StringBuilder _stringBuilder = new StringBuilder(500);
   // private MultiKey akkordSchluessel;
   private Integer id;
-
   private Integer anzahlToene = -1;
   // TODO zu Set!
   // private Ton[] tonArray;
   private List<Ton> tonList;
-  private static Logger _logger = Logger.getLogger(Akkord.class);
-  // TODO Implikationen von static im Kontext prüfen.
-  private static StringBuilder _stringBuilder = new StringBuilder(500);
   private Integer klangschaerfe = 0;
-//  private ApplicationContext applicationContext = null;
-//  private Kombinationsberechnung kombinationsberechnung = new Kombinationsberechnung();
+  //  private ApplicationContext applicationContext = null;
+  //  private Kombinationsberechnung kombinationsberechnung = new Kombinationsberechnung();
 
   private Integer basisAkkordId = -1;
 
-  public Akkord()
-  {
+  public Akkord() {
     // Leer
   }
 
-//  public Akkord(List<Ton> xTonList)
-//  {
-//    // Mindestens zwei Töne!
-//    // TODO: Exception, wenn nicht.
-//    if (xTonList.size() >= 1)
-//    {
-//      boolean dirtyFlag = false;
-//      // tonArray = new Ton[xTonArray.length];
-//      tonList = new LinkedList<Ton>();
-//      int i = 0;
-//      // TODO Fehlerhaft!
-//      int abstandZumNaechstenTon = 0;
-//      for (i = 0; i < xTonList.size(); i++)
-//      {
-//        tonList.add(xTonList.get(i));
-//
-//        if (i == 0)
-//        {
-//          // TODO Abstand von c', was soll der BasisTon hier??? 
-//          // abstandZumNaechstenTon = tonList.get(i).getAbstandZumBasisTon();
-//          abstandZumNaechstenTon = tonList.get(i).getAbstandZumEingestrichenenC();
-//          // TODO Ästhetische Gewichtung von Kombinationsberechnung unabhängig machen.
-//          this.klangschaerfe += kombinationsberechnung.getAesthetischeGewichtung().getKlangschaerfe(tonList.get(i).getAbstandZumEingestrichenenC());
-//        }
-//        else
-//        {
-//          abstandZumNaechstenTon += tonList.get(i).getAbstandZumEingestrichenenC();
-//          // Auf/Ab!
-//          // TODO Zwischenvariablen!
-//
-//          this.klangschaerfe += kombinationsberechnung.getAesthetischeGewichtung().getKlangschaerfe(tonList.get(i).getAbstandZumEingestrichenenC() - tonList.get(i - 1).getAbstandZumEingestrichenenC());
-//          if (log.isDebugEnabled())
-//          {
-//            log.debug("Akkord.Akkord(): Klangschärfe für Abstand " + (tonList.get(i).getAbstandZumEingestrichenenC() - tonList.get(i - 1).getAbstandZumEingestrichenenC()) + " | Hinzugefügt: "
-//                + kombinationsberechnung.getAesthetischeGewichtung().getKlangschaerfe(tonList.get(i).getAbstandZumEingestrichenenC() - tonList.get(i - 1).getAbstandZumEingestrichenenC()));
-//            log.debug("Akkord.Akkord(): Klangschärfe insgesamt: " + klangschaerfe);
-//          }
-//        }
-//
-//        if (tonList.get(i).getAbstandZumEingestrichenenC() > 0 && dirtyFlag == false)
-//        {
-//          this.ersterTonUeberEingestrichenemC = Integer.valueOf(i);
-//          dirtyFlag = true;
-//        }
-//      }
-//      // War vorher da, aber offenbar falsch:
-//      // anzahlToene = i + 1;
-//      this.anzahlToene = i;
-//    }
-//    else
-//    {
-//      log.error("Akkord.Akkord(): Konnte Akkord nicht initialisieren!");
-//    }
-//  }
+  //  public Akkord(List<Ton> xTonList)
+  //  {
+  //    // Mindestens zwei Töne!
+  //    // TODO: Exception, wenn nicht.
+  //    if (xTonList.size() >= 1)
+  //    {
+  //      boolean dirtyFlag = false;
+  //      // tonArray = new Ton[xTonArray.length];
+  //      tonList = new LinkedList<Ton>();
+  //      int i = 0;
+  //      // TODO Fehlerhaft!
+  //      int abstandZumNaechstenTon = 0;
+  //      for (i = 0; i < xTonList.size(); i++)
+  //      {
+  //        tonList.add(xTonList.get(i));
+  //
+  //        if (i == 0)
+  //        {
+  //          // TODO Abstand von c', was soll der BasisTon hier???
+  //          // abstandZumNaechstenTon = tonList.get(i).getAbstandZumBasisTon();
+  //          abstandZumNaechstenTon = tonList.get(i).getAbstandZumEingestrichenenC();
+  //          // TODO Ästhetische Gewichtung von Kombinationsberechnung unabhängig machen.
+  //          this.klangschaerfe += kombinationsberechnung.getAesthetischeGewichtung().getKlangschaerfe(tonList.get(i).getAbstandZumEingestrichenenC());
+  //        }
+  //        else
+  //        {
+  //          abstandZumNaechstenTon += tonList.get(i).getAbstandZumEingestrichenenC();
+  //          // Auf/Ab!
+  //          // TODO Zwischenvariablen!
+  //
+  //          this.klangschaerfe += kombinationsberechnung.getAesthetischeGewichtung().getKlangschaerfe(tonList.get(i).getAbstandZumEingestrichenenC() - tonList.get(i - 1).getAbstandZumEingestrichenenC());
+  //          if (log.isDebugEnabled())
+  //          {
+  //            log.debug("Akkord.Akkord(): Klangschärfe für Abstand " + (tonList.get(i).getAbstandZumEingestrichenenC() - tonList.get(i - 1).getAbstandZumEingestrichenenC()) + " | Hinzugefügt: "
+  //                + kombinationsberechnung.getAesthetischeGewichtung().getKlangschaerfe(tonList.get(i).getAbstandZumEingestrichenenC() - tonList.get(i - 1).getAbstandZumEingestrichenenC()));
+  //            log.debug("Akkord.Akkord(): Klangschärfe insgesamt: " + klangschaerfe);
+  //          }
+  //        }
+  //
+  //        if (tonList.get(i).getAbstandZumEingestrichenenC() > 0 && dirtyFlag == false)
+  //        {
+  //          this.ersterTonUeberEingestrichenemC = Integer.valueOf(i);
+  //          dirtyFlag = true;
+  //        }
+  //      }
+  //      // War vorher da, aber offenbar falsch:
+  //      // anzahlToene = i + 1;
+  //      this.anzahlToene = i;
+  //    }
+  //    else
+  //    {
+  //      log.error("Akkord.Akkord(): Konnte Akkord nicht initialisieren!");
+  //    }
+  //  }
+
+  @Transient
+  public static int getErsterTonUeberEingestrichenemC(List<Ton> tonList) {
+    int ersterTonUeberEingestrichenemC = -1;
+
+    int tonZaehler = 0;
+
+    for (Ton ton : tonList) {
+      if (ton.getAbstandZumEingestrichenenC() > 0) {
+        ersterTonUeberEingestrichenemC = tonZaehler;
+        break;
+      }
+      tonZaehler++;
+
+    }
+
+    return ersterTonUeberEingestrichenemC;
+  }
 
   @Id
   /* @GeneratedValue(strategy = GenerationType.AUTO) */
-  public Integer getId()
-  {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(Integer id)
-  {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -118,9 +123,12 @@ public class Akkord
    * @return Returns the anzahlToene.
    */
   @Column(name = "anzahlToene", unique = false, nullable = false)
-  public Integer getAnzahlToene()
-  {
+  public Integer getAnzahlToene() {
     return anzahlToene;
+  }
+
+  public void setAnzahlToene(Integer xAnzahlToene) {
+    anzahlToene = xAnzahlToene;
   }
 
   // @Transient
@@ -128,31 +136,26 @@ public class Akkord
   // return tonArray;
   // }
   // Bestimmten Ton holen - Numerierung nullbasiert.
-  public Ton getTonZuNummerNullbasiert(Integer xNummer)
-  {
+  public Ton getTonZuNummerNullbasiert(Integer xNummer) {
     return tonList.get(xNummer);
   }
 
   // Bestimmten Ton holen - Numerierung mit 1 beginnend.
-  public Ton getTonZuNummer(Integer xNummer)
-  {
+  public Ton getTonZuNummer(Integer xNummer) {
     return tonList.get(xNummer - 1);
   }
 
   // Bestimmten Ton holen - Numerierung mit 1 beginnend.
   @Transient
-  public Ton getHoechstenTon()
-  {
+  public Ton getHoechstenTon() {
     return tonList.get(tonList.size() - 1);
   }
 
-  public String toString()
-  {
+  public String toString() {
     return this.toStringBuilder().toString();
   }
 
-  public StringBuilder toStringBuilder()
-  {
+  public StringBuilder toStringBuilder() {
     _stringBuilder.delete(0, _stringBuilder.length());
     int i = -1;
     _stringBuilder.append("******* AKKORD *******");
@@ -170,8 +173,7 @@ public class Akkord
     _stringBuilder.append(this.klangschaerfe);
     _stringBuilder.append('\n');
 
-    for (i = 0; i < this.tonList.size(); i++)
-    {
+    for (i = 0; i < this.tonList.size(); i++) {
       _stringBuilder.append('\n');
       _stringBuilder.append("Ton Nummer: " + String.valueOf(i + 1));
       _stringBuilder.append(tonList.get(i).toString());
@@ -180,113 +182,77 @@ public class Akkord
     return _stringBuilder;
   }
 
-  @Transient
-  public static int getErsterTonUeberEingestrichenemC(List<Ton> tonList)
-  {
-    int ersterTonUeberEingestrichenemC = -1;
-    
-    int tonZaehler = 0;
-   
-    for (Ton ton : tonList)
-    {
-      if(ton.getAbstandZumEingestrichenenC() > 0)
-      {
-        ersterTonUeberEingestrichenemC = tonZaehler;
-        break;
-      }
-      tonZaehler++;
-      
-    }
-    
-    return ersterTonUeberEingestrichenemC;
-  }
-
   @Column(name = "klangschaerfe", unique = false, nullable = false)
-  public Integer getKlangschaerfe()
-  {
+  public Integer getKlangschaerfe() {
     return klangschaerfe;
   }
 
-  public void setKlangschaerfe(Integer klangschaerfe)
-  {
+  //  public void validate() throws ValidationFailure
+  //  {
+  //    if (log.isDebugEnabled())
+  //    {
+  //      log.debug("Akkord-Hibernate: Validate()");
+  //    }
+  //  }
+
+  //  public void onLoad(Session arg0, Serializable arg1)
+  //  {
+  //    if (log.isDebugEnabled())
+  //    {
+  //      log.debug("Akkord-Hibernate: onLoad");
+  //    }
+  //  }
+
+  public void setKlangschaerfe(Integer klangschaerfe) {
     this.klangschaerfe = klangschaerfe;
   }
 
-//  public void validate() throws ValidationFailure
-//  {
-//    if (log.isDebugEnabled())
-//    {
-//      log.debug("Akkord-Hibernate: Validate()");
-//    }
-//  }
-
-//  public void onLoad(Session arg0, Serializable arg1)
-//  {
-//    if (log.isDebugEnabled())
-//    {
-//      log.debug("Akkord-Hibernate: onLoad");
-//    }
-//  }
-
-  public void setAnzahlToene(Integer xAnzahlToene)
-  {
-    anzahlToene = xAnzahlToene;
-  }
-
-  @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
   @org.hibernate.annotations.Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-  @JoinTable(name = "ton_akkord", joinColumns = { @JoinColumn(name = "akkord_id") }, inverseJoinColumns = { @JoinColumn(name = "ton_id") })
-  @org.hibernate.annotations.IndexColumn(name = "position")
-  public List<Ton> getTonList()
-  {
+  @JoinTable(name = "ton_akkord", joinColumns = {@JoinColumn(name = "akkord_id")}, inverseJoinColumns = {@JoinColumn(name = "ton_id")})
+  @javax.persistence.OrderColumn(name = "position")
+  public List<Ton> getTonList() {
     return tonList;
   }
 
-  public void setTonList(List<Ton> tonList)
-  {
+  public void setTonList(List<Ton> tonList) {
     this.tonList = tonList;
   }
 
-  public void setBasisAkkordId(Integer xBasisAkkordId)
-  {
+  @Column(name = "basis_akkord_id", unique = false, nullable = false)
+  public Integer getBasisAkkordId() {
+    return basisAkkordId;
+  }
+
+  public void setBasisAkkordId(Integer xBasisAkkordId) {
     basisAkkordId = xBasisAkkordId;
 
   }
 
-  @Column(name = "basis_akkord_id", unique = false, nullable = false)
-  public Integer getBasisAkkordId()
-  {
-    return basisAkkordId;
-  }
-
-//  @Override
-//  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
-//  {
-//    this.applicationContext = applicationContext;
-//    this.kombinationsberechnung = ((KombinationsberechnungService) applicationContext.getBean("kombinationsberechnungService")).getKombinationsBerechnung();
-//  }
+  //  @Override
+  //  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
+  //  {
+  //    this.applicationContext = applicationContext;
+  //    this.kombinationsberechnung = ((KombinationsberechnungService) applicationContext.getBean("kombinationsberechnungService")).getKombinationsBerechnung();
+  //  }
 
   @Override
-  public boolean equals(Object other)
-  {
+  public boolean equals(Object other) {
     if (this == other)
       return true;
     if (!(other instanceof Akkord))
       return false;
     final Akkord that = (Akkord) other;
     // Muss dieselbe Anzahl an Tönen haben
-    if (!this.getAnzahlToene().equals(that.getAnzahlToene()))
-    {
+    if (!this.getAnzahlToene().equals(that.getAnzahlToene())) {
       return false;
     }
     // Muss vom selben Akkord abgeleitet sein - allerdings problematisch, wenn Konfusion in Akkord-Ids
-    if (!this.getBasisAkkordId().equals(that.getBasisAkkordId()))
-    {
+    if (!this.getBasisAkkordId().equals(that.getBasisAkkordId())) {
       return false;
     }
     // Muss dieselbe Klangschärfe haben
-    if (!this.getKlangschaerfe().equals(that.getKlangschaerfe()))
-    {
+    if (!this.getKlangschaerfe().equals(that.getKlangschaerfe())) {
       return false;
     }
     // Folgende Attribute schieden aus:
@@ -310,8 +276,7 @@ public class Akkord
   }
 
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     int result = 14;
     result = 29 * result + getAnzahlToene().intValue();
     result = 29 * result + getBasisAkkordId().intValue();

@@ -1,7 +1,6 @@
 package org.gresch.quintett.domain.kombination;
 
-public enum AkkordIdRangeZwoelftonklaenge
-{
+public enum AkkordIdRangeZwoelftonklaenge {
   ZWEITONKLAENGE(2, 1, 11),
   DREITONKLAENGE(3, 12, 121),
   VIERTONKLAENGE(4, 122, 1111),
@@ -19,30 +18,16 @@ public enum AkkordIdRangeZwoelftonklaenge
 
   AkkordIdRangeZwoelftonklaenge(int anzahlToene,
                                 int minId,
-                                int maxId)
-  {
+                                int maxId) {
     this.anzahlToene = anzahlToene;
     this.minId = minId;
     this.maxId = maxId;
   }
 
-  public int minId()
-  {
-    return minId;
-  }
+  public static int anzahlToeneZuId(int akkordId) {
 
-  public int maxId()
-  {
-    return maxId;
-  }
-
-  public static int anzahlToeneZuId(int akkordId)
-  {
-
-    for (AkkordIdRangeZwoelftonklaenge akkordIdRange : AkkordIdRangeZwoelftonklaenge.values())
-    {
-      if (akkordId >= akkordIdRange.minId && akkordId <= akkordIdRange.maxId)
-      {
+    for (AkkordIdRangeZwoelftonklaenge akkordIdRange : AkkordIdRangeZwoelftonklaenge.values()) {
+      if (akkordId >= akkordIdRange.minId && akkordId <= akkordIdRange.maxId) {
         return akkordIdRange.anzahlToene;
       }
     }
@@ -51,12 +36,9 @@ public enum AkkordIdRangeZwoelftonklaenge
 
   }
 
-  public static int maxIdZuAnzahlToene(int anzahlToene)
-  {
-    for (AkkordIdRangeZwoelftonklaenge akkordIdRange : AkkordIdRangeZwoelftonklaenge.values())
-    {
-      if (anzahlToene == akkordIdRange.anzahlToene)
-      {
+  public static int maxIdZuAnzahlToene(int anzahlToene) {
+    for (AkkordIdRangeZwoelftonklaenge akkordIdRange : AkkordIdRangeZwoelftonklaenge.values()) {
+      if (anzahlToene == akkordIdRange.anzahlToene) {
         return akkordIdRange.maxId;
       }
     }
@@ -65,18 +47,23 @@ public enum AkkordIdRangeZwoelftonklaenge
 
   }
 
-  public static int minIdZuAnzahlToene(int anzahlToene)
-  {
-    for (AkkordIdRangeZwoelftonklaenge akkordIdRange : AkkordIdRangeZwoelftonklaenge.values())
-    {
-      if (anzahlToene == akkordIdRange.anzahlToene)
-      {
+  public static int minIdZuAnzahlToene(int anzahlToene) {
+    for (AkkordIdRangeZwoelftonklaenge akkordIdRange : AkkordIdRangeZwoelftonklaenge.values()) {
+      if (anzahlToene == akkordIdRange.anzahlToene) {
         return akkordIdRange.minId;
       }
     }
     // TODO Exception?
     return -1;
 
+  }
+
+  public int minId() {
+    return minId;
+  }
+
+  public int maxId() {
+    return maxId;
   }
 
 }

@@ -1,0 +1,28 @@
+# About this document
+To unburden myself from the pain running MySQL (the only DB that was both freely available and capable fullfilling my requirements on a local machine) on OS X natively, I decided to run it via Docker's standard MySQL image.
+ 
+As OS X doesn't support Docker natively and needs a VM for it, I decided to also control the VM creation (instead of using boot2docker or Kitematic) with Vagrant.
+ 
+You can find the Vagrantfile in the project root.
+ 
+In general, the setup process looks like this (on Mac OS X, IntelliJ IDEA):
+ 
+* Vagrant must be installed, got it from [https://www.vagrantup.com/downloads.html](the official Vagrant website). N.B. - I used also the VMWare Fusion provider. 
+* Next the Vagrant box needs to be initialised.
+ 
+## Vagrant
+    v$>git clone https://github.com/coreos/coreos-vagrant/
+    v$>cd coreos-vagrant/
+    v$>vagrant up --provider vmware_fusion
+    v$>ssh-add ~/.vagrant.d/insecure_private_key
+    v$>vagrant ssh core-01 -- -A
+
+## Docker
+For getting the official MySQL docker 
+    d$>docker run -d -p 0.0.0.0:3306:3306 -e MYSQL_DATABASE=quintett -e MYSQL_USER=quintett -e MYSQL_ROOT_PASSWORD=nonono mysql:latest --name quintett
+    
+   
+## Troubleshooting
+
+Try
+        rpcbind restart nfs-server

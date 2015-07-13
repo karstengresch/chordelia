@@ -1,45 +1,38 @@
 package org.gresch.quintett.service;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
-public class RenderServiceTest
-{
+import static org.junit.Assert.fail;
+
+public class RenderServiceTest {
 
   @Test
-  public void testGetErgebnisSystemPfad()
-  {
+  public void testGetErgebnisSystemPfad() {
     fail("Not yet implemented");
   }
 
   @Test
-  public void testGetOberesSystemPfad()
-  {
+  public void testGetOberesSystemPfad() {
     fail("Not yet implemented");
   }
 
   @Test
-  public void testGetTemplateKopf()
-  {
+  public void testGetTemplateKopf() {
     fail("Not yet implemented");
   }
 
   @Test
-  public void testGetTemplateOberesSystem()
-  {
+  public void testGetTemplateOberesSystem() {
     fail("Not yet implemented");
   }
 
   @Test
-  public void testGetTemplateUnteresSystem()
-  {
+  public void testGetTemplateUnteresSystem() {
     fail("Not yet implemented");
   }
 
   @Test
-  public void testGetUnteresSystemPfad()
-  {
+  public void testGetUnteresSystemPfad() {
     fail("Not yet implemented");
   }
 

@@ -1,21 +1,13 @@
 package org.gresch.quintett.domain.kombination;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gresch.quintett.BasisTon;
 import org.gresch.quintett.KombinationsberechnungParameter;
 import org.gresch.quintett.domain.tonmodell.Ton;
+
+import javax.persistence.*;
 
 /**
  * @author Karsten Führt die Berechnung der möglichen Kombinationen durch. Ausgabe je nach übergebenem Renderer. <br>
@@ -45,47 +37,30 @@ import org.gresch.quintett.domain.tonmodell.Ton;
  */
 @Entity
 @Table(name = "kombinationsberechnung")
-public class Kombinationsberechnung
-{
+public class Kombinationsberechnung {
+  public final static Log log = LogFactory.getLog(Kombinationsberechnung.class);
+  public final static String S = System.getProperty("file.separator");
+  public final static String TEMPDIR_PATH = System.getProperty("java.io.tmpdir");
+  public final static String TEMPORAERES_VERZEICHNIS_PFAD = TEMPDIR_PATH + (TEMPDIR_PATH.endsWith(S) ? "" : S) + "quintett";
+  public final String ANWENDUNGSPFAD = System.getProperty("user.dir");
+  public Ton basisTon = null;
+  public Integer maxAnzahlToene = -1;
+  public AesthetischeGewichtung aesthetischeGewichtung;
+  public Akkordkombinationen akkordkombinationen;
+
+  //
+  public String renderer = "?";
   // FIXME Sollte das nötig sein? Eigentlich müsste sinnvolle hashCode/equals-Implementierung ausreichen.
   // FIXME hashCode und equals in jedem Fall!
   // FIXME ggf. Timestamp, ggf. sogar Update
   //  private static Kombinationsberechnung theInstance;
   //  private static boolean instantiated = false;
   private Integer id = 1;
-
-  public final static Log log = LogFactory.getLog(Kombinationsberechnung.class);
-
-  public Kombinationsberechnung()
-  {
-//    log.info("Kombinationsberechnung erzeugt!");
-    //    Kombinationsberechnung.getInstance();
-  }
-
   private String[] argumentsArray;
   private String argumentsString;
-  public final String ANWENDUNGSPFAD = System.getProperty("user.dir");
-  public final static String S = System.getProperty("file.separator");
-  public final static String TEMPDIR_PATH = System.getProperty("java.io.tmpdir");
-  public final static String TEMPORAERES_VERZEICHNIS_PFAD = TEMPDIR_PATH + (TEMPDIR_PATH.endsWith(S) ? "" : S) + "quintett";
-
-  //
-
-  public enum Ausgabeformat
-  {
-    LILYPOND,
-    MUSICML,
-    MIDI,
-    POSTSCRIPT,
-    TEXT
-  };
-
   // Statische Member
   @SuppressWarnings("unused")
   private boolean isDebugModus = false;
-
-  public Ton basisTon = null;
-  public Integer maxAnzahlToene = -1;
   //  private String absteigendeIntervallOption;
   private Boolean hatAbsteigendeIntervallinformationen = true;
   //  private String absteigendeKlangschaerfeOption;
@@ -93,9 +68,6 @@ public class Kombinationsberechnung
   //  private String absteigendeAusgabeOption;
   private Boolean hatAbsteigendeAusgabe = true;
   private String intervallInformationen = "?";
-  public AesthetischeGewichtung aesthetischeGewichtung;
-  public Akkordkombinationen akkordkombinationen;
-  public String renderer = "?";
   private Boolean hatPersistenzSchreiben = false;
   private Boolean hatPersistenzLaden = false;
   private Boolean hatDbErstellen = false;
@@ -103,6 +75,19 @@ public class Kombinationsberechnung
   private Integer letzteBasisAkkordKlangschaerfe = -1;
   private Integer letzteAkkordId = -1;
   private Integer letzteBasisAkkordId = -1;
+
+  public Kombinationsberechnung() {
+    //    log.info("Kombinationsberechnung erzeugt!");
+    //    Kombinationsberechnung.getInstance();
+  }
+
+  @Transient
+  public AesthetischeGewichtung getAesthetischeGewichtung() {
+    if (null == aesthetischeGewichtung) {
+      aesthetischeGewichtung = new AesthetischeGewichtung(KombinationsberechnungParameter.CLI_DEFAULTWERT_INTERVALLINFORMATIONEN, this);
+    }
+    return aesthetischeGewichtung;
+  }
 
   //  public String getAbsteigendeIntervallOption()
   //  {
@@ -142,137 +127,104 @@ public class Kombinationsberechnung
   //    this.absteigendeAusgabeOption = absteigendeAusgabeOption;
   //  }
 
-  @Transient
-  public AesthetischeGewichtung getAesthetischeGewichtung()
-  {
-    if (null == aesthetischeGewichtung)
-    {
-      aesthetischeGewichtung = new AesthetischeGewichtung(KombinationsberechnungParameter.CLI_DEFAULTWERT_INTERVALLINFORMATIONEN, this);
-    }
-    return aesthetischeGewichtung;
-  }
-
-  public void setAesthetischeGewichtung(AesthetischeGewichtung aesthetischeGewichtung)
-  {
+  public void setAesthetischeGewichtung(AesthetischeGewichtung aesthetischeGewichtung) {
     this.aesthetischeGewichtung = aesthetischeGewichtung;
   }
 
   // @Column(name="basis_ton", unique=true, nullable=false)
   @Transient
-  public Ton getBasisTonAsTon()
-  {
+  public Ton getBasisTonAsTon() {
     return basisTon;
   }
 
-//  @Transient
-  @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
+  //  @Transient
+  @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
   @org.hibernate.annotations.Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-  @JoinTable(name = "basiston_kombinationsberechnung", joinColumns = { @JoinColumn(name = "kombinationsberechnung_id") }, inverseJoinColumns = { @JoinColumn(name = "ton_id") })
-  public Ton getBasisTon()
-  {
+  @JoinTable(name = "basiston_kombinationsberechnung", joinColumns = {@JoinColumn(name = "kombinationsberechnung_id")}, inverseJoinColumns = {
+    @JoinColumn(name = "ton_id")})
+  public Ton getBasisTon() {
     return basisTon;
   }
 
-  public void setBasisTon(Ton xBasisTon)
-  {
-    if(BasisTon.istGueltigerBasisTon(xBasisTon))
-    {
-    basisTon = xBasisTon;
-    }
-    else
-    {
+  public void setBasisTon(Ton xBasisTon) {
+    if (BasisTon.istGueltigerBasisTon(xBasisTon)) {
+      basisTon = xBasisTon;
+    } else {
       // Ggf. auf Default setzen.
       throw new RuntimeException("Kann ohne gueltigen Basiston keine Kombinationsberechnung durchfuehren!");
     }
   }
 
   @Column(name = "intervallinformationen", unique = false, nullable = false)
-  public String getIntervallInformationen()
-  {
+  public String getIntervallInformationen() {
     return intervallInformationen;
   }
 
-  public void setIntervallInformationen(String intervallInformationen)
-  {
+  public void setIntervallInformationen(String intervallInformationen) {
     this.intervallInformationen = intervallInformationen;
   }
 
   @Column(name = "intervallinformationen_absteigend", unique = false, nullable = false)
-  public Boolean getHatAbsteigendeIntervallinformationen()
-  {
+  public Boolean getHatAbsteigendeIntervallinformationen() {
     return hatAbsteigendeIntervallinformationen;
   }
 
-  public void setHatAbsteigendeIntervallinformationen(Boolean istAbsteigend)
-  {
+  public void setHatAbsteigendeIntervallinformationen(Boolean istAbsteigend) {
     this.hatAbsteigendeIntervallinformationen = istAbsteigend;
   }
 
   @Column(name = "anzahl_toene", unique = false, nullable = false)
-  public Integer getMaxAnzahlToene()
-  {
+  public Integer getMaxAnzahlToene() {
     return maxAnzahlToene;
   }
 
-  public void setMaxAnzahlToene(Integer maxAnzahlToene)
-  {
+  public void setMaxAnzahlToene(Integer maxAnzahlToene) {
     this.maxAnzahlToene = maxAnzahlToene;
   }
 
-  public String[] getArgumentsArray()
-  {
+  public String[] getArgumentsArray() {
     return argumentsArray;
   }
 
-  @Column(name = "aufrufparameter", unique = false, nullable = true)
-  public String getArgumentsString()
-  {
-    return argumentsString;
-  }
-
-  public void setArguments(String[] xArguments)
-  {
-    argumentsArray = xArguments;
-    setArgumentsString(StringUtils.join((Object[]) xArguments, ';'));
-  }
-
-  public void setArgumentsArray(String[] xArgumentsArray)
-  {
+  public void setArgumentsArray(String[] xArgumentsArray) {
     argumentsArray = xArgumentsArray;
   }
 
-  public void setArgumentsString(String xArgumentsString)
-  {
+  @Column(name = "aufrufparameter", unique = false, nullable = true)
+  public String getArgumentsString() {
+    return argumentsString;
+  }
+
+  public void setArgumentsString(String xArgumentsString) {
     argumentsString = xArgumentsString;
   }
 
+  public void setArguments(String[] xArguments) {
+    argumentsArray = xArguments;
+    setArgumentsString(StringUtils.join(xArguments, ';'));
+  }
+
   @Column(name = "renderer", unique = false, nullable = false)
-  public String getRenderer()
-  {
+  public String getRenderer() {
     return renderer;
   }
 
-  public void setRenderer(String renderer)
-  {
+  public void setRenderer(String renderer) {
     this.renderer = renderer;
   }
 
   @Column(name = "klangschaerfe_absteigend", unique = true, nullable = false)
-  public Boolean getHatAbsteigendeKlangschaerfe()
-  {
+  public Boolean getHatAbsteigendeKlangschaerfe() {
     return hatAbsteigendeKlangschaerfe;
   }
 
-  public void setHatAbsteigendeKlangschaerfe(Boolean hatAbsteigendeKlangschaerfe)
-  {
+  public void setHatAbsteigendeKlangschaerfe(Boolean hatAbsteigendeKlangschaerfe) {
     this.hatAbsteigendeKlangschaerfe = hatAbsteigendeKlangschaerfe;
   }
 
   @Transient
-  public Ton getDefaultBasisTon()
-  {
-    if (null == basisTon)
-    {
+  public Ton getDefaultBasisTon() {
+    if (null == basisTon) {
       basisTon = new Ton();
       basisTon.setTonName(KombinationsberechnungParameter.CLI_DEFAULTWERT_GRUNDTON);
       // basisTon.setAbstandZumBasisTon(0);
@@ -283,61 +235,56 @@ public class Kombinationsberechnung
   }
 
   @Column(name = "ausgabe_absteigend", unique = false, nullable = false)
-  public Boolean getHatAbsteigendeAusgabe()
-  {
+  public Boolean getHatAbsteigendeAusgabe() {
     return hatAbsteigendeAusgabe;
   }
 
-  public void setHatAbsteigendeAusgabe(Boolean hatAbsteigendeAusgabe)
-  {
+  public void setHatAbsteigendeAusgabe(Boolean hatAbsteigendeAusgabe) {
     this.hatAbsteigendeAusgabe = hatAbsteigendeAusgabe;
   }
 
-  public Boolean getHatPersistenzLaden()
-  {
+  public Boolean getHatPersistenzLaden() {
     return hatPersistenzLaden;
+  }
+
+  public void setHatPersistenzLaden(Boolean hatPersistenzLaden) {
+    this.hatPersistenzLaden = hatPersistenzLaden;
   }
 
   // public void setHatPersistenzLaden(Boolean hatPersistenzLaden) {
   // this.hatPersistenzLaden = hatPersistenzLaden;
   // }
 
-  public Boolean getHatPersistenzSchreiben()
-  {
+  public Boolean getHatPersistenzSchreiben() {
     return hatPersistenzSchreiben;
+  }
+
+  public void setHatPersistenzSchreiben(Boolean hatPersistenzSchreiben) {
+    this.hatPersistenzSchreiben = hatPersistenzSchreiben;
   }
 
   // TODO Könnte man auch verknüpfen, wenn eine DB mehrere AesthetischeGewichtungen enthalten soll
   @Transient
-  public Akkordkombinationen getAkkordKombinationen()
-  {
+  public Akkordkombinationen getAkkordKombinationen() {
     return akkordkombinationen;
   }
 
   @Id
   // @GeneratedValue(strategy = GenerationType.IDENTITY)
-  public Integer getId()
-  {
-    if (null == id)
-    {
+  public Integer getId() {
+    if (null == id) {
       id = 1;
     }
     return id;
   }
 
-  public void setId(java.lang.Integer xId)
-  {
+  public void setId(java.lang.Integer xId) {
     id = xId;
   }
 
-  public void setHatPersistenzLaden(Boolean hatPersistenzLaden)
-  {
-    this.hatPersistenzLaden = hatPersistenzLaden;
-  }
-
-  public void setHatPersistenzSchreiben(Boolean hatPersistenzSchreiben)
-  {
-    this.hatPersistenzSchreiben = hatPersistenzSchreiben;
+  @Column(name = "bereits_berechnete_toene", unique = false, nullable = true)
+  public Integer getBereitsBerechneteToene() {
+    return bereitsBerechneteToene;
   }
 
   //  // FIXME So nicht! Kombinationsberechnung über KombinationsberechnungInformationService holen!
@@ -354,68 +301,48 @@ public class Kombinationsberechnung
   //    return theInstance;
   //  }
 
-  @Column(name = "bereits_berechnete_toene", unique = false, nullable = true)
-  public Integer getBereitsBerechneteToene()
-  {
-    return bereitsBerechneteToene;
-  }
-
-  public void setBereitsBerechneteToene(Integer xBereitsBerechneteToene)
-  {
+  public void setBereitsBerechneteToene(Integer xBereitsBerechneteToene) {
     bereitsBerechneteToene = xBereitsBerechneteToene;
   }
 
   @Column(name = "letzte_basis_akkord_klangschaerfe", unique = false, nullable = true)
-  public Integer getLetzteBasisAkkordKlangschaerfe()
-  {
+  public Integer getLetzteBasisAkkordKlangschaerfe() {
     return letzteBasisAkkordKlangschaerfe;
   }
 
-  public void setLetzteBasisAkkordKlangschaerfe(Integer xLetzteBasisAkkordKlangschaerfe)
-  {
+  public void setLetzteBasisAkkordKlangschaerfe(Integer xLetzteBasisAkkordKlangschaerfe) {
     letzteBasisAkkordKlangschaerfe = xLetzteBasisAkkordKlangschaerfe;
   }
 
-  public boolean getHatDbErstellen()
-  {
+  public Boolean getHatDbErstellen() {
     return hatDbErstellen;
   }
 
-  public void setHatDbErstellen(Boolean xHatDbErstellen)
-  {
+  public void setHatDbErstellen(Boolean xHatDbErstellen) {
     hatDbErstellen = xHatDbErstellen;
   }
 
-  public void setLetzteAkkordId(Integer xId)
-  {
+  @Column(name = "letzte_akkord_id", unique = false, nullable = true)
+  public Integer getLetzteAkkordId() {
+    return letzteAkkordId;
+  }
+
+  public void setLetzteAkkordId(Integer xId) {
     letzteAkkordId = xId;
 
   }
 
-  @Column(name = "letzte_akkord_id", unique = false, nullable = true)
-  public Integer getLetzteAkkordId()
-  {
-    return letzteAkkordId;
-  }
-
   @Column(name = "letzte_basis_akkord_id", unique = false, nullable = true)
-  public Integer getLetzteBasisAkkordId()
-  {
+  public Integer getLetzteBasisAkkordId() {
     return letzteBasisAkkordId;
   }
 
-  public void setLetzteBasisAkkordId(Integer xLetzteBasisAkkordId)
-  {
+  public void setLetzteBasisAkkordId(Integer xLetzteBasisAkkordId) {
     letzteBasisAkkordId = xLetzteBasisAkkordId;
   }
 
-  // public void setHatPersistenzSchreiben(Boolean hatPersistenzSchreiben) {
-  // this.hatPersistenzSchreiben = hatPersistenzSchreiben;
-  // }
-
   @Override
-  public boolean equals(Object other)
-  {
+  public boolean equals(Object other) {
     if (this == other)
       return true;
     if (!(other instanceof Kombinationsberechnung))
@@ -423,42 +350,36 @@ public class Kombinationsberechnung
     final Kombinationsberechnung that = (Kombinationsberechnung) other;
     // Muss dieselbe Anzahl an Tönen haben
 
-    if (!this.getBasisTon().equals(that.getBasisTon()))
-    {
+    if (!this.getBasisTon().equals(that.getBasisTon())) {
       return false;
     }
 
-    if (!this.getMaxAnzahlToene().equals(that.getMaxAnzahlToene()))
-    {
+    if (!this.getMaxAnzahlToene().equals(that.getMaxAnzahlToene())) {
       return false;
     }
 
-    if (!this.getArgumentsString().equals(that.getArgumentsString()))
-    {
+    if (!this.getArgumentsString().equals(that.getArgumentsString())) {
       return false;
     }
 
-    if (!this.getBereitsBerechneteToene().equals(that.getBereitsBerechneteToene()))
-    {
+    if (!this.getBereitsBerechneteToene().equals(that.getBereitsBerechneteToene())) {
       return false;
     }
 
-    if (!this.getLetzteAkkordId().equals(that.getLetzteAkkordId()))
-    {
+    if (!this.getLetzteAkkordId().equals(that.getLetzteAkkordId())) {
       return false;
     }
 
-    if (!this.getLetzteBasisAkkordId().equals(that.getLetzteBasisAkkordId()))
-    {
-      return false;
-    }
+    return this.getLetzteBasisAkkordId().equals(that.getLetzteBasisAkkordId());
 
-    return true;
   }
 
+  // public void setHatPersistenzSchreiben(Boolean hatPersistenzSchreiben) {
+  // this.hatPersistenzSchreiben = hatPersistenzSchreiben;
+  // }
+
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     int result = 14;
     result = 29 * result + getArgumentsString().hashCode();
     result = 29 * result + getLetzteAkkordId().intValue();
@@ -466,6 +387,14 @@ public class Kombinationsberechnung
     result = 29 * result + getBereitsBerechneteToene().intValue();
     return result;
 
+  }
+
+  public enum Ausgabeformat {
+    LILYPOND,
+    MUSICML,
+    MIDI,
+    POSTSCRIPT,
+    TEXT
   }
 
 }

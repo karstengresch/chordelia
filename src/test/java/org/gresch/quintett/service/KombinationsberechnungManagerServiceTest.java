@@ -1,27 +1,30 @@
 package org.gresch.quintett.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import javax.annotation.Resource;
-
 import org.gresch.quintett.KombinationsberechnungParameter;
 import org.gresch.quintett.domain.kombination.AkkordIdRangeZwoelftonklaenge;
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+
+import static org.junit.Assert.*;
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring-main.xml" })
+@ContextConfiguration(locations = {"classpath:spring-main-test.xml"})
+@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
+  TransactionalTestExecutionListener.class})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false)
 @Transactional
-public class KombinationsberechnungManagerServiceTest
-{
+public class KombinationsberechnungManagerServiceTest {
 
   @Resource(name = "kombinationsberechnungService")
   KombinationsberechnungService kombinationsberechnungService;
@@ -30,8 +33,7 @@ public class KombinationsberechnungManagerServiceTest
   KombinationsberechnungTestHelper kombinationsberechnungTestHelper;
 
   @Test
-  public void testSetup()
-  {
+  public void testSetup() {
     assertTrue("Die Spring-Konfiguration sollte funktionieren.", true);
     assertNotNull("Bean 'kombinationsberechnungService' sollte instantiiert sein.", kombinationsberechnungService);
     assertNotNull("Bean 'kombinationsberechnungTestHelper' sollte instantiiert sein.", kombinationsberechnungTestHelper);
@@ -51,9 +53,9 @@ public class KombinationsberechnungManagerServiceTest
   //  private static final  String CLI_PARAMETER_DB_ERSTELLEN =                      "db";
 
   @Test
-  public void testInitialisierung()
-  {
-    Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[] { "-t", "3", "-db", "j", "-ps", "j", "-pl", "n" });
+  public void testInitialisierung() {
+    Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter
+      .parameterAuswerten(new String[]{"-t", "3", "-db", "j", "-ps", "j", "-pl", "n"});
     assertTrue("Id der Kombinationsberechnung sollte 1 sein", kombinationsberechnung.getId().equals(Integer.valueOf(1)));
     kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
     //    kombinationsberechnungTestHelper.initialiseKombinationsberechnung();
@@ -62,15 +64,11 @@ public class KombinationsberechnungManagerServiceTest
   }
 
   @Test
-  public void testKombinationenBerechnen()
-  {
+  public void testKombinationenBerechnen() {
     //    kombinationsberechnungTestHelper.initialiseKombinationsberechnung();
-    try
-    {
+    try {
       kombinationsberechnungService.kombinationenBerechnen();
-    }
-    catch (Exception e)
-    {
+    } catch (Exception e) {
       e.printStackTrace();
     }
 

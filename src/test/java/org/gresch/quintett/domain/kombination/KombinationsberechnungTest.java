@@ -1,7 +1,6 @@
 package org.gresch.quintett.domain.kombination;
 
-public class KombinationsberechnungTest
-{
+public class KombinationsberechnungTest {
 
   // TODO Alle möglichen gängigen Kommandozeilenoptionen testen.
 

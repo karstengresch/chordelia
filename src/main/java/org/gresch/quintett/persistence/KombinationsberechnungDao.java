@@ -2,8 +2,7 @@ package org.gresch.quintett.persistence;
 
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
 
-public interface KombinationsberechnungDao extends com.trg.dao.dao.standard.GenericDAO<Kombinationsberechnung, Integer>
-{
+public interface KombinationsberechnungDao extends com.googlecode.genericdao.dao.jpa.GenericDAO<Kombinationsberechnung, Integer> {
 
   Integer getMaxAkkordIdZuBasisAkkordId(Integer xBasisAkkordId);
 
@@ -30,12 +29,14 @@ public interface KombinationsberechnungDao extends com.trg.dao.dao.standard.Gene
 
   /**
    * Gibt eine Referenz auf die aktuelle Berechnung.
+   *
    * @return
    */
   Kombinationsberechnung getKombinationsberechnung();
 
   boolean saveOrUpdate(Kombinationsberechnung kombinationsberechnung);
 
-  void merge(Kombinationsberechnung kombinationsberechnung);
+  // @Override
+  //void merge(Kombinationsberechnung kombinationsberechnung);
 
 }

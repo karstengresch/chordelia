@@ -1,39 +1,33 @@
 package org.gresch.quintett.service;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.annotation.Resource;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gresch.quintett.KombinationsberechnungParameter;
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
 import org.gresch.quintett.persistence.KombinationsberechnungDao;
-import org.hibernate.FlushMode;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.io.File;
+import java.io.IOException;
 
 // TODO Logger
 @Service("kombinationsberechnungService")
-public class KombinationsberechnungServiceImpl implements KombinationsberechnungService
-{
+public class KombinationsberechnungServiceImpl implements KombinationsberechnungService {
 
+  @PersistenceContext
+  EntityManager entityManager;
   private Log log = LogFactory.getLog(KombinationsberechnungServiceImpl.class);
   @Resource(name = "kombinationsberechnungDao")
   private KombinationsberechnungDao kombinationsberechnungDao;
-
   @Resource(name = "akkordKombinationenService")
   private AkkordKombinationenService akkordKombinationenService;
-  
-  @Resource(name = "sessionFactory")
-  private SessionFactory sessionFactory;
-
+  //@Resource(name = "sessionFactory")
+  // private SessionFactory sessionFactory;
 
   //  @Autowired
   //  public KombinationsberechnungServiceImpl(KombinationsberechnungDao kombinationsberechnungDao)
@@ -43,27 +37,24 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
   //    // Beany baby
   //  }
 
-  public KombinationsberechnungServiceImpl()
-  {
+  public KombinationsberechnungServiceImpl() {
 
   }
 
   /*
-   * (non-Javadoc)
-   * 
-   * @see org.gresch.quintett.service.KombinationsberechnungService#kombinationenBerechnen()
-   */
+     * (non-Javadoc)
+     *
+     * @see org.gresch.quintett.service.KombinationsberechnungService#kombinationenBerechnen()
+     */
   @Transactional
-  public void kombinationenBerechnen() throws Exception
-  {
-    // wohl: 
+  public void kombinationenBerechnen() throws Exception {
+    // wohl:
     Kombinationsberechnung kombinationsberechnung = kombinationsberechnungDao.getKombinationsberechnung();
-    if (null == kombinationsberechnung)
-    {
+    if (null == kombinationsberechnung) {
       throw new RuntimeException("Kann ohne Informationen zur Kombinationsberechnung nichts berechnen. Programm beendet sich.");
     }
     akkordKombinationenService.berechneUndPersistiereKombinationsberechnung();
-//    throw new RuntimeException("'kombinationenBerechnen()' Noch nicht implementiert");
+    //    throw new RuntimeException("'kombinationenBerechnen()' Noch nicht implementiert");
     // TODO Ganz hässlich
     // kombinationsberechnung.akkordKombinationen = new Akkordkombinationen(kombinationsberechnung.maxAnzahlToene,
     // kombinationsberechnung.aesthetischeGewichtung,
@@ -72,8 +63,7 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
   }
 
   @Transactional
-  public void kombinationenAusgeben()
-  {
+  public void kombinationenAusgeben() {
     throw new RuntimeException("'kombinationenAusgeben()' Noch nicht implementiert");
     // FIXME Services verwenden!
     // TODO Ausgabeformat auswerten
@@ -98,27 +88,21 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
 
   }
 
-  public void verzeichnisseVorbereiten()
-  {
-    try
-    {
+  public void verzeichnisseVorbereiten() {
+    try {
       FileUtils.forceMkdir(new File(Kombinationsberechnung.TEMPORAERES_VERZEICHNIS_PFAD));
-    }
-    catch (IOException e)
-    {
+    } catch (IOException e) {
       log.error("Kombinationsberechnung.verzeichnisseVorbereiten(): Konnte trotz Commons Verzeichnis nicht anlegen!\n", e);
     }
   }
 
   @Override
-//  @Transactional(propagation=Propagation.REQUIRES_NEW)
+  //  @Transactional(propagation=Propagation.REQUIRES_NEW)
   @Transactional(readOnly = true)
-  public Kombinationsberechnung getKombinationsBerechnung()
-  { // TODO ans DAO???
+  public Kombinationsberechnung getKombinationsBerechnung() { // TODO ans DAO???
     Kombinationsberechnung kombinationsberechnung = kombinationsberechnungDao.getKombinationsberechnung();
 
-    if (null == kombinationsberechnung)
-    {
+    if (null == kombinationsberechnung) {
       // kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(null);
       log.error("Konnte keine Kombinationsberechnung zurueckgeben!!!");
     }
@@ -127,84 +111,71 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
   }
 
   @Override
-  @Transactional(isolation=Isolation.SERIALIZABLE)
-  public void saveKombinationsBerechnung(Kombinationsberechnung kombinationsberechnung)
-  {
+  @Transactional(isolation = Isolation.SERIALIZABLE)
+  public void saveKombinationsBerechnung(Kombinationsberechnung kombinationsberechnung) {
     Kombinationsberechnung kombinationsberechungOld = kombinationsberechnungDao.getKombinationsberechnung();
     // Vielleicht in Erstinitialisierungsmethode?
-    if (null == kombinationsberechungOld)
-    {
+    if (null == kombinationsberechungOld) {
       kombinationsberechnungDao.save(kombinationsberechnung);
       log.info("Speichere Kombinationsberechnung, weil noch keine ermittelt wurde.");
-    }
-    else
-    {
-      if(kombinationsberechungOld.getArgumentsString().equalsIgnoreCase(kombinationsberechnung.getArgumentsString()))
-      {
+    } else {
+      if (kombinationsberechungOld.getArgumentsString().equalsIgnoreCase(kombinationsberechnung.getArgumentsString())) {
         kombinationsberechnungDao.saveOrUpdate(kombinationsberechnung);
-      }
-      else {
+      } else {
         kombinationsberechnungDao.merge(kombinationsberechnung);
       }
     }
-    
-//    FlushMode flushModeOld = sessionFactory.getCurrentSession().getFlushMode();
-//    sessionFactory.getCurrentSession().setFlushMode(FlushMode.MANUAL);
-//    sessionFactory.getCurrentSession().flush();
-////    sessionFactory.getCurrentSession().getTransaction().commit();
-////    sessionFactory.getCurrentSession().beginTransaction();
-//    sessionFactory.getCurrentSession().setFlushMode(flushModeOld);
+
+    //    FlushMode flushModeOld = sessionFactory.getCurrentSession().getFlushMode();
+    //    sessionFactory.getCurrentSession().setFlushMode(FlushMode.MANUAL);
+    //    sessionFactory.getCurrentSession().flush();
+    ////    sessionFactory.getCurrentSession().getTransaction().commit();
+    ////    sessionFactory.getCurrentSession().beginTransaction();
+    //    sessionFactory.getCurrentSession().setFlushMode(flushModeOld);
 
     // TODO In Generic-DAO-Methode (?)
 
   }
 
   @Override
-  public Long getAnzahlBerechneterAkkorde()
-  {
+  public Long getAnzahlBerechneterAkkorde() {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public Integer getLetzteAkkordId()
-  {
+  public Integer getLetzteAkkordId() {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public Integer getLetzteBasisAkkordId()
-  {
+  public Integer getLetzteBasisAkkordId() {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public Integer getLetzteBasisAkkordKlangschaerfe()
-  {
+  public Integer getLetzteBasisAkkordKlangschaerfe() {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public Integer getMaxAkkordIdZuBasisAkkordId(Integer letzteBasisAkkordIdInteger)
-  {
+  public Integer getMaxAkkordIdZuBasisAkkordId(Integer letzteBasisAkkordIdInteger) {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public Integer getMaxAnzahlAkkordToeneAusAkkorden()
-  {
+  public Integer getMaxAnzahlAkkordToeneAusAkkorden() {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
   @Transactional(isolation = Isolation.REPEATABLE_READ)
-  public void updateKombinationsberechnung(Kombinationsberechnung kombinationsberechnung)
-  {
+  public void updateKombinationsberechnung(Kombinationsberechnung kombinationsberechnung) {
     kombinationsberechnungDao.refresh(kombinationsberechnung);
   }
 

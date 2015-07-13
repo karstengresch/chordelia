@@ -1,48 +1,48 @@
 package org.gresch.quintett.persistence;
 
-import javax.annotation.Resource;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
-import org.hibernate.FlushMode;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  * TODO: Remove Singleton impl. when starting to use Spring.
  * TODO: Logging.
  *
  * @author Karsten
- *
  */
 @Repository("kombinationsberechnungDao")
-public class KombinationsberechnungDaoHibernateImpl extends com.trg.dao.dao.standard.GenericDAOImpl<Kombinationsberechnung, Integer> implements KombinationsberechnungDao
-{
-  private final Log log = LogFactory.getLog(KombinationsberechnungDaoHibernateImpl.class);
+public class KombinationsberechnungDaoHibernateImpl extends com.googlecode.genericdao.dao.jpa.GenericDAOImpl<Kombinationsberechnung, Integer>
+  implements KombinationsberechnungDao {
   // TODO remove singleton
   private final static KombinationsberechnungDaoHibernateImpl theInstance = new KombinationsberechnungDaoHibernateImpl();
+  private final Log log = LogFactory.getLog(KombinationsberechnungDaoHibernateImpl.class);
   // TODO sessionFactory
-  @Resource(name = "sessionFactory")
-  private SessionFactory sessionFactory;
+  @PersistenceContext
+  EntityManager entityManager;
 
-  private KombinationsberechnungDaoHibernateImpl()
-  {
+  private KombinationsberechnungDaoHibernateImpl() {
     // Beany
   }
 
+  public static KombinationsberechnungDao getInstance() {
+    return theInstance;
+  }
+
   @Override
-  public Long getAnzahlBerechneterAkkorde()
-  {
+  public Long getAnzahlBerechneterAkkorde() {
     Long anzahlBerechneterAkkorde;
 
-    // anzahlBerechneterAkkorde = (Long) sessionFactory.getCurrentSession().createQuery("select count(distinct a) from Akkord a").uniqueResult();
-    try
-    {
-      anzahlBerechneterAkkorde = Long.valueOf(((Integer) sessionFactory.getCurrentSession().createSQLQuery("select max(id) from Akkord").uniqueResult()).longValue());
-    }
-    catch (NullPointerException e)
-    {
+    // anzahlBerechneterAkkorde = (Long) entityManager.unwrap(SessionFactory.class).getCurrentSession().createQuery("select count(distinct a) from Akkord a").uniqueResult();
+    try {
+      anzahlBerechneterAkkorde = Long.valueOf(
+        ((Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession().createSQLQuery("select max(id) from Akkord").uniqueResult())
+          .longValue());
+    } catch (NullPointerException e) {
       anzahlBerechneterAkkorde = Long.valueOf(0);
     }
 
@@ -50,27 +50,25 @@ public class KombinationsberechnungDaoHibernateImpl extends com.trg.dao.dao.stan
   }
 
   @Override
-  public Long getAnzahlBerechneterAkkordeZuAnzahlAkkordToene(Integer xAkkordToene)
-  {
+  public Long getAnzahlBerechneterAkkordeZuAnzahlAkkordToene(Integer xAkkordToene) {
     Long anzahlBerechneterToene;
 
-    // anzahlBerechneterToene = (Long) sessionFactory.getCurrentSession().createQuery("select count(distinct a) from Akkord a where a.anzahlToene = " + xAkkordToene).uniqueResult();
-    anzahlBerechneterToene = Long.valueOf((String) sessionFactory.getCurrentSession().createSQLQuery("select max(id) from Akkord a where a.anzahlToene = " + xAkkordToene)
-                                                                 .uniqueResult());
+    // anzahlBerechneterToene = (Long) entityManager.unwrap(SessionFactory.class).getCurrentSession().createQuery("select count(distinct a) from Akkord a where a.anzahlToene = " + xAkkordToene).uniqueResult();
+    anzahlBerechneterToene = Long.valueOf((String) entityManager.unwrap(SessionFactory.class).getCurrentSession()
+      .createSQLQuery("select max(id) from Akkord a where a.anzahlToene = " + xAkkordToene)
+      .uniqueResult());
     return anzahlBerechneterToene;
   }
 
   @Override
-  public Integer getMaxAnzahlAkkordToeneAusBerechnungsInformation()
-  {
+  public Integer getMaxAnzahlAkkordToeneAusBerechnungsInformation() {
     Integer maxAnzahlAkkordToeneAusBerechnungsInformation = 0;
 
-    // alt:maxAnzahlAkkordToene = (Integer) sessionFactory.getCurrentSession().createQuery("select max(a.anzahlToene) from Akkord
+    // alt:maxAnzahlAkkordToene = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession().createQuery("select max(a.anzahlToene) from Akkord
     // a").uniqueResult();
-    maxAnzahlAkkordToeneAusBerechnungsInformation = (Integer) sessionFactory.getCurrentSession()
-                                                                            .createSQLQuery("select bereits_berechnete_toene from berechnungs_informationen").uniqueResult();
-    if (null == maxAnzahlAkkordToeneAusBerechnungsInformation)
-    {
+    maxAnzahlAkkordToeneAusBerechnungsInformation = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession()
+      .createSQLQuery("select bereits_berechnete_toene from berechnungs_informationen").uniqueResult();
+    if (null == maxAnzahlAkkordToeneAusBerechnungsInformation) {
       // Später: Loggen
       maxAnzahlAkkordToeneAusBerechnungsInformation = -1;
     }
@@ -78,18 +76,17 @@ public class KombinationsberechnungDaoHibernateImpl extends com.trg.dao.dao.stan
   }
 
   @Override
-  public Integer getMaxAnzahlAkkordToeneAusAkkorden()
-  {
+  public Integer getMaxAnzahlAkkordToeneAusAkkorden() {
     // BigInteger maxAnzahlAkkordToeneAusAkkorden = BigInteger.valueOf(0);
     Integer maxAnzahlAkkordToeneAusAkkorden = 0;
-    // alt:maxAnzahlAkkordToene = (Integer) sessionFactory.getCurrentSession().createQuery("select max(a.anzahlToene) from Akkord
+    // alt:maxAnzahlAkkordToene = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession().createQuery("select max(a.anzahlToene) from Akkord
     // a").uniqueResult();
     // String subselectQuery = "select max(c.county) from (select count(position) county from ton_akkord group by akkord_id) c";
     String subselectQuery = "select (max(position)+1) from TON_AKKORD where AKKORD_ID = ( select max(akkord_id) from ton_akkord)";
-    maxAnzahlAkkordToeneAusAkkorden = (Integer) sessionFactory.getCurrentSession().createSQLQuery(subselectQuery).uniqueResult();
+    maxAnzahlAkkordToeneAusAkkorden = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession().createSQLQuery(subselectQuery)
+      .uniqueResult();
 
-    if (null == maxAnzahlAkkordToeneAusAkkorden)
-    {
+    if (null == maxAnzahlAkkordToeneAusAkkorden) {
       // Später: Loggen
       maxAnzahlAkkordToeneAusAkkorden = -1; // BigInteger.valueOf(-1);
     }
@@ -97,25 +94,20 @@ public class KombinationsberechnungDaoHibernateImpl extends com.trg.dao.dao.stan
     return Integer.valueOf(maxAnzahlAkkordToeneAusAkkorden.intValue());
   }
 
-  public static KombinationsberechnungDao getInstance()
-  {
-    return theInstance;
-  }
-
   @Override
-  public Integer getMaxIdZuAnzahlAkkordToene(Integer xAkkordToene)
-  {
+  public Integer getMaxIdZuAnzahlAkkordToene(Integer xAkkordToene) {
     Integer maxId;
-    maxId = (Integer) sessionFactory.getCurrentSession().createQuery("select max(a.id) from Akkord a where a.anzahlToene = " + xAkkordToene).uniqueResult();
+    maxId = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession()
+      .createQuery("select max(a.id) from Akkord a where a.anzahlToene = " + xAkkordToene).uniqueResult();
     return maxId;
   }
 
   @Override
-  public Integer getMinIdZuAnzahlAkkordToene(Integer xAkkordToene)
-  {
+  public Integer getMinIdZuAnzahlAkkordToene(Integer xAkkordToene) {
     Integer maxId;
     // TODO Projections
-    maxId = (Integer) sessionFactory.getCurrentSession().createQuery("select min(a.id) from Akkord a where a.anzahlToene = " + xAkkordToene).uniqueResult();
+    maxId = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession()
+      .createQuery("select min(a.id) from Akkord a where a.anzahlToene = " + xAkkordToene).uniqueResult();
     return maxId;
   }
 
@@ -137,17 +129,13 @@ public class KombinationsberechnungDaoHibernateImpl extends com.trg.dao.dao.stan
 
   // ???
   @Override
-  public boolean saveOrUpdate(Kombinationsberechnung kombinationsberechnung)
-  {
+  public boolean saveOrUpdate(Kombinationsberechnung kombinationsberechnung) {
 
     boolean successfullyUpdated = false;
-    try
-    {
-      sessionFactory.getCurrentSession().saveOrUpdate(kombinationsberechnung);
+    try {
+      entityManager.unwrap(SessionFactory.class).getCurrentSession().saveOrUpdate(kombinationsberechnung);
       successfullyUpdated = true;
-    }
-    catch (Exception e)
-    {
+    } catch (Exception e) {
       log.error("Konnte Kombinationsberechnung nicht updaten: " + e.getLocalizedMessage());
     }
 
@@ -156,14 +144,13 @@ public class KombinationsberechnungDaoHibernateImpl extends com.trg.dao.dao.stan
   }
 
   @Override
-  public Integer getBerechnungsId()
-  {
+  public Integer getBerechnungsId() {
     Integer berechnungsId = 0;
 
-    berechnungsId = (Integer) sessionFactory.getCurrentSession().createQuery("select max(b.id) from Kombinationsberechnung b").uniqueResult();
+    berechnungsId = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession().createQuery("select max(b.id) from Kombinationsberechnung b")
+      .uniqueResult();
 
-    if (null == berechnungsId)
-    {
+    if (null == berechnungsId) {
       // Später: Loggen
     }
 
@@ -171,62 +158,50 @@ public class KombinationsberechnungDaoHibernateImpl extends com.trg.dao.dao.stan
   }
 
   @Override
-  public Integer getLetzteBasisAkkordKlangschaerfe()
-  {
+  public Integer getLetzteBasisAkkordKlangschaerfe() {
     Integer letzteBasisAkkordKlangschaerfe = 0;
-    try
-    {
-      letzteBasisAkkordKlangschaerfe = (Integer) sessionFactory.getCurrentSession().createSQLQuery("select letzte_basis_akkord_klangschaerfe from berechnungs_informationen")
-                                                               .uniqueResult();
-    }
-    catch (Exception e)
-    {
+    try {
+      letzteBasisAkkordKlangschaerfe = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession()
+        .createSQLQuery("select letzte_basis_akkord_klangschaerfe from berechnungs_informationen")
+        .uniqueResult();
+    } catch (Exception e) {
       System.out.println(e.toString());
     }
 
-    if (null == letzteBasisAkkordKlangschaerfe)
-    {
+    if (null == letzteBasisAkkordKlangschaerfe) {
       // Später: Loggen
     }
     return letzteBasisAkkordKlangschaerfe;
   }
 
-  public Integer getLetzteAkkordId()
-  {
+  public Integer getLetzteAkkordId() {
     Integer letzteAkkordId = 0;
-    try
-    {
-      letzteAkkordId = (Integer) sessionFactory.getCurrentSession().createSQLQuery("select " + "letzte_akkord_id from berechnungs_informationen").uniqueResult();
-    }
-    catch (Exception e)
-    {
+    try {
+      letzteAkkordId = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession()
+        .createSQLQuery("select " + "letzte_akkord_id from berechnungs_informationen").uniqueResult();
+    } catch (Exception e) {
       // TODO: Kommt, wenn noch nicht vorhanden - dann gar nicht erst abfragen!
       System.out.println(e.toString());
     }
 
-    if (null == letzteAkkordId)
-    {
+    if (null == letzteAkkordId) {
       // Später: Loggen
     }
     return letzteAkkordId;
   }
 
   @Override
-  public Integer getLetzteBasisAkkordId()
-  {
+  public Integer getLetzteBasisAkkordId() {
     {
       Integer letzteBasisAkkordId = 0;
-      try
-      {
-        letzteBasisAkkordId = (Integer) sessionFactory.getCurrentSession().createSQLQuery("select letzte_basis_akkord_id from berechnungs_informationen").uniqueResult();
-      }
-      catch (Exception e)
-      {
+      try {
+        letzteBasisAkkordId = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession()
+          .createSQLQuery("select letzte_basis_akkord_id from berechnungs_informationen").uniqueResult();
+      } catch (Exception e) {
         System.out.println(e.toString());
       }
 
-      if (null == letzteBasisAkkordId)
-      {
+      if (null == letzteBasisAkkordId) {
         // Später: Loggen
       }
       return letzteBasisAkkordId;
@@ -234,22 +209,17 @@ public class KombinationsberechnungDaoHibernateImpl extends com.trg.dao.dao.stan
   }
 
   @Override
-  public Integer getMaxAkkordIdZuBasisAkkordId(Integer xBasisAkkordId)
-  {
+  public Integer getMaxAkkordIdZuBasisAkkordId(Integer xBasisAkkordId) {
     {
       Integer maxAkkordAkkordIdZuBasisAkkordId = 0;
-      try
-      {
-        maxAkkordAkkordIdZuBasisAkkordId = (Integer) sessionFactory.getCurrentSession()
-                                                                   .createSQLQuery(("select max(id) from akkord where basis_akkord_id = " + xBasisAkkordId)).uniqueResult();
-      }
-      catch (Exception e)
-      {
+      try {
+        maxAkkordAkkordIdZuBasisAkkordId = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession()
+          .createSQLQuery(("select max(id) from akkord where basis_akkord_id = " + xBasisAkkordId)).uniqueResult();
+      } catch (Exception e) {
         System.out.println(e.toString());
       }
 
-      if (null == maxAkkordAkkordIdZuBasisAkkordId)
-      {
+      if (null == maxAkkordAkkordIdZuBasisAkkordId) {
         // Später: Loggen
       }
       return maxAkkordAkkordIdZuBasisAkkordId;
@@ -257,29 +227,26 @@ public class KombinationsberechnungDaoHibernateImpl extends com.trg.dao.dao.stan
   }
 
   @Override
-  public Kombinationsberechnung getKombinationsberechnung()
-  {
-//    Kombinationsberechnung kombinationsberechnung = (Kombinationsberechnung) sessionFactory.getCurrentSession().get(Kombinationsberechnung.class, 1);
+  public Kombinationsberechnung getKombinationsberechnung() {
     Kombinationsberechnung kombinationsberechnung = find(1);
-    if (null == kombinationsberechnung)
-    {
+    if (null == kombinationsberechnung) {
       log.error("******* Konnte keine Kombinationsberechnung zurueckgeben!");
     }
     return kombinationsberechnung;
   }
 
-  @Override
-  public void merge(Kombinationsberechnung kombinationsberechnung)
-  {
-    try
-    {
-      sessionFactory.getCurrentSession().merge(kombinationsberechnung);
-    }
-    catch (Exception e)
-    {
-      log.error("Konnte Kombinationsberechnung nicht updaten: " + e.getLocalizedMessage());
-    }
-
-  }
+  //  @Override
+  //  public void merge(Kombinationsberechnung kombinationsberechnung)
+  //  {
+  //    try
+  //    {
+  //      entityManager.unwrap(SessionFactory.class).getCurrentSession().merge(kombinationsberechnung);
+  //    }
+  //    catch (Exception e)
+  //    {
+  //      log.error("Konnte Kombinationsberechnung nicht updaten: " + e.getLocalizedMessage());
+  //    }
+  //
+  //  }
 
 }

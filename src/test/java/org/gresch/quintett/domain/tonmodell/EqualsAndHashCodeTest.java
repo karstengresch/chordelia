@@ -1,26 +1,29 @@
 package org.gresch.quintett.domain.tonmodell;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring-main.xml" })
-public class EqualsAndHashCodeTest
-{
+@ContextConfiguration("classpath:spring-main-test.xml")
+@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
+  TransactionalTestExecutionListener.class})
+public class EqualsAndHashCodeTest {
   @Test
-  public void testSetup()
-  {
+  public void testSetup() {
     assertTrue("Spring-Konfiguration sollte geladen werden können", true);
   }
+
   @Test
   public void testTonEqualityAndHashCode() {
     Ton kleinCisis1 = new Ton(Oktavlage.KLEINE, Name.CISIS);
@@ -29,7 +32,7 @@ public class EqualsAndHashCodeTest
     assertEquals("Toene sollten gleich sein.", kleinCisis1, kleinCisis2);
     assertEquals("HashCode sollte gleich sein.", kleinCisis1.hashCode(), kleinCisis2.hashCode());
     assertNotSame("Klein CISIS sollte nicht klein CIS sein.", kleinCisis1, kleinCis1);
-    
+
   }
 
   @Test
@@ -43,12 +46,12 @@ public class EqualsAndHashCodeTest
     clusterListe1.add(kleinD1);
     clusterListe1.add(kleinDis1);
     clusterListe1.add(kleinE1);
-    
+
     List<Ton> clusterListe2 = new ArrayList<Ton>();
     clusterListe1.add(kleinCis1);
     clusterListe1.add(kleinD1);
-    clusterListe1.add(kleinE1);    
-    
+    clusterListe1.add(kleinE1);
+
     Akkord akkordCluster1 = new Akkord();
     akkordCluster1.setTonList(clusterListe1);
     Akkord akkordCluster2 = new Akkord();
@@ -58,9 +61,7 @@ public class EqualsAndHashCodeTest
     assertEquals("Ersten beiden Akkorde sollten gleich sein.", akkordCluster1, akkordCluster2);
     assertEquals("HashCode der ersten beiden Akkorde sollte gleich sein.", akkordCluster1.hashCode(), akkordCluster2.hashCode());
     assertNotSame("Akkord mit weniger Toenen sollte nicht gleich sein.", akkordCluster3, akkordCluster2);
-    
-    
+
   }
-  
-  
+
 }
