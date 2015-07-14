@@ -410,25 +410,6 @@ public class Ton {
     this.tonNameVollstaendig = tonNameVollstaendig;
   }
 
-  // public boolean onSave(Session arg0) throws CallbackException {
-  // log.debug("Ton-Hibernate: onSave");
-  // return false;
-  // }
-  //
-  // public boolean onUpdate(Session arg0) throws CallbackException {
-  // log.debug("Ton-Hibernate: onUpdate");
-  // return false;
-  // }
-  //
-  // public boolean onDelete(Session arg0) throws CallbackException {
-  // log.debug("Ton-Hibernate: onDelete");
-  // return false;
-  // }
-  //
-  // public void onLoad(Session arg0, Serializable arg1) {
-  // log.debug("Ton-Hibernate: onLoad");
-  // }
-
   @Override
   public boolean equals(Object other) {
     if (this == other)
