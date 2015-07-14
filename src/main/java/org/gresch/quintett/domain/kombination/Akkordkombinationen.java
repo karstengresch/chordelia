@@ -81,7 +81,7 @@ public class Akkordkombinationen {
   /**
    * Default-Konstruktor. Die Anzahl der Töne wird angegeben, für die permutierte Akkorde berechnet werden sollen.
    *
-   * @param anzahlToene
+   *
    */
   public Akkordkombinationen() {
 
@@ -117,12 +117,5 @@ public class Akkordkombinationen {
     return akkordKombinationen;
   }
 
-  //  @Override
-  //  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
-  //  {
-  //    this.kombinationsberechnungService = (KombinationsberechnungService) applicationContext.getBean("kombinationsberechungService");
-  //    this.kombinationsberechnung = kombinationsberechnungService.getKombinationsBerechnung();
-  //
-  //  }
 
 }

@@ -18,7 +18,6 @@ public interface QuintettRenderer {
    *
    * @param minAkkordId
    * @param maxAkkordId
-   * @param vollerPfadname
    * @param switchString   TODO
    */
   void rendereKombinationenNachAkkordIdRange(int minAkkordId, int maxAkkordId, String switchString);
@@ -26,7 +25,6 @@ public interface QuintettRenderer {
   /**
    * Für unsortierte, unbestimmte Anzahl von Akkorden, normalerweise unterschiedlicher Tonanzahl.
    *
-   * @param vollerPfadname
    * @param switchString   TODO
    */
   void rendereKombinationenNachAkkordIdList(List<Integer> akkordIdList, String switchString);
@@ -35,9 +33,7 @@ public interface QuintettRenderer {
    * Komfortmethode, die es ermöglicht, alle Akkorde mit der bestimmten Tonanzahl
    * (z.B. Fünftonklänge) zu rendern.
    *
-   * @param vollerPfadname
    * @param switchString   TODO
-   * @param akkordIdList
    */
   void rendereKombinationenFuerAnzahlToene(Integer anzahlToene, String switchString);
 
@@ -45,9 +41,7 @@ public interface QuintettRenderer {
    * Komfortmethode, die es ermöglicht, alle Akkorde bis zu einer bestimmten Tonanzahl
    * (z.B. ab Zwei- bis Fünftonklänge) zu rendern.
    *
-   * @param vollerPfadname
    * @param switchString   TODO
-   * @param akkordIdList
    */
   void rendereKombinationenBisAnzahlToene(Integer maxAnzahlToene, String switchString);
   // /**

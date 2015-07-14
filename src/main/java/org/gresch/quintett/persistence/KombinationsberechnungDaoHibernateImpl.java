@@ -22,6 +22,8 @@ public class KombinationsberechnungDaoHibernateImpl extends com.googlecode.gener
   private final static KombinationsberechnungDaoHibernateImpl theInstance = new KombinationsberechnungDaoHibernateImpl();
   private final Log log = LogFactory.getLog(KombinationsberechnungDaoHibernateImpl.class);
   // TODO sessionFactory
+
+
   @PersistenceContext
   EntityManager entityManager;
 
