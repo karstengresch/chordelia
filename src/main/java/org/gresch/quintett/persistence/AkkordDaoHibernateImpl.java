@@ -101,19 +101,5 @@ public class AkkordDaoHibernateImpl extends GenericDAOImpl<Akkord, Integer> impl
     return resultList;
   }
 
-  //  // Noch benötigt? => Nicht im  Interface!
-  //  Map<Akkord, Integer> getAkkorde(Integer rangeBeginId, Integer rangeEndID)
-  //  {
-  //    Map<Akkord, Integer> akkorde = null;
-  //
-  //    return akkorde;
-  //  }
-  //
-  //  // Noch nicht im Interface! void oder doch boolean?
-  //  public void deleteAkkordeGreaterEqualBasisAkkordId(Integer xBasisAkkordId)
-  //  {
-  //
-  //
-  //  }
 
 }
