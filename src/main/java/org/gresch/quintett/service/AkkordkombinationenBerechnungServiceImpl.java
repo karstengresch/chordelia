@@ -412,7 +412,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
     for (i = 0; i < xTonList.size(); i++) {
       _ton = null;
       if (i == 0) {
-        _ton = tonDao.find(basisTon.getId());
+        _ton = tonDao.findOne(basisTon.getId());
       } else {
 
         if (null == xTonList.get(i)) {
@@ -421,7 +421,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
         }
 
         try {
-          _ton = tonDao.find((xTonList.get(i).getAbstandZumEingestrichenenC() + _abstand));
+          _ton = tonDao.findOne((xTonList.get(i).getAbstandZumEingestrichenenC() + _abstand));
         } catch (Exception e) {
           log.error("Schwerer Fehler beim Transponieren: " + e.getMessage() + "\nProgramm beendet sich!");
           System.exit(-1);

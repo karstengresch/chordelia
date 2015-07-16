@@ -16,8 +16,8 @@ import javax.persistence.PersistenceContext;
  * @author Karsten
  */
 @Repository("kombinationsberechnungDao")
-public class KombinationsberechnungDaoHibernateImpl extends com.googlecode.genericdao.dao.jpa.GenericDAOImpl<Kombinationsberechnung, Integer>
-  implements KombinationsberechnungDao {
+public class KombinationsberechnungDaoHibernateImpl
+  extends KombinationsberechnungDao<Kombinationsberechnung, Integer> {
   // TODO remove singleton
   private final static KombinationsberechnungDaoHibernateImpl theInstance = new KombinationsberechnungDaoHibernateImpl();
   private final Log log = LogFactory.getLog(KombinationsberechnungDaoHibernateImpl.class);
@@ -146,6 +146,11 @@ public class KombinationsberechnungDaoHibernateImpl extends com.googlecode.gener
   }
 
   @Override
+  public boolean merge(Kombinationsberechnung kombinationsberechnung) {
+    return false;
+  }
+
+  @Override
   public Integer getBerechnungsId() {
     Integer berechnungsId = 0;
 
@@ -211,6 +216,11 @@ public class KombinationsberechnungDaoHibernateImpl extends com.googlecode.gener
   }
 
   @Override
+  public Kombinationsberechnung findOne(Integer integer) {
+    return null;
+  }
+
+  @Override
   public Integer getMaxAkkordIdZuBasisAkkordId(Integer xBasisAkkordId) {
     {
       Integer maxAkkordAkkordIdZuBasisAkkordId = 0;
@@ -230,7 +240,7 @@ public class KombinationsberechnungDaoHibernateImpl extends com.googlecode.gener
 
   @Override
   public Kombinationsberechnung getKombinationsberechnung() {
-    Kombinationsberechnung kombinationsberechnung = find(1);
+    Kombinationsberechnung kombinationsberechnung = findOne(1);
     if (null == kombinationsberechnung) {
       log.error("******* Konnte keine Kombinationsberechnung zurueckgeben!");
     }

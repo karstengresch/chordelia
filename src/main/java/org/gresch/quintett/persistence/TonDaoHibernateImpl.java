@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 @Repository("tonDao")
-public class TonDaoHibernateImpl extends com.googlecode.genericdao.dao.jpa.GenericDAOImpl<Ton, Integer> implements TonDao {
+public class TonDaoHibernateImpl implements TonDao {
   @PersistenceContext
   EntityManager entityManager;
 

@@ -1,9 +1,11 @@
 package org.gresch.quintett.persistence;
 
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.Repository;
 
-public interface KombinationsberechnungDao extends CrudRepository<Kombinationsberechnung, Integer> {
+import java.io.Serializable;
+
+public interface KombinationsberechnungDao<T, ID extends Serializable> extends Repository<T, ID> {
 
   Integer getMaxAkkordIdZuBasisAkkordId(Integer xBasisAkkordId);
 
@@ -27,6 +29,9 @@ public interface KombinationsberechnungDao extends CrudRepository<Kombinationsbe
   Integer getLetzteAkkordId();
 
   Integer getLetzteBasisAkkordId();
+
+  T findOne(ID id);
+
 
   /**
    * Gibt eine Referenz auf die aktuelle Berechnung.

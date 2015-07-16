@@ -1,6 +1,5 @@
 package org.gresch.quintett.persistence;
 
-import com.googlecode.genericdao.dao.jpa.GenericDAOImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gresch.quintett.domain.tonmodell.Akkord;
@@ -18,7 +17,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 @Repository("akkordDao")
-public class AkkordDaoHibernateImpl implements AkkordDao {
+public class AkkordDaoHibernateImpl extends AkkordDao<Akkord, Integer> {
+
   @PersistenceContext
   EntityManager entityManager;
   private Log log = LogFactory.getLog(AkkordDaoHibernateImpl.class);
@@ -42,7 +42,6 @@ public class AkkordDaoHibernateImpl implements AkkordDao {
     }
   }
 
-  @Override
   public Set<Akkord> getAkkordkombinationenZuBasisAkkord(Akkord basisAkkord) {
     // TODO Null-Check etc.
     Criteria criteria = entityManager.unwrap(SessionFactory.class).getCurrentSession().createCriteria(Akkord.class);
@@ -57,7 +56,6 @@ public class AkkordDaoHibernateImpl implements AkkordDao {
   }
 
   // XXX TODO Auf- oder absteigend : Klangschärfe und AkkordId wohl getrennt !?
-  @Override
   public ScrollableResults getScrollableResultByBasisAkkordRange(Integer minBlockId, Integer maxBlockId, int fetchBlockGroesze, boolean absteigend) {
     String steigendString = absteigend ? "DESC" : "ASC";
     String queryString = "";
@@ -72,7 +70,6 @@ public class AkkordDaoHibernateImpl implements AkkordDao {
     return akkordCursor;
   }
 
-  @Override
   public List<Integer> getAkkordIdsByAnzahlToene(int anzahlToene, boolean klangschaerfeAbsteigend, boolean akkordIdAbsteigend) {
     String klangschaerfeAbsteigendString = klangschaerfeAbsteigend ? "DESC" : "ASC";
     String akkordIdAbsteigendString = akkordIdAbsteigend ? "DESC" : "ASC";
@@ -86,7 +83,6 @@ public class AkkordDaoHibernateImpl implements AkkordDao {
     return resultList;
   }
 
-  @Override
   public List<Integer> getAkkordIdsByRange(int minId, int maxId, boolean klangschaerfeAbsteigend, boolean akkordIdAbsteigend) {
     String steigendString = klangschaerfeAbsteigend ? "DESC" : "ASC";
     String akkordIdAbsteigendString = akkordIdAbsteigend ? "DESC" : "ASC";

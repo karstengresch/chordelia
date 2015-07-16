@@ -116,7 +116,7 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
     Kombinationsberechnung kombinationsberechungOld = kombinationsberechnungDao.getKombinationsberechnung();
     // Vielleicht in Erstinitialisierungsmethode?
     if (null == kombinationsberechungOld) {
-      kombinationsberechnungDao.save(kombinationsberechnung);
+      kombinationsberechnungDao.findOne(kombinationsberechnung.getId());
       log.info("Speichere Kombinationsberechnung, weil noch keine ermittelt wurde.");
     } else {
       if (kombinationsberechungOld.getArgumentsString().equalsIgnoreCase(kombinationsberechnung.getArgumentsString())) {
