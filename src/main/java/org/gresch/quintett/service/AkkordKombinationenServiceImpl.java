@@ -160,7 +160,7 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
   @Override
   @Transactional
   public Akkord getAkkordById(Integer akkordId) {
-    return akkordDao.find(akkordId);
+    return akkordDao.findOne(akkordId);
   }
 
   @Override

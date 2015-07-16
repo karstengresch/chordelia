@@ -176,7 +176,7 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
   @Override
   @Transactional(isolation = Isolation.REPEATABLE_READ)
   public void updateKombinationsberechnung(Kombinationsberechnung kombinationsberechnung) {
-    kombinationsberechnungDao.refresh(kombinationsberechnung);
+    kombinationsberechnungDao.saveOrUpdate(kombinationsberechnung);
   }
 
 }

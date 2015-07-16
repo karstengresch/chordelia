@@ -145,7 +145,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
             // _ton.setAbstandZumEingestrichenenC(intervallEins - intervallZwei);
             // _ton = Tonumfang.getTon(intervallEins - intervallZwei);
             fetchIntervall = intervallEins - intervallZwei;
-            _ton = tonDao.find((fetchIntervall));
+            _ton = tonDao.findOne((fetchIntervall));
           } else if (!kombinationsberechnung.getHatAbsteigendeKlangschaerfe()) {
             intervallEins = 0;
             intervallZwei = 0;
@@ -154,7 +154,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
             // -1 für Sortierung von unten/aufsteigend: Immer nur das letzte Intervall betrachtend.
             // _ton.setAbstandZumEingestrichenenC(intervallEins + intervallZwei);
             // _ton = Tonumfang.getTon(intervallEins + intervallZwei);
-            _ton = tonDao.find((intervallEins + intervallZwei));
+            _ton = tonDao.findOne((intervallEins + intervallZwei));
           }
           List<Ton> _tonList;
           _tonList = new LinkedList<Ton>();
@@ -315,14 +315,14 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
       }
       List<Ton> _tonList = null;
       _tonList = new LinkedList<Ton>(); // zwei Töne
-      _tonList.add(tonDao.find(basisTon.getId())); // Ton #2 unten in iii-Schleife.
+      _tonList.add(tonDao.findOne(basisTon.getId())); // Ton #2 unten in iii-Schleife.
       //      _tonList.get(0).setAbstandZumBasisTon(0);
       Ton _ton = null;
       Integer abstandZumBasiston = AesthetischeGewichtung.getGewichtungSortierung().get(Integer.valueOf(incrementorIntervalle));
-      _ton = tonDao.find((basisTon.getAbstandZumEingestrichenenC() + abstandZumBasiston));
+      _ton = tonDao.findOne((basisTon.getAbstandZumEingestrichenenC() + abstandZumBasiston));
       //      _ton.setAbstandZumBasisTon(abstandZumBasiston);
       // _tonList.add(_ton);
-      _tonList.add(tonDao.find(_ton.getId()));
+      _tonList.add(tonDao.findOne(_ton.getId()));
       Akkord _akkord = null;
       _akkord = new Akkord();
       _akkord.setTonList(_tonList);

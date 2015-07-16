@@ -1,8 +1,9 @@
 package org.gresch.quintett.persistence;
 
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
+import org.springframework.data.repository.CrudRepository;
 
-public interface KombinationsberechnungDao extends com.googlecode.genericdao.dao.jpa.GenericDAO<Kombinationsberechnung, Integer> {
+public interface KombinationsberechnungDao extends CrudRepository<Kombinationsberechnung, Integer> {
 
   Integer getMaxAkkordIdZuBasisAkkordId(Integer xBasisAkkordId);
 
@@ -35,6 +36,8 @@ public interface KombinationsberechnungDao extends com.googlecode.genericdao.dao
   Kombinationsberechnung getKombinationsberechnung();
 
   boolean saveOrUpdate(Kombinationsberechnung kombinationsberechnung);
+
+  boolean merge(Kombinationsberechnung kombinationsberechnung);
 
   // @Override
   //void merge(Kombinationsberechnung kombinationsberechnung);
