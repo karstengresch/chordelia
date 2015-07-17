@@ -47,10 +47,10 @@ public class TonServiceTest {
   @Test
   public void testTonvorratInitialisieren() {
     tonService.tonvorratInitialisieren();
-    Ton tiefsterTon = tonDao.find(MIN_ABSTAND_C_EINGESTRICHEN);
-    Ton hoechsterTon = tonDao.find(MAX_ABSTAND_C_EINGESTRICHEN);
-    Ton es4 = tonDao.find(ES_4.getAbstandZumEingestrichenenC());
-    Ton c1 = tonDao.find(C_1.getAbstandZumEingestrichenenC());
+    Ton tiefsterTon = (Ton) tonDao.findOne(MIN_ABSTAND_C_EINGESTRICHEN);
+    Ton hoechsterTon = (Ton) tonDao.findOne(MAX_ABSTAND_C_EINGESTRICHEN);
+    Ton es4 = (Ton) tonDao.findOne(ES_4.getAbstandZumEingestrichenenC());
+    Ton c1 = (Ton) tonDao.findOne(C_1.getAbstandZumEingestrichenenC());
     assertNotNull("Tiefster Ton sollte vorhanden sein.", tiefsterTon);
     assertNotNull("Hoechster Ton sollte vorhanden sein.", hoechsterTon);
     assertNotNull("es'''' sollte vorhanden sein.", es4);
@@ -60,7 +60,7 @@ public class TonServiceTest {
 
   @Test
   public void testGetTon() {
-    Ton c1 = tonDao.find(0);
+    Ton c1 = (Ton) tonDao.findOne(0);
     assertEquals("c1 sollte c1 sein (Abstand == id == 0 fuer eingestrichenes c", C_1, c1);
     Ton c1Nr2 = tonService.getTonByExample(Tonumfang.C_1);
     assertEquals("c1 sollte c1 sein (Abstand == id == 0 fuer eingestrichenes c", c1, c1Nr2);

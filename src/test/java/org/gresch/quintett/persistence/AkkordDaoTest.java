@@ -70,7 +70,7 @@ public class AkkordDaoTest {
     Akkord testAkkord = new Akkord();
     testAkkord.setTonList(tonList);
     assertNotNull(akkordDao);
-    List<Akkord> chords = akkordDao.findAll();
+    List<Akkord> chords = (List<Akkord>) akkordDao.findAll();
     assertTrue("Akkord mit der genannten Id sollte noch nicht vorhanden sein.", null == chords);
     testAkkord.setId(Integer.valueOf(103));
     testAkkord.setAnzahlToene(3);

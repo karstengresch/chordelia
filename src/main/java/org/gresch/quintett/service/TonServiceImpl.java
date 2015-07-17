@@ -33,7 +33,7 @@ public class TonServiceImpl implements TonService {
 
   @Transactional(readOnly = true)
   public Ton getTon(Integer abstandZumEingestrichenenC) throws Exception {
-    return tonDao.findOne(abstandZumEingestrichenenC);
+    return (Ton) tonDao.findOne(abstandZumEingestrichenenC);
   }
 
   @Transactional

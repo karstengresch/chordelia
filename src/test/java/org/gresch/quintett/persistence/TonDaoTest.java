@@ -57,7 +57,7 @@ public class TonDaoTest {
     entityManager.unwrap(SessionFactory.class).getCurrentSession().flush();
     ton1.setAbstandZumEingestrichenenC(5);
     assertFalse(entityManager.unwrap(SessionFactory.class).getCurrentSession().isDirty());
-    tonDao.refresh(ton1);
+    // tonDao.(ton1);
     assertFalse("Trotz Aenderung (auszer bei der Id) sollte Hibernate das Entity-Objekt vom Dirty-Checking ausgeschlossen haben.",
       entityManager.unwrap(SessionFactory.class).getCurrentSession().isDirty());
   }

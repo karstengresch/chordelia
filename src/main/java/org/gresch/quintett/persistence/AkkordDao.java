@@ -2,13 +2,13 @@ package org.gresch.quintett.persistence;
 
 import org.gresch.quintett.domain.tonmodell.Akkord;
 import org.hibernate.ScrollableResults;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.CrudRepository;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-public interface AkkordDao<T, ID extends Serializable> extends Repository<T, ID> {
+public interface AkkordDao<T, ID extends Serializable> extends CrudRepository<Akkord, Integer> {
 
   void makePersistentReadOnly(Akkord akkord2);
 

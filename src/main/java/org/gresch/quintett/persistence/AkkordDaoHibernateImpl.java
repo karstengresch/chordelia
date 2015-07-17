@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 @Repository("akkordDao")
-public class AkkordDaoHibernateImpl extends AkkordDao<Akkord, Integer> {
+public class AkkordDaoHibernateImpl /* extends AkkordDao<Akkord, Integer>*/ {
 
   @PersistenceContext
   EntityManager entityManager;

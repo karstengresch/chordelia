@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 @Repository("tonDao")
-public class TonDaoHibernateImpl implements TonDao {
+public class TonDaoHibernateImpl {
   @PersistenceContext
   EntityManager entityManager;
 
@@ -20,7 +20,6 @@ public class TonDaoHibernateImpl implements TonDao {
   }
 
   @Transactional
-  @Override
   public void makePersistentReadOnly(Ton ton) {
     SessionFactory sessionFactory = (entityManager.unwrap(Session.class)).getSessionFactory();
     Session session = sessionFactory.getCurrentSession();
@@ -32,7 +31,6 @@ public class TonDaoHibernateImpl implements TonDao {
   // Nichts zu tun zur Zeit, nur der Struktur halber und für den Fall, dass
   // spezielle Nicht-CRUD-Methoden nötig werden.
 
-  @Override
   public Ton findByExample(Ton xTon) {
     return (Ton) entityManager.unwrap(SessionFactory.class).getCurrentSession().get(Ton.class, xTon.getAbstandZumEingestrichenenC());
   }

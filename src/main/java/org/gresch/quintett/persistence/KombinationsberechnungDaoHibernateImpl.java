@@ -17,7 +17,7 @@ import javax.persistence.PersistenceContext;
  */
 @Repository("kombinationsberechnungDao")
 public class KombinationsberechnungDaoHibernateImpl
-  extends KombinationsberechnungDao<Kombinationsberechnung, Integer> {
+  /* extends KombinationsberechnungDao<Kombinationsberechnung, Integer>*/ {
   // TODO remove singleton
   private final static KombinationsberechnungDaoHibernateImpl theInstance = new KombinationsberechnungDaoHibernateImpl();
   private final Log log = LogFactory.getLog(KombinationsberechnungDaoHibernateImpl.class);
@@ -32,10 +32,10 @@ public class KombinationsberechnungDaoHibernateImpl
   }
 
   public static KombinationsberechnungDao getInstance() {
-    return theInstance;
+    return null;
   }
 
-  @Override
+
   public Long getAnzahlBerechneterAkkorde() {
     Long anzahlBerechneterAkkorde;
 
@@ -51,7 +51,7 @@ public class KombinationsberechnungDaoHibernateImpl
     return anzahlBerechneterAkkorde;
   }
 
-  @Override
+
   public Long getAnzahlBerechneterAkkordeZuAnzahlAkkordToene(Integer xAkkordToene) {
     Long anzahlBerechneterToene;
 
@@ -62,7 +62,7 @@ public class KombinationsberechnungDaoHibernateImpl
     return anzahlBerechneterToene;
   }
 
-  @Override
+
   public Integer getMaxAnzahlAkkordToeneAusBerechnungsInformation() {
     Integer maxAnzahlAkkordToeneAusBerechnungsInformation = 0;
 
@@ -77,7 +77,7 @@ public class KombinationsberechnungDaoHibernateImpl
     return Integer.valueOf(maxAnzahlAkkordToeneAusBerechnungsInformation.intValue());
   }
 
-  @Override
+
   public Integer getMaxAnzahlAkkordToeneAusAkkorden() {
     // BigInteger maxAnzahlAkkordToeneAusAkkorden = BigInteger.valueOf(0);
     Integer maxAnzahlAkkordToeneAusAkkorden = 0;
@@ -96,7 +96,7 @@ public class KombinationsberechnungDaoHibernateImpl
     return Integer.valueOf(maxAnzahlAkkordToeneAusAkkorden.intValue());
   }
 
-  @Override
+
   public Integer getMaxIdZuAnzahlAkkordToene(Integer xAkkordToene) {
     Integer maxId;
     maxId = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession()
@@ -104,7 +104,7 @@ public class KombinationsberechnungDaoHibernateImpl
     return maxId;
   }
 
-  @Override
+
   public Integer getMinIdZuAnzahlAkkordToene(Integer xAkkordToene) {
     Integer maxId;
     // TODO Projections
@@ -130,7 +130,7 @@ public class KombinationsberechnungDaoHibernateImpl
   //  }
 
   // ???
-  @Override
+
   public boolean saveOrUpdate(Kombinationsberechnung kombinationsberechnung) {
 
     boolean successfullyUpdated = false;
@@ -145,12 +145,12 @@ public class KombinationsberechnungDaoHibernateImpl
 
   }
 
-  @Override
+
   public boolean merge(Kombinationsberechnung kombinationsberechnung) {
     return false;
   }
 
-  @Override
+
   public Integer getBerechnungsId() {
     Integer berechnungsId = 0;
 
@@ -164,7 +164,7 @@ public class KombinationsberechnungDaoHibernateImpl
     return berechnungsId;
   }
 
-  @Override
+
   public Integer getLetzteBasisAkkordKlangschaerfe() {
     Integer letzteBasisAkkordKlangschaerfe = 0;
     try {
@@ -197,7 +197,7 @@ public class KombinationsberechnungDaoHibernateImpl
     return letzteAkkordId;
   }
 
-  @Override
+
   public Integer getLetzteBasisAkkordId() {
     {
       Integer letzteBasisAkkordId = 0;
@@ -215,12 +215,12 @@ public class KombinationsberechnungDaoHibernateImpl
     }
   }
 
-  @Override
+
   public Kombinationsberechnung findOne(Integer integer) {
     return null;
   }
 
-  @Override
+
   public Integer getMaxAkkordIdZuBasisAkkordId(Integer xBasisAkkordId) {
     {
       Integer maxAkkordAkkordIdZuBasisAkkordId = 0;
@@ -238,7 +238,7 @@ public class KombinationsberechnungDaoHibernateImpl
     }
   }
 
-  @Override
+
   public Kombinationsberechnung getKombinationsberechnung() {
     Kombinationsberechnung kombinationsberechnung = findOne(1);
     if (null == kombinationsberechnung) {
@@ -247,7 +247,7 @@ public class KombinationsberechnungDaoHibernateImpl
     return kombinationsberechnung;
   }
 
-  //  @Override
+  //
   //  public void merge(Kombinationsberechnung kombinationsberechnung)
   //  {
   //    try
