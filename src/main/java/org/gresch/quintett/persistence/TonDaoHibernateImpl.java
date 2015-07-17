@@ -4,13 +4,12 @@ import org.gresch.quintett.domain.tonmodell.Ton;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-@Repository("tonDao")
+// @Repository("tonDao")
 public class TonDaoHibernateImpl {
   @PersistenceContext
   EntityManager entityManager;

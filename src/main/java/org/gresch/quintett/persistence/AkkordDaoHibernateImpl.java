@@ -7,7 +7,6 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.ScrollableResults;
 import org.hibernate.SessionFactory;
-import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-@Repository("akkordDao")
+// @Repository("akkordDao")
 public class AkkordDaoHibernateImpl /* extends AkkordDao<Akkord, Integer>*/ {
 
   @PersistenceContext

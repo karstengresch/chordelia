@@ -4,7 +4,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
 import org.hibernate.SessionFactory;
-import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +14,7 @@ import javax.persistence.PersistenceContext;
  *
  * @author Karsten
  */
-@Repository("kombinationsberechnungDao")
+// @Repository("kombinationsberechnungDao")
 public class KombinationsberechnungDaoHibernateImpl
   /* extends KombinationsberechnungDao<Kombinationsberechnung, Integer>*/ {
   // TODO remove singleton
