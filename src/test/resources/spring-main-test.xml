@@ -16,7 +16,7 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
 
   <context:component-scan base-package="org.gresch.quintett"/>
 
-  <jpa:repositories base-package="org.gresch.quintett"/>
+  <jpa:repositories base-package="org.gresch.quintett.persistence"/>
 
 
   <aop:aspectj-autoproxy proxy-target-class="false"/>

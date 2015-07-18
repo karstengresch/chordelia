@@ -7,6 +7,12 @@ import java.io.Serializable;
 
 public interface KombinationsberechnungDao<T, ID extends Serializable> extends CrudRepository<Kombinationsberechnung, Integer> {
 
+
+  // If we stay w/ Spring, we need sthg like
+
+ // @Query("select p from Product p where p.attributes[?1] = ?2")
+ //  List<Product> findByAttributeAndValue(String attribute, String value);
+
   Integer getMaxAkkordIdZuBasisAkkordId(Integer xBasisAkkordId);
 
   Integer getMaxAnzahlAkkordToeneAusBerechnungsInformation();
