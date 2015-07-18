@@ -145,9 +145,9 @@ public class KombinationsberechnungDaoHibernateImpl
   }
 
 
-  public boolean merge(Kombinationsberechnung kombinationsberechnung) {
-    return false;
-  }
+  /* public boolean merge(Kombinationsberechnung kombinationsberechnung) {
+  return false;
+  }*/
 
 
   public Integer getBerechnungsId() {

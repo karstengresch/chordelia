@@ -122,7 +122,8 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
       if (kombinationsberechungOld.getArgumentsString().equalsIgnoreCase(kombinationsberechnung.getArgumentsString())) {
         kombinationsberechnungDao.saveOrUpdate(kombinationsberechnung);
       } else {
-        kombinationsberechnungDao.merge(kombinationsberechnung);
+        // TODO needed? Returned false >only< anyway???
+        // kombinationsberechnungDao.merge(kombinationsberechnung);
       }
     }
 

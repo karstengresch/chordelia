@@ -160,6 +160,10 @@ public class Kombinationsberechnung {
     return intervallInformationen;
   }
 
+  public Kombinationsberechnung getKombinationsberechnung() {
+    return this;
+  }
+
   public void setIntervallInformationen(String intervallInformationen) {
     this.intervallInformationen = intervallInformationen;
   }

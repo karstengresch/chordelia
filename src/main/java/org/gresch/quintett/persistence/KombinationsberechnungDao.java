@@ -1,7 +1,9 @@
 package org.gresch.quintett.persistence;
 
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.io.Serializable;
 
@@ -13,27 +15,38 @@ public interface KombinationsberechnungDao<T, ID extends Serializable> extends C
  // @Query("select p from Product p where p.attributes[?1] = ?2")
  //  List<Product> findByAttributeAndValue(String attribute, String value);
 
-  Integer getMaxAkkordIdZuBasisAkkordId(Integer xBasisAkkordId);
+  @Query(value = "select max(id) from akkord where basis_akkord_id = :basisakkord", nativeQuery = true)
+  Integer getMaxAkkordIdZuBasisAkkordId(@Param("basisakkord") Integer xBasisAkkordId);
 
+  @Query(value = "select bereits_berechnete_toene from berechnungs_informationen", nativeQuery = true)
   Integer getMaxAnzahlAkkordToeneAusBerechnungsInformation();
 
+  @Query(value = "select (max(position)+1) from TON_AKKORD where AKKORD_ID = ( select max(akkord_id) from ton_akkord)", nativeQuery = true)
   Integer getMaxAnzahlAkkordToeneAusAkkorden();
 
+  @Query("select max(id) from Akkord")
   Long getAnzahlBerechneterAkkorde();
 
-  Long getAnzahlBerechneterAkkordeZuAnzahlAkkordToene(Integer xAkkordToene);
+  @Query("select max(id) from Akkord a where a.anzahlToene = :akkord_toene")
+  Long getAnzahlBerechneterAkkordeZuAnzahlAkkordToene(@Param("akkord_toene") Integer xAkkordToene);
 
-  Integer getMaxIdZuAnzahlAkkordToene(Integer xAkkordToene);
+  @Query("select max(a.id) from Akkord a where a.anzahlToene = :akkord_toene")
+  Integer getMaxIdZuAnzahlAkkordToene(@Param("akkord_toene") Integer xAkkordToene);
 
-  Integer getMinIdZuAnzahlAkkordToene(Integer xAkkordToene);
+  @Query("select min(a.id) from Akkord a where a.anzahlToene = :akkord_toene")
+  Integer getMinIdZuAnzahlAkkordToene(@Param("akkord_toene") Integer xAkkordToene);
 
   //  Boolean ladenAusDatenbankNuetzlich();
+  @Query("select max(b.id) from Kombinationsberechnung b")
   Integer getBerechnungsId();
 
+  @Query(value = "select letzte_basis_akkord_klangschaerfe from berechnungs_informationen", nativeQuery = true)
   Integer getLetzteBasisAkkordKlangschaerfe();
 
+  @Query(value = "select letzte_akkord_id from berechnungs_informationen", nativeQuery = true)
   Integer getLetzteAkkordId();
 
+  @Query(value = "select letzte_basis_akkord_id from berechnungs_informationen", nativeQuery = true)
   Integer getLetzteBasisAkkordId();
 
 
@@ -46,7 +59,7 @@ public interface KombinationsberechnungDao<T, ID extends Serializable> extends C
 
   boolean saveOrUpdate(Kombinationsberechnung kombinationsberechnung);
 
-  boolean merge(Kombinationsberechnung kombinationsberechnung);
+  // boolean merge(Kombinationsberechnung kombinationsberechnung);
 
   // @Override
   //void merge(Kombinationsberechnung kombinationsberechnung);
