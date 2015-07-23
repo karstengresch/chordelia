@@ -37,15 +37,19 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "kombinationsberechnung")
+@Access(AccessType.FIELD)
 public class Kombinationsberechnung {
   public final static Log log = LogFactory.getLog(Kombinationsberechnung.class);
   public final static String S = System.getProperty("file.separator");
   public final static String TEMPDIR_PATH = System.getProperty("java.io.tmpdir");
   public final static String TEMPORAERES_VERZEICHNIS_PFAD = TEMPDIR_PATH + (TEMPDIR_PATH.endsWith(S) ? "" : S) + "quintett";
   public final String ANWENDUNGSPFAD = System.getProperty("user.dir");
+  @Transient
   public Ton basisTon = null;
   public Integer maxAnzahlToene = -1;
+  @Transient
   public AesthetischeGewichtung aesthetischeGewichtung;
+  @Transient
   public Akkordkombinationen akkordkombinationen;
 
   //
@@ -55,7 +59,8 @@ public class Kombinationsberechnung {
   // FIXME ggf. Timestamp, ggf. sogar Update
   //  private static Kombinationsberechnung theInstance;
   //  private static boolean instantiated = false;
-  private Integer id = 1;
+  @Id
+  private Integer id;
   private String[] argumentsArray;
   private String argumentsString;
   // Statische Member
@@ -79,6 +84,20 @@ public class Kombinationsberechnung {
   public Kombinationsberechnung() {
     //    log.info("Kombinationsberechnung erzeugt!");
     //    Kombinationsberechnung.getInstance();
+    if (this.id == null)
+    {
+      this.id = 1;
+    }
+  }
+
+  // @Id
+  // @GeneratedValue(strategy = GenerationType.IDENTITY)
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(java.lang.Integer xId) {
+    id = xId;
   }
 
   @Transient
@@ -126,7 +145,7 @@ public class Kombinationsberechnung {
   //  {
   //    this.absteigendeAusgabeOption = absteigendeAusgabeOption;
   //  }
-
+@Transient
   public void setAesthetischeGewichtung(AesthetischeGewichtung aesthetischeGewichtung) {
     this.aesthetischeGewichtung = aesthetischeGewichtung;
   }
@@ -273,18 +292,6 @@ public class Kombinationsberechnung {
     return akkordkombinationen;
   }
 
-  @Id
-  // @GeneratedValue(strategy = GenerationType.IDENTITY)
-  public Integer getId() {
-    if (null == id) {
-      id = 1;
-    }
-    return id;
-  }
-
-  public void setId(java.lang.Integer xId) {
-    id = xId;
-  }
 
   @Column(name = "bereits_berechnete_toene", unique = false, nullable = true)
   public Integer getBereitsBerechneteToene() {
