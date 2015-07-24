@@ -53,8 +53,16 @@ public interface KombinationsberechnungDao<T, ID extends Serializable> extends C
    *
    * @return
    */
-  @Query(value = "select k from Kombinationsberechnung k where id = 1")
-  Kombinationsberechnung getKombinationsberechnung();
+  // @Query(value = "select k from Kombinationsberechnung k")
+//  Kombinationsberechnung getKombinationsberechnung() {
+//    Kombinationsberechnung kombinationsberechnung = (Kombinationsberechnung) sessionFactory.getCurrentSession().get(Kombinationsberechnung.class, 1);
+//    Kombinationsberechnung kombinationsberechnung = find(1);
+//    if (null == kombinationsberechnung)
+//    {
+//      log.error("******* Konnte keine Kombinationsberechnung zurueckgeben!");
+//    }
+//    return kombinationsberechnung;
+//  }
 
   // void setKombinationsberechnung(Kombinationsberechnung kombinationsberechnung);
 

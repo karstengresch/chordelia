@@ -49,7 +49,7 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
   @Transactional
   public void kombinationenBerechnen() throws Exception {
     // wohl:
-    Kombinationsberechnung kombinationsberechnung = kombinationsberechnungDao.getKombinationsberechnung();
+    Kombinationsberechnung kombinationsberechnung = (Kombinationsberechnung) kombinationsberechnungDao.findOne(1);
     if (null == kombinationsberechnung) {
       throw new RuntimeException("Kann ohne Informationen zur Kombinationsberechnung nichts berechnen. Programm beendet sich.");
     }
@@ -100,7 +100,7 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
   //  @Transactional(propagation=Propagation.REQUIRES_NEW)
   @Transactional(readOnly = true)
   public Kombinationsberechnung getKombinationsBerechnung() { // TODO ans DAO???
-    Kombinationsberechnung kombinationsberechnung = kombinationsberechnungDao.getKombinationsberechnung();
+    Kombinationsberechnung kombinationsberechnung = (Kombinationsberechnung) kombinationsberechnungDao.findOne(1);
 
     if (null == kombinationsberechnung) {
       // kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(null);
@@ -113,10 +113,16 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
   @Override
   @Transactional(isolation = Isolation.SERIALIZABLE)
   public void saveKombinationsBerechnung(Kombinationsberechnung kombinationsberechnung) {
-    Kombinationsberechnung kombinationsberechungOld = kombinationsberechnungDao.getKombinationsberechnung();
+    Kombinationsberechnung kombinationsberechungOld = null;
+    try {
+    kombinationsberechungOld = (Kombinationsberechnung) kombinationsberechnungDao.findOne(1);
+} catch (Exception e) {
+      //
+    }
+
     // Vielleicht in Erstinitialisierungsmethode?
     if (null == kombinationsberechungOld) {
-      kombinationsberechnungDao.findOne(kombinationsberechnung.getId());
+      kombinationsberechnungDao.saveOrUpdate(kombinationsberechnung);
       log.info("Speichere Kombinationsberechnung, weil noch keine ermittelt wurde.");
     } else {
       if (kombinationsberechungOld.getArgumentsString().equalsIgnoreCase(kombinationsberechnung.getArgumentsString())) {
