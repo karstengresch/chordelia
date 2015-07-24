@@ -8,13 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import javax.persistence.EntityManager;
 import java.io.Serializable;
 
 public interface TonDao<T, ID extends Serializable> extends CrudRepository<Ton, Integer> {
   // Nichts zu tun zur Zeit, nur der Struktur halber und für den Fall, dass spezielle Nicht-CRUD-Methoden nötig werden.
-  default void makePersistentReadOnly(Ton ton, EntityManager entityManager) {
-    SessionFactory sessionFactory = (entityManager.unwrap(Session.class)).getSessionFactory();
+  default void makePersistentReadOnly(Ton ton, SessionFactory sessionFactory) {
+    // SessionFactory sessionFactory = (entityManager.unwrap(Session.class)).getSessionFactory();
     Session session = sessionFactory.getCurrentSession();
     Transaction transaction = session.beginTransaction();
     session.saveOrUpdate(ton);

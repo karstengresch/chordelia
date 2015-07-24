@@ -4,6 +4,7 @@ import org.gresch.quintett.domain.tonmodell.Name;
 import org.gresch.quintett.domain.tonmodell.Oktavlage;
 import org.gresch.quintett.domain.tonmodell.Ton;
 import org.gresch.quintett.domain.tonmodell.Tonumfang;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,7 +54,7 @@ public class TonDaoTest {
     Ton basisTon = new Ton(Oktavlage.GROSZE, Name.C);
     Ton ton1 = Tonumfang.getTon(Oktavlage.GROSZE, Name.C);
     ton1.setId(ton1.getAbstandZumEingestrichenenC());
-    tonDao.makePersistentReadOnly(ton1, entityManager);
+    tonDao.makePersistentReadOnly(ton1, (entityManager.unwrap(Session.class)).getSessionFactory());
     entityManager.unwrap(SessionFactory.class).getCurrentSession().flush();
     ton1.setAbstandZumEingestrichenenC(5);
     assertFalse(entityManager.unwrap(SessionFactory.class).getCurrentSession().isDirty());

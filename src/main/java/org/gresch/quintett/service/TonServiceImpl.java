@@ -6,6 +6,8 @@ import org.gresch.quintett.KombinationsberechnungParameter;
 import org.gresch.quintett.domain.tonmodell.Oktavlage;
 import org.gresch.quintett.domain.tonmodell.Ton;
 import org.gresch.quintett.persistence.TonDao;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +53,7 @@ public class TonServiceImpl implements TonService {
   @Override
   @Transactional
   public void tonvorratInitialisieren(Ton basisTon) {
+    SessionFactory sessionFactory = (entityManager.unwrap(Session.class)).getSessionFactory();
     log.info("Tonumfang: Initialisiere...");
     int tonId = 0;
     int i = 0;
@@ -73,7 +76,7 @@ public class TonServiceImpl implements TonService {
       //        ton.setAbstandBasisTonDurchAbstandZumEingestrichenenC(_basisTon);
       //      }
 
-      tonDao.makePersistentReadOnly(ton, this.entityManager);
+      tonDao.makePersistentReadOnly(ton, sessionFactory);
       // FIXME XXX Das muss unbedingt getan werden
       // tonVorratMap.put(i, ton);
     }
