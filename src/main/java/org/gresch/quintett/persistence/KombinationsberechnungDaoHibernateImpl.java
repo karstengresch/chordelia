@@ -100,6 +100,7 @@ public class KombinationsberechnungDaoHibernateImpl
     Integer maxId;
     maxId = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession()
       .createQuery("select max(a.id) from Akkord a where a.anzahlToene = " + xAkkordToene).uniqueResult();
+
     return maxId;
   }
 
@@ -215,10 +216,6 @@ public class KombinationsberechnungDaoHibernateImpl
   }
 
 
-  public Kombinationsberechnung findOne(Integer integer) {
-    return null;
-  }
-
 
   public Integer getMaxAkkordIdZuBasisAkkordId(Integer xBasisAkkordId) {
     {
@@ -238,26 +235,5 @@ public class KombinationsberechnungDaoHibernateImpl
   }
 
 
-  public Kombinationsberechnung getKombinationsberechnung() {
-    Kombinationsberechnung kombinationsberechnung = findOne(1);
-    if (null == kombinationsberechnung) {
-      log.error("******* Konnte keine Kombinationsberechnung zurueckgeben!");
-    }
-    return kombinationsberechnung;
-  }
-
-  //
-  //  public void merge(Kombinationsberechnung kombinationsberechnung)
-  //  {
-  //    try
-  //    {
-  //      entityManager.unwrap(SessionFactory.class).getCurrentSession().merge(kombinationsberechnung);
-  //    }
-  //    catch (Exception e)
-  //    {
-  //      log.error("Konnte Kombinationsberechnung nicht updaten: " + e.getLocalizedMessage());
-  //    }
-  //
-  //  }
 
 }

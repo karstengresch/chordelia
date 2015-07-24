@@ -73,7 +73,7 @@ public class TonServiceImpl implements TonService {
       //        ton.setAbstandBasisTonDurchAbstandZumEingestrichenenC(_basisTon);
       //      }
 
-      tonDao.makePersistentReadOnly(ton);
+      tonDao.makePersistentReadOnly(ton, this.entityManager);
       // FIXME XXX Das muss unbedingt getan werden
       // tonVorratMap.put(i, ton);
     }

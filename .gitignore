@@ -103,3 +103,5 @@ target/
 .idea/chordelia.iml
 
 .idea/.name
+
+*.idea/*

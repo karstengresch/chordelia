@@ -53,7 +53,7 @@ public class TonDaoTest {
     Ton basisTon = new Ton(Oktavlage.GROSZE, Name.C);
     Ton ton1 = Tonumfang.getTon(Oktavlage.GROSZE, Name.C);
     ton1.setId(ton1.getAbstandZumEingestrichenenC());
-    tonDao.makePersistentReadOnly(ton1);
+    tonDao.makePersistentReadOnly(ton1, entityManager);
     entityManager.unwrap(SessionFactory.class).getCurrentSession().flush();
     ton1.setAbstandZumEingestrichenenC(5);
     assertFalse(entityManager.unwrap(SessionFactory.class).getCurrentSession().isDirty());

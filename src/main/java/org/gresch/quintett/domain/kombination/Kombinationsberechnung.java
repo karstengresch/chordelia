@@ -179,6 +179,7 @@ public class Kombinationsberechnung {
     return intervallInformationen;
   }
 
+  
   public Kombinationsberechnung getKombinationsberechnung() {
     return this;
   }

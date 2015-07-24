@@ -10,8 +10,6 @@ import java.io.Serializable;
 public interface KombinationsberechnungDao<T, ID extends Serializable> extends CrudRepository<Kombinationsberechnung, Integer> {
 
 
-  // If we stay w/ Spring, we need sthg like
-
  // @Query("select p from Product p where p.attributes[?1] = ?2")
  //  List<Product> findByAttributeAndValue(String attribute, String value);
 
@@ -55,9 +53,13 @@ public interface KombinationsberechnungDao<T, ID extends Serializable> extends C
    *
    * @return
    */
+  @Query(value = "select k from Kombinationsberechnung k where id = 1")
   Kombinationsberechnung getKombinationsberechnung();
 
-  boolean saveOrUpdate(Kombinationsberechnung kombinationsberechnung);
+  // void setKombinationsberechnung(Kombinationsberechnung kombinationsberechnung);
+
+  @Query(value = "update Kombinationsberechnung k set k = :kombinationsberechnung where id = 1")
+  boolean saveOrUpdate(@Param("kombinationsberechnung") Kombinationsberechnung kombinationsberechnung);
 
   // boolean merge(Kombinationsberechnung kombinationsberechnung);
 
