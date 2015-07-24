@@ -166,13 +166,13 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
   @Override
   @Transactional
   public List<Integer> getAkkordIdsByAnzahlToene(int anzahlToene, boolean klangschaerfeAbsteigend, boolean akkordIdAbsteigend) {
-    return akkordDao.getAkkordIdsByAnzahlToene(anzahlToene, klangschaerfeAbsteigend, akkordIdAbsteigend);
+    return akkordDao.getAkkordIdsByAnzahlToene(anzahlToene, klangschaerfeAbsteigend, akkordIdAbsteigend, this.entityManager);
   }
 
   @Override
   @Transactional
   public List<Integer> getAkkordIdsByRange(int minId, int maxId, boolean klangschaerfeAbsteigend, boolean akkordIdAbsteigend) {
-    return akkordDao.getAkkordIdsByRange(minId, maxId, klangschaerfeAbsteigend, akkordIdAbsteigend);
+    return akkordDao.getAkkordIdsByRange(minId, maxId, klangschaerfeAbsteigend, akkordIdAbsteigend, this.entityManager);
   }
 
 }
