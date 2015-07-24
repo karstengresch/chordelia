@@ -54,13 +54,16 @@ public class TonDaoTest {
     Ton basisTon = new Ton(Oktavlage.GROSZE, Name.C);
     Ton ton1 = Tonumfang.getTon(Oktavlage.GROSZE, Name.C);
     ton1.setId(ton1.getAbstandZumEingestrichenenC());
-    tonDao.makePersistentReadOnly(ton1, (entityManager.unwrap(Session.class)).getSessionFactory());
-    entityManager.unwrap(SessionFactory.class).getCurrentSession().flush();
+    SessionFactory sessionFactory = (entityManager.unwrap(Session.class)).getSessionFactory();
+    Session session = sessionFactory.getCurrentSession();
+    tonDao.makePersistentReadOnly(ton1, session);
+    // sessionFactory.getCurrentSession().flush();
+    entityManager.flush();
     ton1.setAbstandZumEingestrichenenC(5);
-    assertFalse(entityManager.unwrap(SessionFactory.class).getCurrentSession().isDirty());
+    assertFalse((entityManager.unwrap(Session.class)).isDirty());
     // tonDao.(ton1);
     assertFalse("Trotz Aenderung (auszer bei der Id) sollte Hibernate das Entity-Objekt vom Dirty-Checking ausgeschlossen haben.",
-      entityManager.unwrap(SessionFactory.class).getCurrentSession().isDirty());
+      (entityManager.unwrap(Session.class)).isDirty());
   }
 
   @Test

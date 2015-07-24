@@ -75,8 +75,8 @@ public class TonServiceImpl implements TonService {
       //      {
       //        ton.setAbstandBasisTonDurchAbstandZumEingestrichenenC(_basisTon);
       //      }
-
-      tonDao.makePersistentReadOnly(ton, sessionFactory);
+      Session session = sessionFactory.getCurrentSession();
+      tonDao.makePersistentReadOnly(ton, session);
       // FIXME XXX Das muss unbedingt getan werden
       // tonVorratMap.put(i, ton);
     }
