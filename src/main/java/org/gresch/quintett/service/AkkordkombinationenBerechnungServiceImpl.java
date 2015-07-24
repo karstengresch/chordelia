@@ -92,7 +92,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
     ScrollableResults akkordCursor = null;
     //    akkordCursor = null;
     //    akkordCursor = akkordKombinationenService.getScrollableResultByBasisAkkordRange(minBlockId, maxBlockId, 0, true);
-    akkordCursor = akkordDao.getScrollableResultByBasisAkkordRange(minBlockId, maxBlockId, 0, hatAbsteigendeKlangschaerfe);
+    akkordCursor = akkordDao.getScrollableResultByBasisAkkordRange(minBlockId, maxBlockId, 0, hatAbsteigendeKlangschaerfe, this.entityManager);
     //    String queryString = "";
     //    queryString = "FROM Akkord akkord WHERE akkord.id between " + minBlockId + " and " + maxBlockId + " ORDER BY akkord.id ASC";
     //    Query akkordResultQuery = session.createQuery(queryString);
@@ -210,7 +210,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
             }
 
             //                  saveAkkord(akkord2);
-            akkordDao.makePersistentReadOnly(finalAkkord);
+            akkordDao.makePersistentReadOnly(finalAkkord, this.entityManager);
             //                  entityManager.unwrap(SessionFactory.class).getCurrentSession().evict(finalAkkord);
             anzahlAkkorde++;
 
@@ -339,7 +339,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
         }
         // TODO: DAO!
         if (kombinationsberechnung.getHatPersistenzSchreiben()) {
-          akkordDao.makePersistentReadOnly(_akkord);
+          akkordDao.makePersistentReadOnly(_akkord, this.entityManager);
         }
         anzahlAkkorde++;
         _akkord = null;
@@ -370,7 +370,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
   // XXX Remove if not needed!
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void saveAkkord(Akkord akkord) {
-    akkordDao.makePersistentReadOnly(akkord);
+    akkordDao.makePersistentReadOnly(akkord, this.entityManager);
   }
 
   // TODO Asserts für die Parameter!

@@ -4,7 +4,9 @@ import org.gresch.quintett.domain.tonmodell.Ton;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import javax.persistence.EntityManager;
 import java.io.Serializable;
@@ -20,7 +22,8 @@ public interface TonDao<T, ID extends Serializable> extends CrudRepository<Ton, 
     transaction.commit();
   }
 
-  Ton findByExample(Ton ton);
+  @Query(value = "select t from Ton t where t = :ton")
+  Ton findByExample(@Param(value = "ton") Ton ton);
 
   // T findOne(ID id);
 }

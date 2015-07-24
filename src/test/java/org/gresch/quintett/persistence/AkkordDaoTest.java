@@ -76,7 +76,7 @@ public class AkkordDaoTest {
     testAkkord.setAnzahlToene(3);
     //    testAkkord.setKlangschaerfe(AkkordkombinationenBerechnungServiceHelper.getKlangschaerfe(tonList, testGewichtung));
     //    testAkkord.set
-    akkordDao.makePersistentReadOnly(testAkkord);
+    akkordDao.makePersistentReadOnly(testAkkord, this.entityManager);
     entityManager.unwrap(SessionFactory.class).getCurrentSession().flush();
     assertFalse(entityManager.unwrap(SessionFactory.class).getCurrentSession().isDirty());
     testAkkord.setBasisAkkordId(2);

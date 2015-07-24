@@ -45,7 +45,7 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
   @Override
   @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
   public ScrollableResults getScrollableResultByBasisAkkordRange(Integer minBlockId, Integer maxBlockId, int fetchBlockGroesze, boolean absteigend) {
-    return akkordDao.getScrollableResultByBasisAkkordRange(minBlockId, maxBlockId, fetchBlockGroesze, absteigend);
+    return akkordDao.getScrollableResultByBasisAkkordRange(minBlockId, maxBlockId, fetchBlockGroesze, absteigend, this.entityManager);
 
   }
 
@@ -53,7 +53,7 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
   @Override
   @Transactional
   public Set<Akkord> getAkkordkombinationenZuBasisAkkord(Akkord basisAkkord) {
-    return akkordDao.getAkkordkombinationenZuBasisAkkord(basisAkkord);
+    return akkordDao.getAkkordkombinationenZuBasisAkkord(basisAkkord, this.entityManager);
   }
 
   @Override
