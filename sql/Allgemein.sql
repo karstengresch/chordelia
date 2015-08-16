@@ -1,3 +1,4 @@
+/* Only SQL snippets. Evt. to be moved to Gist */
 /* TOENE */
 delete
 from `ton` commit
