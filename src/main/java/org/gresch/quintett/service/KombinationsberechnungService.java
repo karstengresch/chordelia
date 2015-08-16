@@ -2,6 +2,8 @@ package org.gresch.quintett.service;
 
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
 
+import javax.persistence.EntityManager;
+
 public interface KombinationsberechnungService {
 
   void kombinationenBerechnen() throws Exception;
@@ -39,6 +41,6 @@ public interface KombinationsberechnungService {
    *
    * @param kombinationsberechnung
    */
-  void updateKombinationsberechnung(Kombinationsberechnung kombinationsberechnung);
+  void updateKombinationsberechnung(EntityManager entityManager, Kombinationsberechnung kombinationsberechnung);
 
 }

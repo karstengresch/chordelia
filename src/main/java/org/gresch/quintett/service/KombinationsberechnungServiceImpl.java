@@ -114,23 +114,26 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
   @Transactional(isolation = Isolation.SERIALIZABLE)
   public void saveKombinationsBerechnung(Kombinationsberechnung kombinationsberechnung) {
     Kombinationsberechnung kombinationsberechungOld = null;
-    try {
-    kombinationsberechungOld = (Kombinationsberechnung) kombinationsberechnungDao.findOne(1);
-} catch (Exception e) {
-      //
-    }
 
-    // Vielleicht in Erstinitialisierungsmethode?
-    if (null == kombinationsberechungOld) {
-      kombinationsberechnungDao.saveOrUpdate(kombinationsberechnung);
-      log.info("Speichere Kombinationsberechnung, weil noch keine ermittelt wurde.");
-    } else {
-      if (kombinationsberechungOld.getArgumentsString().equalsIgnoreCase(kombinationsberechnung.getArgumentsString())) {
-        kombinationsberechnungDao.saveOrUpdate(kombinationsberechnung);
-      } else {
-        // TODO needed? Returned false >only< anyway???
-        // kombinationsberechnungDao.merge(kombinationsberechnung);
+    Integer berechnungsId = kombinationsberechnungDao.getBerechnungsId();
+
+    if(null != berechnungsId)
+    {
+      try {
+        kombinationsberechungOld = (Kombinationsberechnung) kombinationsberechnungDao.findOne(berechnungsId);
+        // Vielleicht in Erstinitialisierungsmethode?
+
+      } catch (Exception e) {
+        log.info("Did not find Combination Calculation, trying inserting...");
       }
+    }
+    else {
+
+          kombinationsberechnungDao.save(kombinationsberechnung);
+
+          log.info("Speichere Kombinationsberechnung, weil noch keine ermittelt wurde.");
+        // log.error("Could neither find or update Combination Calculation from DB: " + e.getLocalizedMessage());
+
     }
 
     //    FlushMode flushModeOld = sessionFactory.getCurrentSession().getFlushMode();
@@ -180,10 +183,14 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
     return null;
   }
 
-  @Override
+
   @Transactional(isolation = Isolation.REPEATABLE_READ)
-  public void updateKombinationsberechnung(Kombinationsberechnung kombinationsberechnung) {
-    kombinationsberechnungDao.saveOrUpdate(kombinationsberechnung);
+  public void updateKombinationsberechnung(EntityManager entityManager, Kombinationsberechnung kombinationsberechnung) {
+    try {
+      kombinationsberechnungDao.saveOrUpdate(entityManager, kombinationsberechnung);
+    } catch (Exception e) {
+      log.error("Could npt update Combinatoric Calculation", e);
+    }
   }
 
 }

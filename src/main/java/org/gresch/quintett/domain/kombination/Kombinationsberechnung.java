@@ -39,20 +39,29 @@ import javax.persistence.*;
 @Table(name = "kombinationsberechnung")
 @Access(AccessType.FIELD)
 public class Kombinationsberechnung {
-  public final static Log log = LogFactory.getLog(Kombinationsberechnung.class);
-  public final static String S = System.getProperty("file.separator");
-  public final static String TEMPDIR_PATH = System.getProperty("java.io.tmpdir");
-  public final static String TEMPORAERES_VERZEICHNIS_PFAD = TEMPDIR_PATH + (TEMPDIR_PATH.endsWith(S) ? "" : S) + "quintett";
-  public final String ANWENDUNGSPFAD = System.getProperty("user.dir");
   @Transient
+  public final static Log log = LogFactory.getLog(Kombinationsberechnung.class);
+  @Transient
+  public final static String S = System.getProperty("file.separator");
+  @Transient
+  public final static String TEMPDIR_PATH = System.getProperty("java.io.tmpdir");
+  @Transient
+  public final static String TEMPORAERES_VERZEICHNIS_PFAD = TEMPDIR_PATH + (TEMPDIR_PATH.endsWith(S) ? "" : S) + "quintett";
+  @Transient
+  public final String ANWENDUNGSPFAD = System.getProperty("user.dir");
+  @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+  @org.hibernate.annotations.Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+  @JoinTable(name = "basiston_kombinationsberechnung", joinColumns = {@JoinColumn(name = "kombinationsberechnung_id")}, inverseJoinColumns = {
+    @JoinColumn(name = "ton_id")})
   public Ton basisTon = null;
+  @Column(name = "anzahl_toene", unique = false, nullable = false)
   public Integer maxAnzahlToene = -1;
   @Transient
   public AesthetischeGewichtung aesthetischeGewichtung;
   @Transient
   public Akkordkombinationen akkordkombinationen;
 
-  //
+  @Column(name = "renderer", unique = false, nullable = false)
   public String renderer = "?";
   // FIXME Sollte das nötig sein? Eigentlich müsste sinnvolle hashCode/equals-Implementierung ausreichen.
   // FIXME hashCode und equals in jedem Fall!
@@ -61,24 +70,37 @@ public class Kombinationsberechnung {
   //  private static boolean instantiated = false;
   @Id
   private Integer id;
+  // @Transient
   private String[] argumentsArray;
+  // @Transient
+  @Column(name = "aufrufparameter", unique = false, nullable = true)
   private String argumentsString;
   // Statische Member
   @SuppressWarnings("unused")
+  @Transient
   private boolean isDebugModus = false;
   //  private String absteigendeIntervallOption;
+  @Transient
   private Boolean hatAbsteigendeIntervallinformationen = true;
   //  private String absteigendeKlangschaerfeOption;
+  @Column(name = "klangschaerfe_absteigend", unique = true, nullable = false)
   private Boolean hatAbsteigendeKlangschaerfe = true;
   //  private String absteigendeAusgabeOption;
+  @Column(name = "ausgabe_absteigend", unique = false, nullable = false)
   private Boolean hatAbsteigendeAusgabe = true;
+  @Column(name = "intervallinformationen", unique = false, nullable = false)
   private String intervallInformationen = "?";
   private Boolean hatPersistenzSchreiben = false;
   private Boolean hatPersistenzLaden = false;
   private Boolean hatDbErstellen = false;
+  //@Column(name = "intervallinformationen_absteigend", unique = false, nullable = false)
+  @Column(name = "bereits_berechnete_toene", unique = false, nullable = true)
   private Integer bereitsBerechneteToene = -1;
+  @Column(name = "letzte_basis_akkord_klangschaerfe", unique = false, nullable = true)
   private Integer letzteBasisAkkordKlangschaerfe = -1;
+  @Column(name = "letzte_akkord_id", unique = false, nullable = true)
   private Integer letzteAkkordId = -1;
+  @Column(name = "letzte_basis_akkord_id", unique = false, nullable = true)
   private Integer letzteBasisAkkordId = -1;
 
   public Kombinationsberechnung() {
@@ -100,7 +122,7 @@ public class Kombinationsberechnung {
     id = xId;
   }
 
-  @Transient
+
   public AesthetischeGewichtung getAesthetischeGewichtung() {
     if (null == aesthetischeGewichtung) {
       aesthetischeGewichtung = new AesthetischeGewichtung(KombinationsberechnungParameter.CLI_DEFAULTWERT_INTERVALLINFORMATIONEN, this);
@@ -145,22 +167,19 @@ public class Kombinationsberechnung {
   //  {
   //    this.absteigendeAusgabeOption = absteigendeAusgabeOption;
   //  }
-@Transient
+
   public void setAesthetischeGewichtung(AesthetischeGewichtung aesthetischeGewichtung) {
     this.aesthetischeGewichtung = aesthetischeGewichtung;
   }
 
   // @Column(name="basis_ton", unique=true, nullable=false)
-  @Transient
+
   public Ton getBasisTonAsTon() {
     return basisTon;
   }
 
   //  @Transient
-  @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-  @org.hibernate.annotations.Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-  @JoinTable(name = "basiston_kombinationsberechnung", joinColumns = {@JoinColumn(name = "kombinationsberechnung_id")}, inverseJoinColumns = {
-    @JoinColumn(name = "ton_id")})
+
   public Ton getBasisTon() {
     return basisTon;
   }
@@ -174,7 +193,7 @@ public class Kombinationsberechnung {
     }
   }
 
-  @Column(name = "intervallinformationen", unique = false, nullable = false)
+
   public String getIntervallInformationen() {
     return intervallInformationen;
   }
@@ -188,7 +207,7 @@ public class Kombinationsberechnung {
     this.intervallInformationen = intervallInformationen;
   }
 
-  @Column(name = "intervallinformationen_absteigend", unique = false, nullable = false)
+
   public Boolean getHatAbsteigendeIntervallinformationen() {
     return hatAbsteigendeIntervallinformationen;
   }
@@ -197,7 +216,7 @@ public class Kombinationsberechnung {
     this.hatAbsteigendeIntervallinformationen = istAbsteigend;
   }
 
-  @Column(name = "anzahl_toene", unique = false, nullable = false)
+
   public Integer getMaxAnzahlToene() {
     return maxAnzahlToene;
   }
@@ -214,7 +233,7 @@ public class Kombinationsberechnung {
     argumentsArray = xArgumentsArray;
   }
 
-  @Column(name = "aufrufparameter", unique = false, nullable = true)
+
   public String getArgumentsString() {
     return argumentsString;
   }
@@ -228,7 +247,7 @@ public class Kombinationsberechnung {
     setArgumentsString(StringUtils.join(xArguments, ';'));
   }
 
-  @Column(name = "renderer", unique = false, nullable = false)
+
   public String getRenderer() {
     return renderer;
   }
@@ -237,7 +256,7 @@ public class Kombinationsberechnung {
     this.renderer = renderer;
   }
 
-  @Column(name = "klangschaerfe_absteigend", unique = true, nullable = false)
+
   public Boolean getHatAbsteigendeKlangschaerfe() {
     return hatAbsteigendeKlangschaerfe;
   }
@@ -258,7 +277,7 @@ public class Kombinationsberechnung {
     return basisTon;
   }
 
-  @Column(name = "ausgabe_absteigend", unique = false, nullable = false)
+
   public Boolean getHatAbsteigendeAusgabe() {
     return hatAbsteigendeAusgabe;
   }
@@ -294,7 +313,7 @@ public class Kombinationsberechnung {
   }
 
 
-  @Column(name = "bereits_berechnete_toene", unique = false, nullable = true)
+
   public Integer getBereitsBerechneteToene() {
     return bereitsBerechneteToene;
   }
@@ -317,7 +336,7 @@ public class Kombinationsberechnung {
     bereitsBerechneteToene = xBereitsBerechneteToene;
   }
 
-  @Column(name = "letzte_basis_akkord_klangschaerfe", unique = false, nullable = true)
+
   public Integer getLetzteBasisAkkordKlangschaerfe() {
     return letzteBasisAkkordKlangschaerfe;
   }
@@ -334,7 +353,7 @@ public class Kombinationsberechnung {
     hatDbErstellen = xHatDbErstellen;
   }
 
-  @Column(name = "letzte_akkord_id", unique = false, nullable = true)
+
   public Integer getLetzteAkkordId() {
     return letzteAkkordId;
   }
@@ -344,7 +363,7 @@ public class Kombinationsberechnung {
 
   }
 
-  @Column(name = "letzte_basis_akkord_id", unique = false, nullable = true)
+
   public Integer getLetzteBasisAkkordId() {
     return letzteBasisAkkordId;
   }
