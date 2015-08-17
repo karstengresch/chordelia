@@ -109,7 +109,7 @@ public class KombinationsberechnungParameter {
   String rendererString = CLI_DEFAULTWERT_RENDERER;
 
   @Option(name = CLI_PARAMETER_PERSISTENZ_LADEN, handler = KombinationsberechnungParameterJaNeinOptionHandler.class, usage = CLI_AUSGABE_PERSISTENZ_LADEN)
-  boolean hatPersistenzLaden = CLI_DEFAULTWERT_PERSISTENZ_LADEN.equalsIgnoreCase("j") ? true : false;
+  boolean hatPersistenzLaden = CLI_DEFAULTWERT_PERSISTENZ_LADEN.equalsIgnoreCase("f") ? true : false;
 
   @Option(name = CLI_PARAMETER_PERSISTENZ_SCHREIBEN, handler = KombinationsberechnungParameterJaNeinOptionHandler.class, usage = CLI_AUSGABE_PERSISTENZ_SCHREIBEN)
   boolean hatPersistenzSchreiben = CLI_DEFAULTWERT_PERSISTENZ_SCHREIBEN.equalsIgnoreCase("j") ? true : false;
