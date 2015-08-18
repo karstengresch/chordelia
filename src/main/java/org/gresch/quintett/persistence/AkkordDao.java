@@ -24,7 +24,7 @@ public interface AkkordDao<T, ID extends Serializable> extends CrudRepository<Ak
 
 
   default Set<Akkord> getAkkordkombinationenZuBasisAkkord(Akkord basisAkkord, EntityManager entityManager) {
-    Criteria criteria = entityManager.unwrap(SessionFactory.class).getCurrentSession().createCriteria(Akkord.class);
+    Criteria criteria = entityManager.unwrap(org.hibernate.Session.class).createCriteria(Akkord.class);
 
     criteria.createAlias("eq", "basisAkkordId");
     @SuppressWarnings("unchecked")
@@ -42,7 +42,7 @@ public interface AkkordDao<T, ID extends Serializable> extends CrudRepository<Ak
     String queryString = "";
     queryString = "FROM Akkord akkord WHERE akkord.id between " + minBlockId + " and " + maxBlockId + " ORDER BY akkord.anzahlToene, akkord.klangschaerfe "
       + steigendString + ", akkord.id " + steigendString;
-    Query akkordResultQuery = entityManager.unwrap(SessionFactory.class).getCurrentSession().createQuery(queryString);
+    Query akkordResultQuery = entityManager.unwrap(org.hibernate.Session.class).createQuery(queryString);
     //     akkordResultQuery.setFetchSize(fetchBlockGroesze);
     akkordResultQuery.setReadOnly(true);
     //   akkordResultQuery.setCacheMode(CacheMode.IGNORE);
@@ -57,7 +57,7 @@ public interface AkkordDao<T, ID extends Serializable> extends CrudRepository<Ak
     String queryString = "";
     queryString = "SELECT akkord.id FROM Akkord akkord ORDER BY akkord.anzahlToene, akkord.klangschaerfe " + akkordIdAbsteigendString + ", akkord.id "
       + klangschaerfeAbsteigendString;
-    Query akkordResultQuery = entityManager.unwrap(SessionFactory.class).getCurrentSession().createQuery(queryString);
+    Query akkordResultQuery = entityManager.unwrap(org.hibernate.Session.class).createQuery(queryString);
     akkordResultQuery.setReadOnly(true);
     @SuppressWarnings("unchecked")
     List<Integer> resultList = akkordResultQuery.list();
@@ -72,7 +72,7 @@ public interface AkkordDao<T, ID extends Serializable> extends CrudRepository<Ak
     queryString =
       "SELECT akkord.id FROM Akkord akkord WHERE akkord.id between " + minId + " and " + maxId + " ORDER BY akkord.anzahlToene, akkord.klangschaerfe "
         + steigendString + ", akkord.id " + akkordIdAbsteigendString;
-    Query akkordResultQuery = entityManager.unwrap(SessionFactory.class).getCurrentSession().createQuery(queryString);
+    Query akkordResultQuery = entityManager.unwrap(org.hibernate.Session.class).createQuery(queryString);
     akkordResultQuery.setReadOnly(true);
     @SuppressWarnings("unchecked")
     List<Integer> resultList = akkordResultQuery.list();

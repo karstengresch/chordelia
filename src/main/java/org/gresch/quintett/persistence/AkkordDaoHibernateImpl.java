@@ -35,7 +35,7 @@ public class AkkordDaoHibernateImpl /* extends AkkordDao<Akkord, Integer>*/ {
       //      session.clear();
       //      session.close();
       //      log.info("Going to save no: " + akkord.getId());
-      entityManager.unwrap(SessionFactory.class).getCurrentSession().saveOrUpdate(akkord);
+      entityManager.unwrap(org.hibernate.Session.class).saveOrUpdate(akkord);
     } catch (Exception e) {
       log.error("Konnte Akkord nicht persistieren. Fehler war: " + e.getLocalizedMessage());
     }
@@ -43,7 +43,7 @@ public class AkkordDaoHibernateImpl /* extends AkkordDao<Akkord, Integer>*/ {
 
   public Set<Akkord> getAkkordkombinationenZuBasisAkkord(Akkord basisAkkord) {
     // TODO Null-Check etc.
-    Criteria criteria = entityManager.unwrap(SessionFactory.class).getCurrentSession().createCriteria(Akkord.class);
+    Criteria criteria = entityManager.unwrap(org.hibernate.Session.class).createCriteria(Akkord.class);
     criteria.createAlias("eq", "basisAkkordId");
     @SuppressWarnings("unchecked")
     List<Akkord> akkordList = criteria.list();
@@ -60,7 +60,7 @@ public class AkkordDaoHibernateImpl /* extends AkkordDao<Akkord, Integer>*/ {
     String queryString = "";
     queryString = "FROM Akkord akkord WHERE akkord.id between " + minBlockId + " and " + maxBlockId + " ORDER BY akkord.anzahlToene, akkord.klangschaerfe "
       + steigendString + ", akkord.id " + steigendString;
-    Query akkordResultQuery = entityManager.unwrap(SessionFactory.class).getCurrentSession().createQuery(queryString);
+    Query akkordResultQuery = entityManager.unwrap(org.hibernate.Session.class).createQuery(queryString);
     //     akkordResultQuery.setFetchSize(fetchBlockGroesze);
     akkordResultQuery.setReadOnly(true);
     //   akkordResultQuery.setCacheMode(CacheMode.IGNORE);
@@ -75,7 +75,7 @@ public class AkkordDaoHibernateImpl /* extends AkkordDao<Akkord, Integer>*/ {
     String queryString = "";
     queryString = "SELECT akkord.id FROM Akkord akkord ORDER BY akkord.anzahlToene, akkord.klangschaerfe " + akkordIdAbsteigendString + ", akkord.id "
       + klangschaerfeAbsteigendString;
-    Query akkordResultQuery = entityManager.unwrap(SessionFactory.class).getCurrentSession().createQuery(queryString);
+    Query akkordResultQuery = entityManager.unwrap(org.hibernate.Session.class).createQuery(queryString);
     akkordResultQuery.setReadOnly(true);
     @SuppressWarnings("unchecked")
     List<Integer> resultList = akkordResultQuery.list();
@@ -89,7 +89,7 @@ public class AkkordDaoHibernateImpl /* extends AkkordDao<Akkord, Integer>*/ {
     queryString =
       "SELECT akkord.id FROM Akkord akkord WHERE akkord.id between " + minId + " and " + maxId + " ORDER BY akkord.anzahlToene, akkord.klangschaerfe "
         + steigendString + ", akkord.id " + akkordIdAbsteigendString;
-    Query akkordResultQuery = entityManager.unwrap(SessionFactory.class).getCurrentSession().createQuery(queryString);
+    Query akkordResultQuery = entityManager.unwrap(org.hibernate.Session.class).createQuery(queryString);
     akkordResultQuery.setReadOnly(true);
     @SuppressWarnings("unchecked")
     List<Integer> resultList = akkordResultQuery.list();

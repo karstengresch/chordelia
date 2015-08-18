@@ -38,10 +38,10 @@ public class KombinationsberechnungDaoHibernateImpl
   public Long getAnzahlBerechneterAkkorde() {
     Long anzahlBerechneterAkkorde;
 
-    // anzahlBerechneterAkkorde = (Long) entityManager.unwrap(SessionFactory.class).getCurrentSession().createQuery("select count(distinct a) from Akkord a").uniqueResult();
+    // anzahlBerechneterAkkorde = (Long) entityManager.unwrap(org.hibernate.Session.class).createQuery("select count(distinct a) from Akkord a").uniqueResult();
     try {
       anzahlBerechneterAkkorde = Long.valueOf(
-        ((Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession().createSQLQuery("select max(id) from Akkord").uniqueResult())
+        ((Integer) entityManager.unwrap(org.hibernate.Session.class).createSQLQuery("select max(id) from Akkord").uniqueResult())
           .longValue());
     } catch (NullPointerException e) {
       anzahlBerechneterAkkorde = Long.valueOf(0);
@@ -54,8 +54,8 @@ public class KombinationsberechnungDaoHibernateImpl
   public Long getAnzahlBerechneterAkkordeZuAnzahlAkkordToene(Integer xAkkordToene) {
     Long anzahlBerechneterToene;
 
-    // anzahlBerechneterToene = (Long) entityManager.unwrap(SessionFactory.class).getCurrentSession().createQuery("select count(distinct a) from Akkord a where a.anzahlToene = " + xAkkordToene).uniqueResult();
-    anzahlBerechneterToene = Long.valueOf((String) entityManager.unwrap(SessionFactory.class).getCurrentSession()
+    // anzahlBerechneterToene = (Long) entityManager.unwrap(org.hibernate.Session.class).createQuery("select count(distinct a) from Akkord a where a.anzahlToene = " + xAkkordToene).uniqueResult();
+    anzahlBerechneterToene = Long.valueOf((String) entityManager.unwrap(org.hibernate.Session.class)
       .createSQLQuery("select max(id) from Akkord a where a.anzahlToene = " + xAkkordToene)
       .uniqueResult());
     return anzahlBerechneterToene;
@@ -65,9 +65,9 @@ public class KombinationsberechnungDaoHibernateImpl
   public Integer getMaxAnzahlAkkordToeneAusBerechnungsInformation() {
     Integer maxAnzahlAkkordToeneAusBerechnungsInformation = 0;
 
-    // alt:maxAnzahlAkkordToene = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession().createQuery("select max(a.anzahlToene) from Akkord
+    // alt:maxAnzahlAkkordToene = (Integer) entityManager.unwrap(org.hibernate.Session.class).createQuery("select max(a.anzahlToene) from Akkord
     // a").uniqueResult();
-    maxAnzahlAkkordToeneAusBerechnungsInformation = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession()
+    maxAnzahlAkkordToeneAusBerechnungsInformation = (Integer) entityManager.unwrap(org.hibernate.Session.class)
       .createSQLQuery("select bereits_berechnete_toene from berechnungs_informationen").uniqueResult();
     if (null == maxAnzahlAkkordToeneAusBerechnungsInformation) {
       // Später: Loggen
@@ -80,11 +80,11 @@ public class KombinationsberechnungDaoHibernateImpl
   public Integer getMaxAnzahlAkkordToeneAusAkkorden() {
     // BigInteger maxAnzahlAkkordToeneAusAkkorden = BigInteger.valueOf(0);
     Integer maxAnzahlAkkordToeneAusAkkorden = 0;
-    // alt:maxAnzahlAkkordToene = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession().createQuery("select max(a.anzahlToene) from Akkord
+    // alt:maxAnzahlAkkordToene = (Integer) entityManager.unwrap(org.hibernate.Session.class).createQuery("select max(a.anzahlToene) from Akkord
     // a").uniqueResult();
     // String subselectQuery = "select max(c.county) from (select count(position) county from ton_akkord group by akkord_id) c";
     String subselectQuery = "select (max(position)+1) from TON_AKKORD where AKKORD_ID = ( select max(akkord_id) from ton_akkord)";
-    maxAnzahlAkkordToeneAusAkkorden = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession().createSQLQuery(subselectQuery)
+    maxAnzahlAkkordToeneAusAkkorden = (Integer) entityManager.unwrap(org.hibernate.Session.class).createSQLQuery(subselectQuery)
       .uniqueResult();
 
     if (null == maxAnzahlAkkordToeneAusAkkorden) {
@@ -98,7 +98,7 @@ public class KombinationsberechnungDaoHibernateImpl
 
   public Integer getMaxIdZuAnzahlAkkordToene(Integer xAkkordToene) {
     Integer maxId;
-    maxId = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession()
+    maxId = (Integer) entityManager.unwrap(org.hibernate.Session.class)
       .createQuery("select max(a.id) from Akkord a where a.anzahlToene = " + xAkkordToene).uniqueResult();
 
     return maxId;
@@ -108,7 +108,7 @@ public class KombinationsberechnungDaoHibernateImpl
   public Integer getMinIdZuAnzahlAkkordToene(Integer xAkkordToene) {
     Integer maxId;
     // TODO Projections
-    maxId = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession()
+    maxId = (Integer) entityManager.unwrap(org.hibernate.Session.class)
       .createQuery("select min(a.id) from Akkord a where a.anzahlToene = " + xAkkordToene).uniqueResult();
     return maxId;
   }
@@ -135,7 +135,7 @@ public class KombinationsberechnungDaoHibernateImpl
 
     boolean successfullyUpdated = false;
     try {
-      entityManager.unwrap(SessionFactory.class).getCurrentSession().saveOrUpdate(kombinationsberechnung);
+      entityManager.unwrap(org.hibernate.Session.class).saveOrUpdate(kombinationsberechnung);
       successfullyUpdated = true;
     } catch (Exception e) {
       log.error("Konnte Kombinationsberechnung nicht updaten: " + e.getLocalizedMessage());
@@ -154,7 +154,7 @@ public class KombinationsberechnungDaoHibernateImpl
   public Integer getBerechnungsId() {
     Integer berechnungsId = 0;
 
-    berechnungsId = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession().createQuery("select max(b.id) from Kombinationsberechnung b")
+    berechnungsId = (Integer) entityManager.unwrap(org.hibernate.Session.class).createQuery("select max(b.id) from Kombinationsberechnung b")
       .uniqueResult();
 
     if (null == berechnungsId) {
@@ -168,7 +168,7 @@ public class KombinationsberechnungDaoHibernateImpl
   public Integer getLetzteBasisAkkordKlangschaerfe() {
     Integer letzteBasisAkkordKlangschaerfe = 0;
     try {
-      letzteBasisAkkordKlangschaerfe = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession()
+      letzteBasisAkkordKlangschaerfe = (Integer) entityManager.unwrap(org.hibernate.Session.class)
         .createSQLQuery("select letzte_basis_akkord_klangschaerfe from berechnungs_informationen")
         .uniqueResult();
     } catch (Exception e) {
@@ -184,7 +184,7 @@ public class KombinationsberechnungDaoHibernateImpl
   public Integer getLetzteAkkordId() {
     Integer letzteAkkordId = 0;
     try {
-      letzteAkkordId = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession()
+      letzteAkkordId = (Integer) entityManager.unwrap(org.hibernate.Session.class)
         .createSQLQuery("select " + "letzte_akkord_id from berechnungs_informationen").uniqueResult();
     } catch (Exception e) {
       // TODO: Kommt, wenn noch nicht vorhanden - dann gar nicht erst abfragen!
@@ -202,7 +202,7 @@ public class KombinationsberechnungDaoHibernateImpl
     {
       Integer letzteBasisAkkordId = 0;
       try {
-        letzteBasisAkkordId = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession()
+        letzteBasisAkkordId = (Integer) entityManager.unwrap(org.hibernate.Session.class)
           .createSQLQuery("select letzte_basis_akkord_id from berechnungs_informationen").uniqueResult();
       } catch (Exception e) {
         System.out.println(e.toString());
@@ -221,7 +221,7 @@ public class KombinationsberechnungDaoHibernateImpl
     {
       Integer maxAkkordAkkordIdZuBasisAkkordId = 0;
       try {
-        maxAkkordAkkordIdZuBasisAkkordId = (Integer) entityManager.unwrap(SessionFactory.class).getCurrentSession()
+        maxAkkordAkkordIdZuBasisAkkordId = (Integer) entityManager.unwrap(org.hibernate.Session.class)
           .createSQLQuery(("select max(id) from akkord where basis_akkord_id = " + xBasisAkkordId)).uniqueResult();
       } catch (Exception e) {
         System.out.println(e.toString());

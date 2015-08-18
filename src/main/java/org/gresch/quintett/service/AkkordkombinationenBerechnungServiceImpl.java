@@ -13,7 +13,6 @@ import org.gresch.quintett.service.util.AkkordkombinationenBerechnungServiceHelp
 import org.hibernate.FlushMode;
 import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,7 +59,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
 
   /* ####### ALGORITHMUS BEGINNT HIER ####### */
   //(propagation = Propagation.REQUIRES_NEW)
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  @Transactional
   public int berechneUndPersistiereNachBasisAkkordBlock(int minBlockId, int maxBlockId, int incrementorToene, int lastAkkordId) {
 
     Kombinationsberechnung kombinationsberechnung = null;
@@ -71,7 +70,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
     if (null == kombinationsberechnung) {
       throw new RuntimeException("AkkordkombinationenBerechnungService: Kombinationsberechnung darf nicht null sein!");
     }
-    Session currentSession = entityManager.unwrap(SessionFactory.class).getCurrentSession();
+    Session currentSession = entityManager.unwrap(org.hibernate.Session.class);
     //    Session session = entityManager.unwrap(SessionFactory.class).openSession();
     //    Session internalSession = SessionFactoryUtils.getNewSession(sessionFactory);
     FlushMode flushModeOld = currentSession.getFlushMode();
@@ -212,19 +211,19 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
 
             //                  saveAkkord(akkord2);
             akkordDao.makePersistentReadOnly(finalAkkord, this.entityManager);
-            //                  entityManager.unwrap(SessionFactory.class).getCurrentSession().evict(finalAkkord);
+            //                  entityManager.unwrap(org.hibernate.Session.class).evict(finalAkkord);
             anzahlAkkorde++;
 
-            //            entityManager.unwrap(SessionFactory.class).getCurrentSession().evict(finalAkkord);
+            //            entityManager.unwrap(org.hibernate.Session.class).evict(finalAkkord);
 
             //                  if((anzahlAkkorde % 1000 == 0) || (incrementorToene == 3 && anzahlAkkorde % 1000 == 0))
             //                  {
             //                    entityManager.unwrap(SessionFactory.class).evict(Akkord.class);
-            //                    FlushMode flushModeOld = entityManager.unwrap(SessionFactory.class).getCurrentSession().getFlushMode();
-            //                    entityManager.unwrap(SessionFactory.class).getCurrentSession().setFlushMode(FlushMode.MANUAL);
-            //                    entityManager.unwrap(SessionFactory.class).getCurrentSession().flush();
+            //                    FlushMode flushModeOld = entityManager.unwrap(org.hibernate.Session.class).getFlushMode();
+            //                    entityManager.unwrap(org.hibernate.Session.class).setFlushMode(FlushMode.MANUAL);
+            //                    entityManager.unwrap(org.hibernate.Session.class).flush();
             //                    log.info("flushNachBasiston (1)");
-            //                    entityManager.unwrap(SessionFactory.class).getCurrentSession().setFlushMode(flushModeOld);
+            //                    entityManager.unwrap(org.hibernate.Session.class).setFlushMode(flushModeOld);
             //                    log.info("A~K~.berechneKombinationen(): Flush bei Anzahl Akkorde: " + String.valueOf(anzahlAkkorde));
             //
             //                  }
@@ -262,7 +261,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
     } // end while
 
     akkordCursor.close();
-    //    entityManager.unwrap(SessionFactory.class).getCurrentSession().evict(akkordCursor);
+    //    entityManager.unwrap(org.hibernate.Session.class).evict(akkordCursor);
 
     //    ThreadLocalUtil.cleanupThreadLocals(null, "main", Thread.currentThread().getContextClassLoader());
     akkordCursor = null;
@@ -307,7 +306,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
     // Erstelle eine List aus Akkorden - anzahlIntervalle sollte eigentlich konstant 11 sein (wenn nicht vierteltönig etc.).
     log.info("A~K~.berechneKombinationen(): Neue AkkordList erstellt mit Anzahl Intervallen: " + String.valueOf(_anzahlIntervalle));
     // TODO XXX Auf- oder absteigend!!!
-    //    Transaction transaction = entityManager.unwrap(SessionFactory.class).getCurrentSession().beginTransaction();
+    //    Transaction transaction = entityManager.unwrap(org.hibernate.Session.class).beginTransaction();
     for (incrementorIntervalle = 1; incrementorIntervalle < _anzahlIntervalle + 1; incrementorIntervalle++) {
       incrementorAkkorde++;
       // TODO: Weshalb zum Basiston??? Korrekterweise doch nur zum obersten/untersten Ton
@@ -429,7 +428,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
       //        _ton.setId((tonService.getTonByExample(_ton)).getId());
       //      }
 
-      // Transaction _transaction = entityManager.unwrap(SessionFactory.class).getCurrentSession().beginTransaction();
+      // Transaction _transaction = entityManager.unwrap(org.hibernate.Session.class).beginTransaction();
       _tonArrayBuffer.add(_ton);
       // _transaction.commit();
     }

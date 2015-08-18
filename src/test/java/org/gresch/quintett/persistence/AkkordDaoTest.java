@@ -77,13 +77,13 @@ public class AkkordDaoTest {
     //    testAkkord.setKlangschaerfe(AkkordkombinationenBerechnungServiceHelper.getKlangschaerfe(tonList, testGewichtung));
     //    testAkkord.set
     akkordDao.makePersistentReadOnly(testAkkord, this.entityManager);
-    entityManager.unwrap(SessionFactory.class).getCurrentSession().flush();
-    assertFalse(entityManager.unwrap(SessionFactory.class).getCurrentSession().isDirty());
+    entityManager.unwrap(org.hibernate.Session.class).flush();
+    assertFalse(entityManager.unwrap(org.hibernate.Session.class).isDirty());
     testAkkord.setBasisAkkordId(2);
     akkordDao.save(testAkkord);
-    entityManager.unwrap(SessionFactory.class).getCurrentSession().flush();
+    entityManager.unwrap(org.hibernate.Session.class).flush();
     assertFalse("Trotz Aenderung (auszer bei der Id) sollte Hibernate das Entity-Objekt vom Dirty-Checking ausgeschlossen haben.",
-      entityManager.unwrap(SessionFactory.class).getCurrentSession().isDirty());
+      entityManager.unwrap(org.hibernate.Session.class).isDirty());
   }
 
 }

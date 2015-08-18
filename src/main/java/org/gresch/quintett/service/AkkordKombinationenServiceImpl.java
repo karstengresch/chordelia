@@ -91,10 +91,10 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
           kombinationsberechnung.setLetzteAkkordId(anzahlAkkorde);
           kombinationsberechnung.setBereitsBerechneteToene(incrementorToene);
           kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
-          //          FlushMode flushModeOld = entityManager.unwrap(SessionFactory.class).getCurrentSession().getFlushMode();
-          //          entityManager.unwrap(SessionFactory.class).getCurrentSession().setFlushMode(FlushMode.MANUAL);
-          //          entityManager.unwrap(SessionFactory.class).getCurrentSession().flush();
-          //          entityManager.unwrap(SessionFactory.class).getCurrentSession().setFlushMode(flushModeOld);
+          //          FlushMode flushModeOld = entityManager.unwrap(org.hibernate.Session.class).getFlushMode();
+          //          entityManager.unwrap(org.hibernate.Session.class).setFlushMode(FlushMode.MANUAL);
+          //          entityManager.unwrap(org.hibernate.Session.class).flush();
+          //          entityManager.unwrap(org.hibernate.Session.class).setFlushMode(flushModeOld);
         } else {
           int basisAkkordIdStart = AkkordIdRangeZwoelftonklaenge.minIdZuAnzahlToene(incrementorToene - 1);
           int basisAkkordIdEnde = AkkordIdRangeZwoelftonklaenge.maxIdZuAnzahlToene(incrementorToene - 1);

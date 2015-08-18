@@ -31,6 +31,6 @@ public class TonDaoHibernateImpl {
   // spezielle Nicht-CRUD-Methoden nötig werden.
 
   public Ton findByExample(Ton xTon) {
-    return (Ton) entityManager.unwrap(SessionFactory.class).getCurrentSession().get(Ton.class, xTon.getAbstandZumEingestrichenenC());
+    return (Ton) entityManager.unwrap(org.hibernate.Session.class).get(Ton.class, xTon.getAbstandZumEingestrichenenC());
   }
 }

@@ -75,7 +75,7 @@ public interface KombinationsberechnungDao<T, ID extends Serializable> extends C
 
     boolean successfullyUpdated = false;
     try {
-      entityManager.unwrap(SessionFactory.class).getCurrentSession().saveOrUpdate(kombinationsberechnung);
+      entityManager.unwrap(org.hibernate.Session.class).saveOrUpdate(kombinationsberechnung);
       successfullyUpdated = true;
     } catch (Exception e) {
       throw new Exception(e);
