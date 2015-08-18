@@ -47,14 +47,6 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
     // Beany
   }
 
-  //  @Override
-  //  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  //  public int berechneUndPersistiereKombinationen(int akkordIdStart, int akkordIdEnde, int maxAnzahlToene, AesthetischeGewichtung AesthetischeGewichtung) throws Exception
-  //  {
-  //    throw new RuntimeException("Noch nicht implementiert. [berechneUndPersistiereKombinationen(int akkordIdStart, int akkordIdEnde, int maxAnzahlToene, AesthetischeGewichtung AesthetischeGewichtung)]");
-  //
-  //  }
-
   /* ####### ALGORITHMUS BEGINNT HIER ####### */
   //(propagation = Propagation.REQUIRES_NEW)
   @Transactional
@@ -81,18 +73,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
     int intervallEins = 0;
     int intervallZwei = 0;
     ScrollableResults akkordCursor = null;
-    //    akkordCursor = null;
-    //    akkordCursor = akkordKombinationenService.getScrollableResultByBasisAkkordRange(minBlockId, maxBlockId, 0, true);
     akkordCursor = akkordDao.getScrollableResultByBasisAkkordRange(minBlockId, maxBlockId, 0, hatAbsteigendeKlangschaerfe, this.entityManager);
-    //    String queryString = "";
-    //    queryString = "FROM Akkord akkord WHERE akkord.id between " + minBlockId + " and " + maxBlockId + " ORDER BY akkord.id ASC";
-    //    Query akkordResultQuery = session.createQuery(queryString);
-    //    //     akkordResultQuery.setFetchSize(fetchBlockGroesze);
-    //    akkordResultQuery.setReadOnly(true);
-    //    akkordResultQuery.setCacheMode(CacheMode.IGNORE);
-    //    //    akkordResultQuery.setComment("Karstens Abfragekommentar");
-    //    akkordCursor = akkordResultQuery.scroll(ScrollMode.FORWARD_ONLY);
-    // log.info("Cursor ist: " + akkordCursor.)
     int incrementorCursorzeilen = 0;
 
     while (akkordCursor.next()) {
