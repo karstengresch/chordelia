@@ -26,12 +26,12 @@
 
   <!-- Log all JDBC parameters -->
   <logger name="org.hibernate.type" additivity="true">
-    <level value="TRACE"/>
+    <level value="INFO"/>
   </logger>
 
   <!-- Log all SQL DML statements as they are executed -->
   <logger name="org.hibernate.SQL" additivity="true">
-    <level value="TRACE"/>
+    <level value="INFO"/>
   </logger>
 
 

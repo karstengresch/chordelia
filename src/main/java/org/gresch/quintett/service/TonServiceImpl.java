@@ -63,6 +63,7 @@ public class TonServiceImpl implements TonService {
       //      _basisTon.setAbstandZumBasisTon(0);
       // TODO WARNING
     }
+    Session session = sessionFactory.getCurrentSession();
     for (i = MIN_ABSTAND_C_EINGESTRICHEN; i < MAX_ABSTAND_C_EINGESTRICHEN + 1; i++) {
       Ton ton = new Ton();
       ton.initialisiereDurchAbstandZumEingestrichenenC(i);
@@ -75,10 +76,11 @@ public class TonServiceImpl implements TonService {
       //      {
       //        ton.setAbstandBasisTonDurchAbstandZumEingestrichenenC(_basisTon);
       //      }
-      Session session = sessionFactory.getCurrentSession();
-      tonDao.makePersistentReadOnly(ton, session);
+
+      tonDao.makePersistentReadOnly(ton, entityManager);
       // FIXME XXX Das muss unbedingt getan werden
       // tonVorratMap.put(i, ton);
+      tonId = i;
     }
     log.info("Tonumfang: Initialisierung beendet: " + tonId + " Töne initialisiert.");
 

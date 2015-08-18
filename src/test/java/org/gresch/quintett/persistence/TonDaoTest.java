@@ -56,7 +56,7 @@ public class TonDaoTest {
     ton1.setId(ton1.getAbstandZumEingestrichenenC());
     SessionFactory sessionFactory = (entityManager.unwrap(Session.class)).getSessionFactory();
     Session session = sessionFactory.getCurrentSession();
-    tonDao.makePersistentReadOnly(ton1, session);
+    tonDao.makePersistentReadOnly(ton1, entityManager);
     // sessionFactory.getCurrentSession().flush();
     entityManager.flush();
     ton1.setAbstandZumEingestrichenenC(5);

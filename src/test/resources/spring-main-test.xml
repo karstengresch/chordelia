@@ -49,7 +49,7 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
     <property name="packagesToScan" value="org.gresch.quintett"/>
     <property name="jpaProperties">
       <props>
-        <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+        <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
         <prop key="hibernate.jdbc.use_scrollable_resultsets">true</prop>
         <prop key="hibernate.cache.use_second_level_cache">false</prop>
         <prop key="jdbc.batch_size">50</prop>

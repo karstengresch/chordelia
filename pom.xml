@@ -31,7 +31,7 @@
     <el.version>1.0</el.version>
     <fileupload.version>1.2</fileupload.version>
     <hibernate-annotations.version>3.5.6-Final</hibernate-annotations.version>
-    <hibernate.version>4.3.8.Final</hibernate.version>
+    <hibernate.version>4.3.11.Final</hibernate.version>
     <hibernate.scope>compile</hibernate.scope>
     <jasper-el.version>6.0.16</jasper-el.version>
     <jasper-el.scope>compile</jasper-el.scope>
@@ -55,7 +55,6 @@
     <xerces.version>2.6.2</xerces.version>
     <xmlschema.version>1.4.2</xmlschema.version>
     <xmlschema.scope>compile</xmlschema.scope>
-    <!-- Aus BAS-Alt -->
     <JAVA_DEBUG>true</JAVA_DEBUG>
     <JAVA_OPTIMIZE>false</JAVA_OPTIMIZE>
     <checkstyle.excludes>**/db/generic/**/*.java</checkstyle.excludes>

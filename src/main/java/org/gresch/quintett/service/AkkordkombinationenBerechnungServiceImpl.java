@@ -352,6 +352,9 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
     // TODO DAO!
     kombinationsberechnung.setBereitsBerechneteToene(2);
     kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
+
+    SessionFactory sessionFactory = entityManager.unwrap(SessionFactory.class);
+    Session session = sessionFactory.openSession();
     FlushMode flushModeOld = entityManager.unwrap(SessionFactory.class).getCurrentSession().getFlushMode();
     entityManager.unwrap(SessionFactory.class).getCurrentSession().setFlushMode(FlushMode.MANUAL);
     entityManager.unwrap(SessionFactory.class).getCurrentSession().flush();

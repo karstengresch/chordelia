@@ -1,8 +1,11 @@
 package org.gresch.quintett.service;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.gresch.quintett.KombinationsberechnungParameter;
 import org.gresch.quintett.domain.kombination.AkkordIdRangeZwoelftonklaenge;
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -25,6 +28,11 @@ import static org.junit.Assert.*;
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false)
 @Transactional
 public class KombinationsberechnungManagerServiceTest {
+  private Log log = LogFactory.getLog(KombinationsberechnungManagerServiceTest.class);
+  Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter
+    .parameterAuswerten(new String[]{"-t", "3", "-db", "j", "-ps", "j", "-pl", "n"});
+
+
 
   @Resource(name = "kombinationsberechnungService")
   KombinationsberechnungService kombinationsberechnungService;
@@ -32,12 +40,21 @@ public class KombinationsberechnungManagerServiceTest {
   @Resource(name = "kombinationsberechnungTestHelper")
   KombinationsberechnungTestHelper kombinationsberechnungTestHelper;
 
-  @Test
-  public void testSetup() {
+  @Before
+  public void setup()
+  {
     assertTrue("Die Spring-Konfiguration sollte funktionieren.", true);
     assertNotNull("Bean 'kombinationsberechnungService' sollte instantiiert sein.", kombinationsberechnungService);
     assertNotNull("Bean 'kombinationsberechnungTestHelper' sollte instantiiert sein.", kombinationsberechnungTestHelper);
+    kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
+    assertTrue("Id der Kombinationsberechnung sollte 1 sein", kombinationsberechnung.getId().equals(Integer.valueOf(1)));
+
+    //    kombinationsberechnungTestHelper.initialiseKombinationsberechnung();
+    Kombinationsberechnung neueKombinationsberechnung = kombinationsberechnungService.getKombinationsBerechnung();
+    assertEquals("Lokale und persistierte Kombinationsberechnung sollten gleich sein.", kombinationsberechnung, neueKombinationsberechnung);
+
   }
+
 
   //
   //  private static final  String CLI_PARAMETER_MAX_ANZAHL_TOENE =                  "t";
@@ -53,18 +70,8 @@ public class KombinationsberechnungManagerServiceTest {
   //  private static final  String CLI_PARAMETER_DB_ERSTELLEN =                      "db";
 
   @Test
-  public void testInitialisierung() {
-    Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter
-      .parameterAuswerten(new String[]{"-t", "3", "-db", "j", "-ps", "j", "-pl", "n"});
-    assertTrue("Id der Kombinationsberechnung sollte 1 sein", kombinationsberechnung.getId().equals(Integer.valueOf(1)));
-    kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
-    //    kombinationsberechnungTestHelper.initialiseKombinationsberechnung();
-    Kombinationsberechnung neueKombinationsberechnung = kombinationsberechnungService.getKombinationsBerechnung();
-    assertEquals("Lokale und persistierte Kombinationsberechnung sollten gleich sein.", kombinationsberechnung, neueKombinationsberechnung);
-  }
-
-  @Test
   public void testKombinationenBerechnen() {
+    log.info("KombinationsberechnungManagerServiceTest.testKombinationenBerechnen()");
     //    kombinationsberechnungTestHelper.initialiseKombinationsberechnung();
     try {
       kombinationsberechnungService.kombinationenBerechnen();
