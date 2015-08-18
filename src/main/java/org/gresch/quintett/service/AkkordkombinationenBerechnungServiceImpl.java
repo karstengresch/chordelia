@@ -10,9 +10,7 @@ import org.gresch.quintett.domain.tonmodell.Ton;
 import org.gresch.quintett.persistence.AkkordDao;
 import org.gresch.quintett.persistence.TonDao;
 import org.gresch.quintett.service.util.AkkordkombinationenBerechnungServiceHelper;
-import org.hibernate.FlushMode;
 import org.hibernate.ScrollableResults;
-import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,14 +68,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
     if (null == kombinationsberechnung) {
       throw new RuntimeException("AkkordkombinationenBerechnungService: Kombinationsberechnung darf nicht null sein!");
     }
-    Session currentSession = entityManager.unwrap(org.hibernate.Session.class);
-    //    Session session = entityManager.unwrap(SessionFactory.class).openSession();
-    //    Session internalSession = SessionFactoryUtils.getNewSession(sessionFactory);
-    FlushMode flushModeOld = currentSession.getFlushMode();
-    currentSession.setFlushMode(FlushMode.MANUAL);
-    //    internalSession.setFlushMode(FlushMode.MANUAL);
-    //    StatelessSession session = entityManager.unwrap(SessionFactory.class).openStatelessSession();
-    //    org.hibernate.Transaction tx = internalSession.beginTransaction();
+
     // ggf. delete from akkord where basisakkordId >= akkordIdStart
     // TODO Fehlerbehandlung für den Fall, dass basisAkkordIdStart > als max(basisAkkordId) from akkord
     // TODO Routine für den Fall, dass basisAkkordIdStart und basisAkkordIdEnde nicht vorhanden sind. Ggf. einmal durchiterieren (teuer).
@@ -242,13 +233,13 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
             // ((anzahlAkkorde != 0 && anzahlAkkorde % 1000 == 0) ||
             if (akkordCursor.isLast()) {
               // TODO ggf Rollback hier
-              // log.info("Vorm Kombinationsberechnungs-Flush: Zeilennummer des Akkord Cursors ist: " + (akkordCursor.getRowNumber()+1) + " - Anzahl Akkorde sind: " + anzahlAkkorde);
+              log.info("Vorm Kombinationsberechnungs-Flush: Zeilennummer des Akkord Cursors ist: " + (akkordCursor.getRowNumber()+1) + " - Anzahl Akkorde sind: " + anzahlAkkorde);
               Integer temporaereBasisAkkordKlangschaerfe = akkordFromCursor.getKlangschaerfe();
               kombinationsberechnung.setLetzteBasisAkkordKlangschaerfe(temporaereBasisAkkordKlangschaerfe);
               kombinationsberechnung.setLetzteBasisAkkordId(temporaereBasisAkkordId);
               kombinationsberechnung.setLetzteAkkordId(temporaereAkkordId);
               kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
-              currentSession.flush();
+              KombinationsberechnungService.flushManually(entityManager);
 
             }
             //            session.evict(akkordFromCursor);
@@ -269,7 +260,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
     // Check
     kombinationsberechnung.setBereitsBerechneteToene(incrementorToene);
     kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
-    currentSession.setFlushMode(flushModeOld);
+
     //    internalSession.flush();
     //    internalSession.clear();
     //    tx.commit();
@@ -351,11 +342,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
     // TODO DAO!
     kombinationsberechnung.setBereitsBerechneteToene(2);
     kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
-    Session session = entityManager.unwrap(org.hibernate.Session.class);
-    FlushMode flushModeOld = session.getFlushMode();
-    session.setFlushMode(FlushMode.MANUAL);
-    session.flush();
-    session.setFlushMode(flushModeOld);
+    KombinationsberechnungService.flushManually(entityManager);
 
     return anzahlAkkorde;
   }

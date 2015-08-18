@@ -6,9 +6,7 @@ import org.gresch.quintett.domain.kombination.AkkordIdRangeZwoelftonklaenge;
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
 import org.gresch.quintett.domain.tonmodell.Akkord;
 import org.gresch.quintett.persistence.AkkordDao;
-import org.hibernate.FlushMode;
 import org.hibernate.ScrollableResults;
-import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -91,10 +89,8 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
           kombinationsberechnung.setLetzteAkkordId(anzahlAkkorde);
           kombinationsberechnung.setBereitsBerechneteToene(incrementorToene);
           kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
-          //          FlushMode flushModeOld = entityManager.unwrap(org.hibernate.Session.class).getFlushMode();
-          //          entityManager.unwrap(org.hibernate.Session.class).setFlushMode(FlushMode.MANUAL);
-          //          entityManager.unwrap(org.hibernate.Session.class).flush();
-          //          entityManager.unwrap(org.hibernate.Session.class).setFlushMode(flushModeOld);
+
+          KombinationsberechnungService.flushManually(entityManager);
         } else {
           int basisAkkordIdStart = AkkordIdRangeZwoelftonklaenge.minIdZuAnzahlToene(incrementorToene - 1);
           int basisAkkordIdEnde = AkkordIdRangeZwoelftonklaenge.maxIdZuAnzahlToene(incrementorToene - 1);
@@ -137,11 +133,7 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
             kombinationsberechnung.setLetzteAkkordId(anzahlAkkorde);
             kombinationsberechnung.setBereitsBerechneteToene(incrementorToene);
             kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
-            Session session = entityManager.unwrap(org.hibernate.Session.class);
-            FlushMode flushModeOld = session.getFlushMode();
-            session.setFlushMode(FlushMode.MANUAL);
-            session.flush();
-            session.setFlushMode(flushModeOld);
+            KombinationsberechnungService.flushManually(entityManager);
           } // while
         } // else [>2]
       } // Ende incrementorToene-Schleife

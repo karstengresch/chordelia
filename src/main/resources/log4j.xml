@@ -10,11 +10,11 @@
   </appender>
   <appender name="NULL" class="org.apache.log4j.varia.NullAppender"/>
   <logger name="org.jbpm" additivity="true">
-    <level value="DEBUG"/>
+    <level value="WARN"/>
   </logger>
   <!--  Hibernate debugging levels and their output -->
   <logger name="org.hibernate" additivity="true">
-    <level value="INFO"/>
+    <level value="WARN"/>
   </logger>
 
   <!-- hide optimistic locking failures -->
@@ -26,18 +26,18 @@
 
   <!-- Log all JDBC parameters -->
   <logger name="org.hibernate.type" additivity="true">
-    <level value="INFO"/>
+    <level value="WARN"/>
   </logger>
 
   <!-- Log all SQL DML statements as they are executed -->
   <logger name="org.hibernate.SQL" additivity="true">
-    <level value="INFO"/>
+    <level value="WARN"/>
   </logger>
 
 
   <!-- Set root logger level to DEBUG and its only appender to CONSOLE. -->
   <root>
-    <level value="INFO"/>
+    <level value="DEBUG"/>
     <appender-ref ref="CONSOLE"/>
   </root>
 </log4j:configuration>

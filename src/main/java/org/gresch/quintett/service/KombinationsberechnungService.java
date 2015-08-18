@@ -1,10 +1,20 @@
 package org.gresch.quintett.service;
 
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
+import org.hibernate.FlushMode;
+import org.hibernate.Session;
 
 import javax.persistence.EntityManager;
 
 public interface KombinationsberechnungService {
+
+  static void flushManually(EntityManager entityManager) {
+    Session session = entityManager.unwrap(Session.class);
+    FlushMode flushModeOld = session.getFlushMode();
+    session.setFlushMode(FlushMode.MANUAL);
+    session.flush();
+    session.setFlushMode(flushModeOld);
+  }
 
   void kombinationenBerechnen() throws Exception;
 
