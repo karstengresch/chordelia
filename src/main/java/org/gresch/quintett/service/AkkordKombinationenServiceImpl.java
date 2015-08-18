@@ -8,7 +8,7 @@ import org.gresch.quintett.domain.tonmodell.Akkord;
 import org.gresch.quintett.persistence.AkkordDao;
 import org.hibernate.FlushMode;
 import org.hibernate.ScrollableResults;
-import org.hibernate.SessionFactory;
+import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -137,13 +137,11 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
             kombinationsberechnung.setLetzteAkkordId(anzahlAkkorde);
             kombinationsberechnung.setBereitsBerechneteToene(incrementorToene);
             kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
-
-            FlushMode flushModeOld = entityManager.unwrap(SessionFactory.class).getCurrentSession().getFlushMode();
-            entityManager.unwrap(SessionFactory.class).getCurrentSession().setFlushMode(FlushMode.MANUAL);
-            entityManager.unwrap(SessionFactory.class).getCurrentSession().flush();
-            //            entityManager.unwrap(SessionFactory.class).getCurrentSession().getTransaction().commit();
-            entityManager.unwrap(SessionFactory.class).getCurrentSession().setFlushMode(flushModeOld);
-            //            log.info("flushKombinationsberechnung (1)");
+            Session session = entityManager.unwrap(org.hibernate.Session.class);
+            FlushMode flushModeOld = session.getFlushMode();
+            session.setFlushMode(FlushMode.MANUAL);
+            session.flush();
+            session.setFlushMode(flushModeOld);
           } // while
         } // else [>2]
       } // Ende incrementorToene-Schleife

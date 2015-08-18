@@ -40,11 +40,15 @@ public class KombinationsberechnungManagerServiceTest {
   @Resource(name = "kombinationsberechnungTestHelper")
   KombinationsberechnungTestHelper kombinationsberechnungTestHelper;
 
+  @Resource(name = "akkordkombinationenBerechnungService")
+  AkkordkombinationenBerechnungService akkordkombinationenBerechnungService;
+
   @Before
   public void setup()
   {
     assertTrue("Die Spring-Konfiguration sollte funktionieren.", true);
     assertNotNull("Bean 'kombinationsberechnungService' sollte instantiiert sein.", kombinationsberechnungService);
+    assertNotNull("Bean 'akkordkombinationenBerechnungService' sollte instantiiert sein.", akkordkombinationenBerechnungService);
     assertNotNull("Bean 'kombinationsberechnungTestHelper' sollte instantiiert sein.", kombinationsberechnungTestHelper);
     kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
     assertTrue("Id der Kombinationsberechnung sollte 1 sein", kombinationsberechnung.getId().equals(Integer.valueOf(1)));

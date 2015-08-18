@@ -65,6 +65,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
 
     Kombinationsberechnung kombinationsberechnung = null;
     kombinationsberechnung = kombinationsberechnungService.getKombinationsBerechnung();
+
     boolean hatAbsteigendeKlangschaerfe = kombinationsberechnung.getHatAbsteigendeKlangschaerfe();
     // TODO assert anstelle dessen.
     if (null == kombinationsberechnung) {
@@ -280,7 +281,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
   }
 
   // Diese Dokumentation stehen lassen: propagationLevel = REQUIRES_NEW entfernt wegen Problemen mit kombinationsberechnung.
-  @Transactional(propagation = Propagation.NESTED)
+  @Transactional
   public int runIncrementorToeneZwei() {
     Kombinationsberechnung kombinationsberechnung = kombinationsberechnungService.getKombinationsBerechnung();
     // TODO Prüfen, ob Zweitonklänge bereits berechnet worden sind??? Ggf. löschen???
@@ -348,24 +349,14 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
         continue;
       }
     }
-    //    transaction.commit();
     // TODO DAO!
     kombinationsberechnung.setBereitsBerechneteToene(2);
     kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
-
-    SessionFactory sessionFactory = entityManager.unwrap(SessionFactory.class);
-    Session session = sessionFactory.openSession();
-    FlushMode flushModeOld = entityManager.unwrap(SessionFactory.class).getCurrentSession().getFlushMode();
-    entityManager.unwrap(SessionFactory.class).getCurrentSession().setFlushMode(FlushMode.MANUAL);
-    entityManager.unwrap(SessionFactory.class).getCurrentSession().flush();
-    entityManager.unwrap(SessionFactory.class).getCurrentSession().setFlushMode(flushModeOld);
-    // Nicht mehr benötigt...
-    //    akkordKombinationen.put(Integer.valueOf(incrementorToene), _akkordSet);
-    // }
-    // if (laden)
-    // {
-    // anzahlAkkorde = 11;
-    // }
+    Session session = entityManager.unwrap(org.hibernate.Session.class);
+    FlushMode flushModeOld = session.getFlushMode();
+    session.setFlushMode(FlushMode.MANUAL);
+    session.flush();
+    session.setFlushMode(flushModeOld);
 
     return anzahlAkkorde;
   }

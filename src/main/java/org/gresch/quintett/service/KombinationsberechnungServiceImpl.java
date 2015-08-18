@@ -7,7 +7,6 @@ import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
 import org.gresch.quintett.persistence.KombinationsberechnungDao;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -47,7 +46,7 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
      *
      * @see org.gresch.quintett.service.KombinationsberechnungService#kombinationenBerechnen()
      */
-  @Transactional(propagation = Propagation.REQUIRED)
+  @Transactional
   public void kombinationenBerechnen() throws Exception {
     // wohl:
     Kombinationsberechnung kombinationsberechnung = (Kombinationsberechnung) kombinationsberechnungDao.findOne(1);
