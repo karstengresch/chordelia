@@ -103,7 +103,9 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
           Boolean weiterenBlockLaden = true;
 
           while (weiterenBlockLaden) {
+            // TODO Problem here - check condition /2015-08-19 Karsten Gresch
             if (!(minBlockId.equals(basisAkkordIdStart) && (naechsteMinBlockId.equals(-1)))) {
+
               // Nur erster Durchgang
               minBlockId = naechsteMinBlockId;
             }
