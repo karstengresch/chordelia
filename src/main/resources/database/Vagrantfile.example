@@ -136,7 +136,7 @@ Vagrant.configure("2") do |config|
         config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
       end
 
-      config.vm.provision :shell, :inline => "docker run -d -p 0.0.0.0:3306:3306 -e MYSQL_DATABASE=quintett -e MYSQL_USER=quintett -e MYSQL_ROOT_PASSWORD=nonono mysql:latest --name quintett", :privileged => true
+      config.vm.provision :shell, :inline => "docker run -p 0.0.0.0:3306:3306 -e MYSQL_DATABASE=quintett -e MYSQL_USER=quintett -e MYSQL_ROOT_PASSWORD=nonono -d mysql:latest", :privileged => true
 
     end
   end
