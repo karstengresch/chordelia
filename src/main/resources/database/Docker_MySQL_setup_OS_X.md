@@ -18,8 +18,8 @@ In general, the setup process looks like this (on Mac OS X, IntelliJ IDEA):
     v$>vagrant ssh core-01 -- -A
 
 ## Docker
-For getting the official MySQL docker 
-    d$>docker run -d -p 0.0.0.0:3306:3306 -e MYSQL_DATABASE=quintett -e MYSQL_USER=quintett -e MYSQL_ROOT_PASSWORD=nonono mysql:latest --name quintett
+For getting the official MySQL docker container (https://hub.docker.com/_/mysql/)
+    d$>docker run -p 0.0.0.0:3306:3306 -e MYSQL_DATABASE=quintett -e MYSQL_USER=quintett -e MYSQL_ROOT_PASSWORD=nonono -d mysql:latest --name quintett
     
    
 ## Troubleshooting
