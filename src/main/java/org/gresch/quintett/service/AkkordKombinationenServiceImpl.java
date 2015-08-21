@@ -104,7 +104,7 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
 
           while (weiterenBlockLaden) {
             // TODO Problem here - check condition /2015-08-19 Karsten Gresch
-            if (!(minBlockId.equals(basisAkkordIdStart) && (naechsteMinBlockId.equals(-1)))) {
+            if ( (!(minBlockId.equals(basisAkkordIdStart)) && (naechsteMinBlockId.equals(-1)))) {
 
               // Nur erster Durchgang
               minBlockId = naechsteMinBlockId;
@@ -117,14 +117,7 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
               maxBlockId = basisAkkordIdEnde;
               weiterenBlockLaden = false;
             }
-            // hole zu incrementorToene die minAkkordId und die maxAkkordId
-            //          int minBasisAkkordId = -1;
-            //          int maxBasisAkkordId = -1;
-            //          minBasisAkkordId = AkkordIdRangeZwoelftonklaenge.minIdZuAnzahlToene(incrementorToene-1);
-            //          maxBasisAkkordId = AkkordIdRangeZwoelftonklaenge.maxIdZuAnzahlToene(incrementorToene-1);
-            //            log.info("berechneUndPersistiereKombinationen(~): minBlockId = " + minBlockId);
-            //            log.info("berechneUndPersistiereKombinationen(~): maxBlockId = " + maxBlockId);
-            // Hm, das sollte es auch nicht sein...
+
             int tempAnzahlAkkorde = -1;
             tempAnzahlAkkorde = anzahlAkkorde;
             // New thread?
