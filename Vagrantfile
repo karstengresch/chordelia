@@ -126,9 +126,14 @@ Vagrant.configure("2") do |config|
       # $shared_folders.each_with_index do |(host_folder, guest_folder), index|
       #  config.vm.synced_folder host_folder.to_s, guest_folder.to_s, id: "core-share%02d" % index, nfs: true, mount_options: ['nolock,vers=3,udp']
       # end
+      config.vm.synced_folder "./", "/home/core/share/",
+          id: "core",
+          nfs_version: "4",
+          :nfs => true,
+          :mount_options => ['nolock,noatime']
 
       if $share_home
-        config.vm.synced_folder ENV['HOME'], ENV['HOME'], id: "home", :nfs => true, :mount_options => ['nolock,vers=3,udp']
+        config.vm.synced_folder ENV['HOME'], ENV['HOME'], id: "home", :nfs => true, :mount_options => ['nolock,vers=3']
       end
 
       if File.exist?(CLOUD_CONFIG_PATH)
@@ -136,7 +141,7 @@ Vagrant.configure("2") do |config|
         config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
       end
 
-      config.vm.provision :shell, :inline => "docker run -p 0.0.0.0:3306:3306 -e MYSQL_DATABASE=quintett -e MYSQL_USER=quintett -e MYSQL_ROOT_PASSWORD=nonono -d mysql:latest", :privileged => true
+      config.vm.provision :shell, :inline => "docker run -p 3306:3306 -e MYSQL_DATABASE=quintett -e MYSQL_USER=quintett -e MYSQL_ROOT_PASSWORD=nonono -d mysql:latest", :privileged => true
 
     end
   end
