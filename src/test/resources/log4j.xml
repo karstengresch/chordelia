@@ -10,7 +10,7 @@
   </appender>
   <appender name="NULL" class="org.apache.log4j.varia.NullAppender"/>
   <logger name="org.jbpm" additivity="true">
-    <level value="WARN"/>
+    <level value="DEBUG"/>
   </logger>
   <!--  Hibernate debugging levels and their output -->
   <logger name="org.hibernate" additivity="true">
@@ -20,18 +20,18 @@
   <!-- hide optimistic locking failures -->
   <logger name="org.hibernate.event.def.AbstractFlushingEventListener"
           additivity="true">
-    <level value="FATAL"/>
+    <level value="DEBUG"/>
   </logger>
 
 
   <!-- Log all JDBC parameters -->
   <logger name="org.hibernate.type" additivity="true">
-    <level value="WARN"/>
+    <level value="INFO"/>
   </logger>
 
   <!-- Log all SQL DML statements as they are executed -->
   <logger name="org.hibernate.SQL" additivity="true">
-    <level value="WARN"/>
+    <level value="INFO"/>
   </logger>
 
 
