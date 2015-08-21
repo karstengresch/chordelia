@@ -6,7 +6,6 @@ import org.gresch.quintett.domain.tonmodell.Akkord;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.ScrollableResults;
-import org.hibernate.SessionFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,11 +29,6 @@ public class AkkordDaoHibernateImpl /* extends AkkordDao<Akkord, Integer>*/ {
     // TODO Ggf. prüfen, ob FlushMode.MANUAL hier nicht besser wäre.
 
     try {
-      //      Session session = entityManager.unwrap(SessionFactory.class).openSession();
-      //      session.saveOrUpdate(akkord);
-      //      session.clear();
-      //      session.close();
-      //      log.info("Going to save no: " + akkord.getId());
       entityManager.unwrap(org.hibernate.Session.class).saveOrUpdate(akkord);
     } catch (Exception e) {
       log.error("Konnte Akkord nicht persistieren. Fehler war: " + e.getLocalizedMessage());

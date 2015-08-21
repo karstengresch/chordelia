@@ -7,7 +7,7 @@ import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
 import org.gresch.quintett.persistence.KombinationsberechnungDao;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -46,7 +46,12 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
      *
      * @see org.gresch.quintett.service.KombinationsberechnungService#kombinationenBerechnen()
      */
-  @Transactional
+  @org.springframework.transaction.annotation.Transactional
+    (
+      propagation = Propagation.REQUIRED,
+      readOnly = false,
+      noRollbackFor = Throwable.class
+    )
   public void kombinationenBerechnen() throws Exception {
     // wohl:
     Kombinationsberechnung kombinationsberechnung = (Kombinationsberechnung) kombinationsberechnungDao.findOne(1);
@@ -62,7 +67,12 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
     // kombinationsberechnung.akkordKombinationen.berechneKombinationen();
   }
 
-  @Transactional
+  @org.springframework.transaction.annotation.Transactional
+    (
+      propagation = Propagation.REQUIRES_NEW,
+      readOnly = false,
+      noRollbackFor = Throwable.class
+    )
   public void kombinationenAusgeben() {
     throw new RuntimeException("'kombinationenAusgeben()' Noch nicht implementiert");
     // FIXME Services verwenden!
@@ -98,7 +108,12 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
 
   @Override
   //  @Transactional(propagation=Propagation.REQUIRES_NEW)
-  @Transactional(readOnly = true)
+  @org.springframework.transaction.annotation.Transactional
+    (
+      propagation = Propagation.REQUIRED,
+      readOnly = true,
+      noRollbackFor = Throwable.class
+    )
   public Kombinationsberechnung getKombinationsBerechnung() { // TODO ans DAO???
     Kombinationsberechnung kombinationsberechnung = (Kombinationsberechnung) kombinationsberechnungDao.findOne(1);
 
@@ -111,7 +126,7 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
   }
 
   @Override
-  @Transactional(isolation = Isolation.SERIALIZABLE)
+  @org.springframework.transaction.annotation.Transactional(isolation = Isolation.SERIALIZABLE)
   public void saveKombinationsBerechnung(Kombinationsberechnung kombinationsberechnung) {
     Kombinationsberechnung kombinationsberechungOld = null;
 
@@ -184,7 +199,7 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
   }
 
 
-  @Transactional(isolation = Isolation.REPEATABLE_READ)
+  @org.springframework.transaction.annotation.Transactional(isolation = Isolation.REPEATABLE_READ)
   public void updateKombinationsberechnung(EntityManager entityManager, Kombinationsberechnung kombinationsberechnung) {
     try {
       kombinationsberechnungDao.saveOrUpdate(entityManager, kombinationsberechnung);

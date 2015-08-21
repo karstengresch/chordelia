@@ -13,7 +13,6 @@ import org.gresch.quintett.service.util.AkkordkombinationenBerechnungServiceHelp
 import org.hibernate.ScrollableResults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -49,7 +48,13 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
 
   /* ####### ALGORITHMUS BEGINNT HIER ####### */
   //(propagation = Propagation.REQUIRES_NEW)
-  @Transactional
+  @org.springframework.transaction.annotation.Transactional
+    (
+      propagation = Propagation.REQUIRED,
+      readOnly = false,
+      noRollbackFor = Throwable.class
+
+    )
   public int berechneUndPersistiereNachBasisAkkordBlock(int minBlockId, int maxBlockId, int incrementorToene, int lastAkkordId) {
 
     Kombinationsberechnung kombinationsberechnung = null;
@@ -182,7 +187,8 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
             }
 
             //                  saveAkkord(akkord2);
-            akkordDao.makePersistentReadOnly(finalAkkord, this.entityManager);
+            // akkordDao.makePersistentReadOnly(finalAkkord, this.entityManager);
+
             //                  entityManager.unwrap(org.hibernate.Session.class).evict(finalAkkord);
             anzahlAkkorde++;
 
@@ -241,7 +247,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
     // Check
     kombinationsberechnung.setBereitsBerechneteToene(incrementorToene);
     kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
-
+    KombinationsberechnungService.flushManually(entityManager);
     //    internalSession.flush();
     //    internalSession.clear();
     //    tx.commit();
@@ -252,7 +258,13 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
   }
 
   // Diese Dokumentation stehen lassen: propagationLevel = REQUIRES_NEW entfernt wegen Problemen mit kombinationsberechnung.
-  @Transactional
+  @org.springframework.transaction.annotation.Transactional
+    (
+      propagation = Propagation.REQUIRED,
+      readOnly = false,
+      noRollbackFor = Throwable.class
+
+    )
   public int runIncrementorToeneZwei() {
     Kombinationsberechnung kombinationsberechnung = kombinationsberechnungService.getKombinationsBerechnung();
     // TODO Prüfen, ob Zweitonklänge bereits berechnet worden sind??? Ggf. löschen???
@@ -329,7 +341,13 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
   }
 
   // XXX Remove if not needed!
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  @org.springframework.transaction.annotation.Transactional
+    (
+      propagation = Propagation.REQUIRED,
+      readOnly = false,
+      noRollbackFor = Throwable.class
+
+    )
   public void saveAkkord(Akkord akkord) {
     akkordDao.makePersistentReadOnly(akkord, this.entityManager);
   }
@@ -337,7 +355,13 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
   // TODO Asserts für die Parameter!
   // TODO Prüfen: In Util?
   //  @Transactional(propagation=Propagation.NESTED) => Check if needed (i.e. otherwise not threadsafe).
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  @org.springframework.transaction.annotation.Transactional
+    (
+      propagation = Propagation.REQUIRES_NEW,
+      readOnly = false,
+      noRollbackFor = Throwable.class
+
+    )
   public List<Ton> transponiere(List<Ton> xTonList, Integer xTranspositionsIntervall) {
     Kombinationsberechnung kombinationsberechnung = kombinationsberechnungService.getKombinationsBerechnung();
     Ton basisTon = kombinationsberechnung.getBasisTon();
