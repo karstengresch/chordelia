@@ -1,5 +1,6 @@
 package org.gresch.quintett.renderer;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gresch.quintett.domain.kombination.AkkordIdRangeZwoelftonklaenge;
@@ -226,7 +227,13 @@ public class QuintettRendererLilyPondImpl implements QuintettRenderer {
     //      akkordIdList.add(i);
     //    }
     List<Integer> akkordIdList = akkordKombinationenService.getAkkordIdsByRange(minAkkordId, maxAkkordId, true, true);
-    rendereKombinationenInDatei(akkordIdList, switchString);
+
+
+    if(CollectionUtils.isNotEmpty(akkordIdList)) {
+      rendereKombinationenInDatei(akkordIdList, switchString);
+    } else {
+      throw new RuntimeException("Were not able to get the akkord list!");
+    }
 
   }
 
