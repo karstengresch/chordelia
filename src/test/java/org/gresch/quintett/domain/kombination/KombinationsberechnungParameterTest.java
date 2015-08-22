@@ -47,7 +47,7 @@ public class KombinationsberechnungParameterTest {
     assertTrue("Defaultwert für Renderer sollte gesetzt sein.",
       kombinationsberechnung.getRenderer().equals(KombinationsberechnungParameter.CLI_DEFAULTWERT_RENDERER));
     assertTrue("Defaultwert für Persistenz laden sollte gesetzt sein.",
-      kombinationsberechnung.getHatPersistenzLaden() == KombinationsberechnungParameter.CLI_DEFAULTWERT_PERSISTENZ_LADEN.equalsIgnoreCase("j") ?
+      kombinationsberechnung.getHatPersistenzLaden() == KombinationsberechnungParameter.CLI_DEFAULTWERT_PERSISTENZ_LADEN.equalsIgnoreCase("f") ?
         true :
         false);
     assertTrue("Defaultwert für Persistenz schreiben sollte gesetzt sein.",
