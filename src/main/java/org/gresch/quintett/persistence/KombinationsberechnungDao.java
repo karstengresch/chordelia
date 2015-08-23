@@ -1,6 +1,7 @@
 package org.gresch.quintett.persistence;
 
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
+import org.hibernate.Session;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -75,7 +76,9 @@ public interface KombinationsberechnungDao<T, ID extends Serializable> extends C
 
     boolean successfullyUpdated = false;
     try {
-      entityManager.unwrap(org.hibernate.Session.class).saveOrUpdate(kombinationsberechnung);
+      Session session = entityManager.unwrap(org.hibernate.Session.class);
+      session.saveOrUpdate(kombinationsberechnung);
+      session.persist(kombinationsberechnung);
       successfullyUpdated = true;
     } catch (Exception e) {
       throw new Exception(e);

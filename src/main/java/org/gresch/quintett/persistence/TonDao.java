@@ -21,6 +21,7 @@ public interface TonDao<T, ID extends Serializable> extends CrudRepository<Ton, 
     Transaction transaction = session.beginTransaction();
     session.saveOrUpdate(ton);
     session.setReadOnly(ton, true);
+    session.persist(ton);
     transaction.commit();
   }
 

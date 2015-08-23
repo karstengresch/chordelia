@@ -137,10 +137,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
           _tonList = new LinkedList<Ton>();
           // Prüfen!
           if (kombinationsberechnung.getHatAbsteigendeKlangschaerfe()) {
-            // ???
             _tonList.add(tonDao.findByExample((_ton)));
-            //                  _tonList.add(tonDao.find(_ton.getId()));
-            //                  _tonList.add(_ton);
             _tonList.addAll(bufferAkkord.getTonList());
             List<Ton> _tonListBuffer;
             _tonListBuffer = new LinkedList<Ton>();
@@ -152,8 +149,6 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
             _tonListBuffer = null;
           } else if (!kombinationsberechnung.getHatAbsteigendeKlangschaerfe()) {
             _tonList.add(tonDao.findByExample((_ton)));
-            //                  _tonList.add(_ton);
-            //                  _tonList.add(tonDao.find(_ton.getId()));
           }
           // TODO Sollte das nicht nach der TonArray-Schleife folgen?
           Akkord finalAkkord = null;
@@ -186,25 +181,8 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
                 + finalAkkord.getKlangschaerfe());
             }
 
-            //                  saveAkkord(akkord2);
-            // akkordDao.makePersistentReadOnly(finalAkkord, this.entityManager);
-
-            //                  entityManager.unwrap(org.hibernate.Session.class).evict(finalAkkord);
+            akkordDao.makePersistentReadOnly(finalAkkord, entityManager);
             anzahlAkkorde++;
-
-            //            entityManager.unwrap(org.hibernate.Session.class).evict(finalAkkord);
-
-            //                  if((anzahlAkkorde % 1000 == 0) || (incrementorToene == 3 && anzahlAkkorde % 1000 == 0))
-            //                  {
-            //                    entityManager.unwrap(SessionFactory.class).evict(Akkord.class);
-            //                    FlushMode flushModeOld = entityManager.unwrap(org.hibernate.Session.class).getFlushMode();
-            //                    entityManager.unwrap(org.hibernate.Session.class).setFlushMode(FlushMode.MANUAL);
-            //                    entityManager.unwrap(org.hibernate.Session.class).flush();
-            //                    log.info("flushNachBasiston (1)");
-            //                    entityManager.unwrap(org.hibernate.Session.class).setFlushMode(flushModeOld);
-            //                    log.info("A~K~.berechneKombinationen(): Flush bei Anzahl Akkorde: " + String.valueOf(anzahlAkkorde));
-            //
-            //                  }
 
             if ((anzahlAkkorde % 1000 == 0) && (anzahlAkkorde < 10000)) {
               log.info("A~K~.berechneKombinationen(): Anzahl Akkorde: " + String.valueOf(anzahlAkkorde));
@@ -227,10 +205,7 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
               kombinationsberechnung.setLetzteAkkordId(temporaereAkkordId);
               kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
               KombinationsberechnungService.flushManually(entityManager);
-
             }
-            //            session.evict(akkordFromCursor);
-            //            LogFactory.getFactory().release();
           }
           finalAkkord = null;
 
@@ -239,21 +214,14 @@ public class AkkordkombinationenBerechnungServiceImpl implements Akkordkombinati
     } // end while
 
     akkordCursor.close();
-    //    entityManager.unwrap(org.hibernate.Session.class).evict(akkordCursor);
 
-    //    ThreadLocalUtil.cleanupThreadLocals(null, "main", Thread.currentThread().getContextClassLoader());
     akkordCursor = null;
 
     // Check
     kombinationsberechnung.setBereitsBerechneteToene(incrementorToene);
     kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
     KombinationsberechnungService.flushManually(entityManager);
-    //    internalSession.flush();
-    //    internalSession.clear();
-    //    tx.commit();
-    //    internalSession.close();
     kombinationsberechnung = null;
-    //      log.info(incrementorAkkorde + " Kombinationen berechnet, davon " + anzahlAkkorde + " gültig.");
     return anzahlAkkorde;
   }
 

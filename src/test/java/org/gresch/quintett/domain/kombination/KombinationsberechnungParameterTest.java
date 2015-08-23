@@ -92,6 +92,7 @@ public class KombinationsberechnungParameterTest {
     assertTrue("Defaultwert für Persistenz schreiben sollte überschrieben worden sein.",
       kombinationsberechnung.getHatPersistenzSchreiben() != (KombinationsberechnungParameter.CLI_DEFAULTWERT_PERSISTENZ_SCHREIBEN
         .equalsIgnoreCase("j") ? true : false));
+    System.out.println(kombinationsberechnung.getArgumentsString());
 
   }
 

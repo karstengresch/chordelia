@@ -37,7 +37,7 @@
 
   <!-- Set root logger level to DEBUG and its only appender to CONSOLE. -->
   <root>
-    <level value="DEBUG"/>
+    <level value="INFO"/>
     <appender-ref ref="CONSOLE"/>
   </root>
 </log4j:configuration>

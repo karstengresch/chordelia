@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 
 public interface KombinationsberechnungService {
 
-  @Transactional(propagation = Propagation.REQUIRED)
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   static void flushManually(EntityManager entityManager) {
     Session session = entityManager.unwrap(Session.class);
     FlushMode flushModeOld = session.getFlushMode();
