@@ -132,7 +132,7 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
           } // while
         } // else [>2]
       } // Ende incrementorToene-Schleife
-      kombinationsberechnung = null;
+      // kombinationsberechnung = null;
       anzahlBerechneteAkkorde = anzahlAkkorde;
       //      log.info("berechneUndPersistiereKombinationen(~): anzahlBerechneteAkkorde = " + anzahlBerechneteAkkorde);
     } else {

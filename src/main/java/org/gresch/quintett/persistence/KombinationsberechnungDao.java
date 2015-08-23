@@ -1,10 +1,10 @@
 package org.gresch.quintett.persistence;
 
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
-import org.hibernate.SessionFactory;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.io.Serializable;
@@ -70,7 +70,7 @@ public interface KombinationsberechnungDao<T, ID extends Serializable> extends C
   // @Modifying
   // @Query(value = "update Kombinationsberechnung k set k = :kombinationsberechnung where id = 0")
   //Integer saveOrUpdate(@Param("kombinationsberechnung") Kombinationsberechnung kombinationsberechnung);
-
+@Transactional
   default boolean saveOrUpdate(EntityManager entityManager, Kombinationsberechnung kombinationsberechnung) throws Exception {
 
     boolean successfullyUpdated = false;

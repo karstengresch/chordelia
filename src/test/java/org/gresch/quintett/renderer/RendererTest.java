@@ -103,10 +103,12 @@ public class RendererTest {
     assertNotNull("Kombinationsberechnung sollte gespeichert worden sein.", kombinationsberechnungService.getKombinationsBerechnung());
     int anzahlDreitonklaenge = akkordKombinationenService.berechneUndPersistiereKombinationsberechnung();
     KombinationsberechnungService.flushManually(entityManager);
+    kombinationsberechnung = null;
     kombinationsberechnung = kombinationsberechnungService.getKombinationsBerechnung();
     assertEquals("Wert für bereits berechnete Töne sollte auf 3 erhöht sein.", Integer.valueOf(3),
       Integer.valueOf(kombinationsberechnung.getBereitsBerechneteToene()));
     assertEquals("Genau 110 Klaenge sollten berechnet worden sein.", Integer.valueOf(110), Integer.valueOf(anzahlDreitonklaenge - 11));
+    KombinationsberechnungService.flushManually(entityManager);
     lilyPondRenderer
       .rendereKombinationenNachAkkordIdRange(AkkordIdRangeZwoelftonklaenge.minIdZuAnzahlToene(3), AkkordIdRangeZwoelftonklaenge.maxIdZuAnzahlToene(3),
         "");

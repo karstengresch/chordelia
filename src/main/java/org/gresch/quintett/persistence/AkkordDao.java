@@ -24,6 +24,7 @@ public interface AkkordDao<T, ID extends Serializable> extends CrudRepository<Ak
       Session session = entityManager.unwrap(Session.class);
       session.saveOrUpdate(akkord);
       session.setReadOnly(akkord, true);
+      session.flush();
 
     } catch (Exception e) {
      //  log.error("Konnte Akkord nicht persistieren. Fehler war: " + e.getLocalizedMessage());
