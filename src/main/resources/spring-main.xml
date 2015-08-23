@@ -25,7 +25,7 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
     <property name="dataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource"/>
     <property name="dataSourceProperties">
       <props>
-        <prop key="url">jdbc:mysql://localhost:14572/mysql</prop>
+        <prop key="url">jdbc:mysql://localhost:14572/quintett</prop>
         <prop key="user">root</prop>
         <prop key="password">nonono</prop>
       </props>
