@@ -2,6 +2,7 @@ package org.gresch.quintett.service;
 
 import org.gresch.quintett.KombinationsberechnungParameter;
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -91,17 +92,22 @@ public class AkkordkombinationenBerechnungServiceTest {
     assertEquals("Genau 110 Klaenge sollten berechnet worden sein.", Integer.valueOf(110), Integer.valueOf(anzahlDreitonklaenge - 11));
   }
 
-  // @Test
+  // TODO for some reason starting w/ 4 sound chords the loop exceeds. /2015-08-25 Karsten Gresch
+  @Ignore
+  @Test
   public void testBerechneUndPersistiereViertonIntervalle() throws Exception {
     Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[]{CLI_PARAMETER_MAX_ANZAHL_TOENE, "4",
       CLI_PARAMETER_DB_ERSTELLEN, "j",
       CLI_PARAMETER_PERSISTENZ_LADEN, "n"});
     assertTrue("Id der Kombinationsberechnung sollte 1 sein", kombinationsberechnung.getId().equals(Integer.valueOf(1)));
     kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
+    KombinationsberechnungService.flushManually(entityManager);
+    assertNotNull("Kombinationsberechnung sollte gespeichert worden sein.", kombinationsberechnungService.getKombinationsBerechnung());
     int anzahlViertonklaenge = akkordKombinationenService.berechneUndPersistiereKombinationsberechnung();
     KombinationsberechnungService.flushManually(entityManager);
     kombinationsberechnung = kombinationsberechnungService.getKombinationsBerechnung();
-    assertTrue("Wert für bereits berechnete Töne sollte auf 4 erhöht sein.", kombinationsberechnung.getBereitsBerechneteToene().intValue() == 4);
+    assertEquals("Wert für bereits berechnete Töne sollte auf 4 erhöht sein.", Integer.valueOf(4),
+      Integer.valueOf(kombinationsberechnung.getBereitsBerechneteToene()));
     assertEquals("Genau 990 Klaenge sollten berechnet worden sein.", Integer.valueOf(990), Integer.valueOf(anzahlViertonklaenge - 110 - 11));
   }
 
