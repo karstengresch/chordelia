@@ -36,13 +36,15 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
   @Resource(name = "akkordDao")
   private AkkordDao akkordDao;
 
-  public AkkordKombinationenServiceImpl() {
+  public AkkordKombinationenServiceImpl()
+  {
     // Beany baby
   }
 
   @Override
   @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
-  public ScrollableResults getScrollableResultByBasisAkkordRange(Integer minBlockId, Integer maxBlockId, int fetchBlockGroesze, boolean absteigend) {
+  public ScrollableResults getScrollableResultByBasisAkkordRange(Integer minBlockId, Integer maxBlockId, int fetchBlockGroesze, boolean absteigend)
+  {
     return akkordDao.getScrollableResultByBasisAkkordRange(minBlockId, maxBlockId, fetchBlockGroesze, absteigend, this.entityManager);
 
   }
@@ -50,13 +52,15 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
   // FIXME Set oder doch TreeSet, ausnahmsweise?
   @Override
   @Transactional
-  public Set<Akkord> getAkkordkombinationenZuBasisAkkord(Akkord basisAkkord) {
+  public Set<Akkord> getAkkordkombinationenZuBasisAkkord(Akkord basisAkkord)
+  {
     return akkordDao.getAkkordkombinationenZuBasisAkkord(basisAkkord, this.entityManager);
   }
 
   @Override
   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
-  public int berechneUndPersistiereKombinationsberechnung() throws Exception {
+  public int berechneUndPersistiereKombinationsberechnung() throws Exception
+  {
   /* TODO
      * - Prüfe, ob DB erstellen gewählt wurde
      * - wenn ja, lasse runIncrementorToeneZwei laufen und danach
@@ -69,7 +73,8 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
     // Sollte keinen Unterschied im Vergleich zur Übergabe machen.
     Kombinationsberechnung kombinationsberechnung = kombinationsberechnungService.getKombinationsBerechnung();
 
-    if (kombinationsberechnung.getHatPersistenzSchreiben() && (kombinationsberechnung.getHatPersistenzLaden() == false)) {
+    if (kombinationsberechnung.getHatPersistenzSchreiben() && (kombinationsberechnung.getHatPersistenzLaden() == false))
+    {
       int incrementorToene = -1;
       Integer bereitsBerechneteToene = kombinationsberechnung.getBereitsBerechneteToene();
       // Prüfen: bereits berechnete Töne <== max. Töne
@@ -78,20 +83,25 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
       // TODO bereitsBerechneteAkkorde/bereitsBerechneteAkkordId, darauf mit Range-Umrechnung.
       int incrementorToeneStartwert = bereitsBerechneteToene.intValue() + 1;
       // Setzte auf Zweitonklänge, da Töne separat initialisiert werden.
-      if (incrementorToeneStartwert == 0) {
+      if (incrementorToeneStartwert == 0)
+      {
         incrementorToeneStartwert = 2;
       }
       final int maxAnzahlToene = kombinationsberechnung.getMaxAnzahlToene().intValue();
-      for (incrementorToene = incrementorToeneStartwert; incrementorToene <= maxAnzahlToene; incrementorToene++) {
+      for (incrementorToene = incrementorToeneStartwert; incrementorToene <= maxAnzahlToene; incrementorToene++)
+      {
         //        log.info("berechneUndPersistiereKombinationen(~): incrementorToene = " + incrementorToene);
-        if (incrementorToene == 2) {
+        if (incrementorToene == 2)
+        {
           anzahlAkkorde = akkordkombinationenBerechnungService.runIncrementorToeneZwei();
           kombinationsberechnung.setLetzteAkkordId(anzahlAkkorde);
           kombinationsberechnung.setBereitsBerechneteToene(incrementorToene);
           kombinationsberechnungService.saveKombinationsBerechnung(kombinationsberechnung);
 
           KombinationsberechnungService.flushManually(entityManager);
-        } else {
+        }
+        else
+        {
           int basisAkkordIdStart = AkkordIdRangeZwoelftonklaenge.minIdZuAnzahlToene(incrementorToene - 1);
           int basisAkkordIdEnde = AkkordIdRangeZwoelftonklaenge.maxIdZuAnzahlToene(incrementorToene - 1);
           incrementorToene = AkkordIdRangeZwoelftonklaenge.anzahlToeneZuId(basisAkkordIdStart) + 1;
@@ -102,18 +112,23 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
           Integer maxBlockId = -1;
           Boolean weiterenBlockLaden = true;
 
-          while (weiterenBlockLaden) {
+          while (weiterenBlockLaden)
+          {
             // TODO Problem here - check condition /2015-08-19 Karsten Gresch
-            if ( (!(minBlockId.equals(basisAkkordIdStart)) && (naechsteMinBlockId.equals(-1)))) {
+            if ((!(minBlockId.equals(basisAkkordIdStart)) && (naechsteMinBlockId.equals(-1))))
+            {
 
-              // Nur erster Durchgang
+              // Nur erster Durchgang/**/
               minBlockId = naechsteMinBlockId;
             }
 
-            if (!((minBlockId + fetchBlockGroesze) > basisAkkordIdEnde)) {
+            if (!((minBlockId + fetchBlockGroesze) > basisAkkordIdEnde))
+            {
               maxBlockId = minBlockId + fetchBlockGroesze;
               naechsteMinBlockId = maxBlockId + 1;
-            } else {
+            }
+            else
+            {
               maxBlockId = basisAkkordIdEnde;
               weiterenBlockLaden = false;
             }
@@ -121,8 +136,7 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
             int tempAnzahlAkkorde = -1;
             tempAnzahlAkkorde = anzahlAkkorde;
             // New thread?
-            tempAnzahlAkkorde = akkordkombinationenBerechnungService
-              .berechneUndPersistiereNachBasisAkkordBlock(minBlockId, maxBlockId, incrementorToene, tempAnzahlAkkorde);
+            tempAnzahlAkkorde = akkordkombinationenBerechnungService.berechneUndPersistiereNachBasisAkkordBlock(minBlockId, maxBlockId, incrementorToene, tempAnzahlAkkorde);
             anzahlAkkorde = tempAnzahlAkkorde;
             //            log.info("berechneUndPersistiereKombinationen(~): anzahlAkkorde = " + anzahlAkkorde);
             kombinationsberechnung.setLetzteAkkordId(anzahlAkkorde);
@@ -135,28 +149,32 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
       // kombinationsberechnung = null;
       anzahlBerechneteAkkorde = anzahlAkkorde;
       //      log.info("berechneUndPersistiereKombinationen(~): anzahlBerechneteAkkorde = " + anzahlBerechneteAkkorde);
-    } else {
-      throw new RuntimeException(
-        "Noch nicht implementiert! [!(kombinationsberechnung.getHatPersistenzSchreiben() && (!kombinationsberechnung.getHatPersistenzLaden()))]");
+    }
+    else
+    {
+      throw new RuntimeException("Noch nicht implementiert! [!(kombinationsberechnung.getHatPersistenzSchreiben() && (!kombinationsberechnung.getHatPersistenzLaden()))]");
     }
     return anzahlBerechneteAkkorde;
   }
 
   @Override
   @Transactional
-  public Akkord getAkkordById(Integer akkordId) {
+  public Akkord getAkkordById(Integer akkordId)
+  {
     return (Akkord) akkordDao.findOne(akkordId);
   }
 
   @Override
   @Transactional
-  public List<Integer> getAkkordIdsByAnzahlToene(int anzahlToene, boolean klangschaerfeAbsteigend, boolean akkordIdAbsteigend) {
+  public List<Integer> getAkkordIdsByAnzahlToene(int anzahlToene, boolean klangschaerfeAbsteigend, boolean akkordIdAbsteigend)
+  {
     return akkordDao.getAkkordIdsByAnzahlToene(anzahlToene, klangschaerfeAbsteigend, akkordIdAbsteigend, this.entityManager);
   }
 
   @Override
   @Transactional
-  public List<Integer> getAkkordIdsByRange(int minId, int maxId, boolean klangschaerfeAbsteigend, boolean akkordIdAbsteigend) {
+  public List<Integer> getAkkordIdsByRange(int minId, int maxId, boolean klangschaerfeAbsteigend, boolean akkordIdAbsteigend)
+  {
     return akkordDao.getAkkordIdsByRange(minId, maxId, klangschaerfeAbsteigend, akkordIdAbsteigend, this.entityManager);
   }
 
