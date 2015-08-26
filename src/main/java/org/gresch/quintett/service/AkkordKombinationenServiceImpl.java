@@ -8,7 +8,6 @@ import org.gresch.quintett.domain.tonmodell.Akkord;
 import org.gresch.quintett.persistence.AkkordDao;
 import org.hibernate.ScrollableResults;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,7 +57,8 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
   }
 
   @Override
-  @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+  // @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+  @Transactional()
   public int berechneUndPersistiereKombinationsberechnung() throws Exception
   {
   /* TODO
@@ -109,6 +109,7 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
           Integer fetchBlockGroesze = 50;
           Integer minBlockId = basisAkkordIdStart;
           Integer naechsteMinBlockId = -1;
+          @SuppressWarnings("UnusedAssignment")
           Integer maxBlockId = -1;
           Boolean weiterenBlockLaden = true;
 
@@ -117,7 +118,6 @@ public class AkkordKombinationenServiceImpl implements AkkordKombinationenServic
             // TODO Problem here - check condition /2015-08-19 Karsten Gresch
             if ((!(minBlockId.equals(basisAkkordIdStart)) && (naechsteMinBlockId.equals(-1))))
             {
-
               // Nur erster Durchgang/**/
               minBlockId = naechsteMinBlockId;
             }

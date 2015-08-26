@@ -2,7 +2,6 @@ package org.gresch.quintett.service;
 
 import org.gresch.quintett.KombinationsberechnungParameter;
 import org.gresch.quintett.domain.kombination.Kombinationsberechnung;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -93,7 +92,7 @@ public class AkkordkombinationenBerechnungServiceTest {
   }
 
   // TODO for some reason starting w/ 4 sound chords the loop exceeds. /2015-08-25 Karsten Gresch
-  @Ignore
+  // @Ignore
   @Test
   public void testBerechneUndPersistiereViertonIntervalle() throws Exception {
     Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[]{CLI_PARAMETER_MAX_ANZAHL_TOENE, "4",
