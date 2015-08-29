@@ -12,7 +12,7 @@ $vm_gui = false
 $vm_memory = 4096
 $vm_cpus = 2
 $shared_folders = {}
-$forwarded_ports = {}
+# $forwarded_ports = {}
 
 def vm_gui
   $vb_gui.nil? ? $vm_gui : $vb_gui
@@ -40,12 +40,12 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.provider :virtualbox do |v|
+  # config.vm.provider :virtualbox do |v|
     #  On VirtualBox, we don't have guest additions or a functional vboxsf
     #  in CoreOS, so tell Vagrant that so it can be smarter.
-    v.check_guest_additions = false
-    v.functional_vboxsf     = false
-  end
+  #  v.check_guest_additions = false
+  #  v.functional_vboxsf     = false
+  # end
 
   # plugin conflict
   if Vagrant.has_plugin?("vagrant-vbguest") then
@@ -74,15 +74,15 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  if $expose_docker_tcp
-    config.vm.network "forwarded_port", guest: 2375, host: ($expose_docker_tcp + i - 1), auto_correct: true
-  end
+  # if $expose_docker_tcp
+  #  config.vm.network "forwarded_port", guest: 2375, host: ($expose_docker_tcp + i - 1), auto_correct: true
+  # end
 
   config.vm.network "forwarded_port", guest: 3306, host: 14572, auto_correct: false
 
-  $forwarded_ports.each do |guest, host|
-    config.vm.network "forwarded_port", guest: guest, host: host, auto_correct: true
-  end
+ # $forwarded_ports.each do |guest, host|
+ #   config.vm.network "forwarded_port", guest: guest, host: host, auto_correct: true
+ # end
 
   ["vmware_fusion", "vmware_workstation"].each do |vmware|
     config.vm.provider vmware do |v|
