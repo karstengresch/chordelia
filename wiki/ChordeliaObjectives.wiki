@@ -28,6 +28,7 @@ As we're speaking about more than 68 Mio chords this will not only take some tim
 Next planned stage would be a useful UI that would allow you to browse the chords, eventually add them, put interesting chords to a scratchpad and export them for further use in notation software like Sibelius or Capella.
 
 
+
 == Criticism or unwanted answers to the FUDders == 
   * *This approach is artificial*: Sure it is. Being artificial belongs to being art.
   * *One cannot hear real dissonance differences in 9-/10-/11-tone chords*: You could try changing your orchestration. But in general it'll always be difficult to differenciate 11-tone chords. Anyway, at least the more cluster-like chords will differenciate the better, the more instruments will play.
