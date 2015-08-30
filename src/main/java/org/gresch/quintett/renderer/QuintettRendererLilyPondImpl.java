@@ -239,6 +239,7 @@ public class QuintettRendererLilyPondImpl implements QuintettRenderer {
 
   protected File rendereKombinationenInDatei(List<Integer> xAkkordList, String xSwitchString) {
     //    TreeSet<Akkord> _akkordSet;
+    // assert(null != xAkkordList, "Cannot render null list - no chords given!");
     Akkord _akkord;
     int i = 0;
     int counter = AkkordIdRangeZwoelftonklaenge.anzahlToeneZuId(xAkkordList.get(xAkkordList.size() - 1));

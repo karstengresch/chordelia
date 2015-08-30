@@ -59,12 +59,6 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
       throw new RuntimeException("Kann ohne Informationen zur Kombinationsberechnung nichts berechnen. Programm beendet sich.");
     }
     akkordKombinationenService.berechneUndPersistiereKombinationsberechnung();
-    //    throw new RuntimeException("'kombinationenBerechnen()' Noch nicht implementiert");
-    // TODO Ganz hässlich
-    // kombinationsberechnung.akkordKombinationen = new Akkordkombinationen(kombinationsberechnung.maxAnzahlToene,
-    // kombinationsberechnung.aesthetischeGewichtung,
-    // kombinationsberechnung.basisTon);
-    // kombinationsberechnung.akkordKombinationen.berechneKombinationen();
   }
 
   @org.springframework.transaction.annotation.Transactional

@@ -45,6 +45,7 @@ public class Kombinationsberechnung {
   public final static String S = System.getProperty("file.separator");
   @Transient
   public final static String TEMPDIR_PATH = System.getProperty("java.io.tmpdir");
+  // TODO change temporary directory pfad to local application path default + parameterizeable
   @Transient
   public final static String TEMPORAERES_VERZEICHNIS_PFAD = TEMPDIR_PATH + (TEMPDIR_PATH.endsWith(S) ? "" : S) + "quintett";
   @Transient
