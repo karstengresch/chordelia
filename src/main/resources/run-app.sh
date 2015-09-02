@@ -1,1 +1,0 @@
-java -client -Xmx768m -Xms256m -XX:MaxPermSize=512m -XX:-UseGCOverheadLimit -XX:+UseParallelGC -jar Quintett-0.0.4-jar-with-dependencies.jar -t 11 -db j &

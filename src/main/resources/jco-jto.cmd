@@ -1,1 +1,0 @@
-jconsole -pluginpath ./JTop.jar

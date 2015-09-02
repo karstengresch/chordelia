@@ -1,3 +1,0 @@
-
-    \new Staff \with { \remove "Time_signature_engraver" }
-       { \clef bass \fatText

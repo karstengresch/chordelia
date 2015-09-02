@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Created-By: Apache Maven
-Built-By: Karsten Gresch
-Main-Class: org.gresch.quintett.KombinationsBerechnung
