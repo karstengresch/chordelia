@@ -12,3 +12,4 @@ github_username:  karstengresch
 # Build settings
 markdown: kramdown
 permalink: /:title
+include: ['_pages']
