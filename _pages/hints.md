@@ -5,8 +5,8 @@ permalink: /hints/
 ---
 
 
-# Tips and tricks (TO BE DONE).
+## Tips and tricks (TO BE DONE).
 
-= Tips and tricks =
+### Tips and tricks
 
 TO BE DONE
