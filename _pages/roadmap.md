@@ -4,11 +4,11 @@ title: Roadmap
 permalink: /roadmap/
 ---
 
-# Future plans, support needed!
+<!-- Future plans, support needed! -->
 
-= Road Map for chordelia =
+## Road Map for chordelia
 
-== Server side ==
+### Server side
   * Refactoring: German stuff out, English in.
   * Extract properties of _spring-main.xml_ to _`*`.properties_ files.
   * Enhance test cases.
@@ -21,5 +21,8 @@ permalink: /roadmap/
   * Implementation that is not dependend on index based locking.
   * Eventually move to Scala.
 
-== Client side ==
-  * Eclipse GUI: Eclipse is _the_ platform for score creation and working with musical symbols.
+### Client side
+  * Custom UI: Create an UI able to
+    * start a chord calculation
+    * play chords
+    * select chords and group them for creating material for a composition
