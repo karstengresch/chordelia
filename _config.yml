@@ -8,8 +8,11 @@ baseurl: "/chordelia" # the subpath of your site, e.g. /blog/
 url: "http://karstengresch.github.io" # the base hostname & protocol for your site
 twitter_username: gresch
 github_username:  karstengresch
-
+markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 # Build settings
 markdown: kramdown
+kramdown:
+  input: GFM
+
 permalink: /:title
 include: ['_pages']

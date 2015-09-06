@@ -6,6 +6,5 @@ permalink: /hints/
 
 
 ## Tips and tricks
-
-
+  
 TO BE DONE
