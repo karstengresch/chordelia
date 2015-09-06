@@ -13,9 +13,9 @@ permalink: /objectives/
   
   
   
-    * Provide musicians (composers) with a reservoir of chords for writing any sort of music.
-    * chordelia does neither force nor prohibit writing functional or non functional music.
-    * chordelia's based on notes/tones and not based on noises/sounds.
+    - Provide musicians (composers) with a reservoir of chords for writing any sort of music.
+    - chordelia does neither force nor prohibit writing functional or non functional music.
+    - chordelia's based on notes/tones and not based on noises/sounds.
   
 ### How it works
   
@@ -29,7 +29,7 @@ In the following picture you see five chords, starting with a great seventh as t
   
 Finally, in the third score the most dissonant 4-tone chord the 3-tone chord #22 from the second score with another great seventh added to the top.
   
-![Spicy Intervalls](/img/spicy_intervalls.png)
+![Spicy Intervalls](/chordelia/img/spicy_intervalls.png)
   
 Chordelia calculates all the permutations, stores them in a database for you and - at the moment - creates the Lilypond files for you so you can print them out or load and use them with tools like Frescobaldi.
   
