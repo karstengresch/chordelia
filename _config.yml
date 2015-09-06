@@ -4,8 +4,8 @@ email: chordelia-201509@closureone.com
 description: > # this means to ignore newlines until "baseurl:"
   chordelia is a tool helping composers of classical, sound based, music
   creating a raw chord material.
-baseurl: "" # the subpath of your site, e.g. /blog/
-url: "http://karstengresch.github.io/chordelia/" # the base hostname & protocol for your site
+baseurl: "/chordelia/" # the subpath of your site, e.g. /blog/
+url: "http://karstengresch.github.io" # the base hostname & protocol for your site
 twitter_username: gresch
 github_username:  karstengresch
 
