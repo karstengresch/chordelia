@@ -22,13 +22,13 @@ This page gives you information on how to setup chordelia so you can let it calc
 
 ### DB Setup (for MySQL)
   * Either create a database and user according to the settings in _spring-main.xml_ or adjust _spring-main.xml_.
-  * With the included Vagrantfile you can easily setup the DB w/ one command (assumed, Vagrant is installed: ```vagrant up```)
+  * With the included *Vagrantfile* you can easily setup the DB w/ one command (assumed, Vagrant is installed): ```vagrant up```). DB port is 14572 (as in the Spring config file).
 
-###Create a build with Maven
-  * Run mvn ```assembly:assembly```.
+### Create a build with Maven
+  * Run ```mvn assembly:assembly```.
   * Make sure the created jar is fully functional.
 
-###Move the build to another directory
+### Move the build to another directory
   * TO DO: Describe _run.sh_.
 
 ### Run chordelia
