@@ -10,12 +10,15 @@ permalink: /objectives/
 
 ### What it is meant for
 
-  * Provide musicians (composers) with a reservoir of chords for writing any sort of music.
-  * chordelia does neither force nor prohibit writing functional or non functional music.
-  * chordelia's based on notes/tones and not based on noises/sounds.
+
+    * Provide musicians (composers) with a reservoir of chords for writing any sort of music.
+    * chordelia does neither force nor prohibit writing functional or non functional music.
+    * chordelia's based on notes/tones and not based on noises/sounds.
 
 
 ### How it works
+
+
 First you need to put the eleven intervals within an octave space into an order. The order could be based on your individual feeling of the dissonance/consonance grade of each interval when be played as a chord. E.g. you might feel the small second the most dissonant interval within the octave space, maybe followed by a tritonus, then followed by the great seventh, then followed by the great second etc. etc.
 
 
@@ -46,6 +49,7 @@ Next planned stage would be a useful UI that would allow you to browse the chord
 
 ### Criticism or unwanted answers to the FUDders
 
-  * *This approach is artificial*: Sure it is. Being artificial belongs to being art.
-  * *One cannot hear real dissonance differences in 9-/10-/11-tone chords*: You could try changing your orchestration. But in general it'll always be difficult to differenciate 11-tone chords. Anyway, at least the more cluster-like chords will differenciate the better, the more instruments will play.
-  * *One cannot hear that chord #xxx should be more dissonant/spicy than chord #yyy*: Showing and playing my concept to different people, all were quite convinced when listening to strong "dissonance contrasts" (e.g. most dissonant, midst dissonant lowest dissonant chord of 5-tone chords). As in life, there are grayscales where it gets difficult to differenciate. Chordelia's intention is not to force you writing music that doesn't convince yourself.
+
+    * *This approach is artificial*: Sure it is. Being artificial belongs to being art.
+    * *One cannot hear real dissonance differences in 9-/10-/11-tone chords*: You could try changing your orchestration. But in general it'll always be difficult to differenciate 11-tone chords. Anyway, at least the more cluster-like chords will differenciate the better, the more instruments will play.
+    * *One cannot hear that chord #xxx should be more dissonant/spicy than chord #yyy*: Showing and playing my concept to different people, all were quite convinced when listening to strong "dissonance contrasts" (e.g. most dissonant, midst dissonant lowest dissonant chord of 5-tone chords). As in life, there are grayscales where it gets difficult to differenciate. Chordelia's intention is not to force you writing music that doesn't convince yourself.
