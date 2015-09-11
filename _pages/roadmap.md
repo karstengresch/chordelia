@@ -26,3 +26,4 @@ permalink: /roadmap/
     * start a chord calculation
     * play chords
     * select chords and group them for creating material for a composition
+    * export material
