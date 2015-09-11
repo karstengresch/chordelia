@@ -10,14 +10,15 @@ permalink: /setup/
 This page gives you information on how to setup chordelia so you can let it calculate chord permutations based on your individual taste.
 
 ###  Prerequisites
-  * [http://maven.apache.org Apache Maven (2.x)] needs to be installed. Check the instructions [http://maven.apache.org/download.html#Installation here].
-  * You should use a JDK 1.6+ (latest stable version normally preferred).
-  * MySQL or other index-based locking database (not H2/HSQL-DB, not Derby).
+  * [http://maven.apache.org Apache Maven (3.x)] needs to be installed. Check the instructions [http://maven.apache.org/download.html#Installation here].
+  * You should use a JDK 1.8+ (latest stable version normally preferred).
+  * MySQL or other index-based locking database (not H2/HSQL-DB, not Derby). To make it easy for you, there's a Vagrantfile, see below.
   * Make sure you have enough free disk space (min. ~50 GByte).
+  * For Lilypond output, Lilypond needs to be installed. On OS X, I prefer installing it via ports, ```sudo port install lilypond``` 
   * Get a computer that is either superfast or can run for days without being interrupted.
 
 ### git checkout
-  * Get the repository from .
+  * Get the repository from GitHub (either clone or unzip).
   * Run ```mvn clean compile -Dmaven.test.skip=true```
 
 ### DB Setup (for MySQL)
