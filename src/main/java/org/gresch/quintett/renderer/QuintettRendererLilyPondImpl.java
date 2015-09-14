@@ -345,7 +345,7 @@ public class QuintettRendererLilyPondImpl implements QuintettRenderer {
           // _bufferedWriterOberesSystem.flush();
           _bufferedWriterUnteresSystem.append(getUnterenErsetzenString(_akkord));
           // _bufferedWriterUnteresSystem.append("\"");
-          _bufferedWriterUnteresSystem.append("\\markup \\tiny { \\center-align { \"");
+          _bufferedWriterUnteresSystem.append("\\markup \\tiny { \\center-column { \"");
           // !!! 0-terminiert, hochsetzen
           _bufferedWriterUnteresSystem.append(String.valueOf(_klangschaerfe));
 

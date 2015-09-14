@@ -1,6 +1,6 @@
 #(set-default-paper-size "a4" 'landscape)
 #(set-global-staff-size 11)
-\version "2.8.0"
+\version "2.18.0"
 \layout
   {
     indent = 0.35\cm
