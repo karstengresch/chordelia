@@ -114,7 +114,7 @@ public class RendererTest {
         "");
   }
 
-  // @Test
+  @Test
   public void testBerechneUndRendereViertonIntervalle() throws Exception {
     Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[]{CLI_PARAMETER_MAX_ANZAHL_TOENE, "4",
       CLI_PARAMETER_DB_ERSTELLEN, "j",
