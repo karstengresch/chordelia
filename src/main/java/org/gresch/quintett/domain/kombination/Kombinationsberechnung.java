@@ -47,7 +47,7 @@ public class Kombinationsberechnung {
   public final static String USER_DIR = System.getProperty("user.dir");
   // TODO change temporary directory pfad to local application path default + parameterizeable
   @Transient
-  public final static String AUSGABEPFAD = USER_DIR + (USER_DIR.endsWith(S) ? "" : S) + "render";
+  public final static String AUSGABEPFAD = USER_DIR + (USER_DIR.endsWith(S) ? "" : S) + "target" + S + "render";
   @Transient
   public final String ANWENDUNGSPFAD = System.getProperty("user.dir");
   @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
