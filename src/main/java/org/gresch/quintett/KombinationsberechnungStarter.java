@@ -60,7 +60,7 @@ public class KombinationsberechnungStarter {
 
     try {
       kombinationsberechnungService.kombinationenBerechnen();
-      //      kombinationsberechnungService.kombinationenAusgeben();
+      kombinationsberechnungService.kombinationenAusgeben();
     } catch (Exception e) {
       log.error("Kombinationsberechnung-Exception: ", e);
     }

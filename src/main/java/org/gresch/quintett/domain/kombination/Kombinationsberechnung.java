@@ -44,10 +44,10 @@ public class Kombinationsberechnung {
   @Transient
   public final static String S = System.getProperty("file.separator");
   @Transient
-  public final static String TEMPDIR_PATH = System.getProperty("java.io.tmpdir");
+  public final static String USER_DIR = System.getProperty("user.dir");
   // TODO change temporary directory pfad to local application path default + parameterizeable
   @Transient
-  public final static String TEMPORAERES_VERZEICHNIS_PFAD = TEMPDIR_PATH + (TEMPDIR_PATH.endsWith(S) ? "" : S) + "quintett";
+  public final static String AUSGABEPFAD = USER_DIR + (USER_DIR.endsWith(S) ? "" : S) + "render";
   @Transient
   public final String ANWENDUNGSPFAD = System.getProperty("user.dir");
   @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})

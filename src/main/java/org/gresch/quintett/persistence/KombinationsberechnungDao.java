@@ -12,10 +12,6 @@ import java.io.Serializable;
 
 public interface KombinationsberechnungDao<T, ID extends Serializable> extends CrudRepository<Kombinationsberechnung, Integer> {
 
-
- // @Query("select p from Product p where p.attributes[?1] = ?2")
- //  List<Product> findByAttributeAndValue(String attribute, String value);
-
   @Query(value = "select max(id) from akkord where basis_akkord_id = :basisakkord", nativeQuery = true)
   Integer getMaxAkkordIdZuBasisAkkordId(@Param("basisakkord") Integer xBasisAkkordId);
 
@@ -56,7 +52,8 @@ public interface KombinationsberechnungDao<T, ID extends Serializable> extends C
    *
    * @return
    */
-  // @Query(value = "select k from Kombinationsberechnung k")
+  @Query(value = "select k from Kombinationsberechnung k", nativeQuery = true)
+  Kombinationsberechnung getKombinationsberechnung();
 //  Kombinationsberechnung getKombinationsberechnung() {
 //    Kombinationsberechnung kombinationsberechnung = (Kombinationsberechnung) sessionFactory.getCurrentSession().get(Kombinationsberechnung.class, 1);
 //    Kombinationsberechnung kombinationsberechnung = find(1);

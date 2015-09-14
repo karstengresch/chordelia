@@ -2,7 +2,6 @@ package org.gresch.quintett;
 
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gresch.quintett.domain.kombination.AesthetischeGewichtung;
@@ -16,6 +15,7 @@ import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class KombinationsberechnungParameter {
@@ -133,7 +133,7 @@ public class KombinationsberechnungParameter {
   }
 
   public static Kombinationsberechnung parameterAuswerten(String[] args) {
-    log.info("KombinationsberechnungParameter() - Parameter: " + StringUtils.stripAll(args));
+    log.info("KombinationsberechnungParameter() - Parameter: " + (Arrays.deepToString(args)));
     return new KombinationsberechnungParameter().processArguments(args);
   }
 

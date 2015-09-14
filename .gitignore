@@ -81,7 +81,7 @@ hs_err_pid*
 *.mid
 *.log
 *~
-
+render/
 target/
 
 .vagrant/

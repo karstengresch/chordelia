@@ -27,6 +27,13 @@ import javax.persistence.PersistenceContext;
 import static org.gresch.quintett.KombinationsberechnungParameter.*;
 import static org.junit.Assert.*;
 
+/**
+ * Purpose of this test: Assure rendering (to midi/LilyPond/PDF) works correctly.
+ *
+ * TODO: At the moment the test only assures the correct number of
+ */
+
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring-main-test.xml"})
 @TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
@@ -131,7 +138,7 @@ public class RendererTest {
         "");
   }
 
-  // @Test
+  @Test
   public void testBerechneUndRendereFuenftonIntervalle() throws Exception {
     Kombinationsberechnung kombinationsberechnung = KombinationsberechnungParameter.parameterAuswerten(new String[]{CLI_PARAMETER_MAX_ANZAHL_TOENE, "5",
       CLI_PARAMETER_DB_ERSTELLEN, "j",

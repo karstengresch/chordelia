@@ -21,16 +21,16 @@ public class RenderServiceImpl implements RenderService {
   //private static final File _TEMPLATE_KOPF = new File(kombinationsberechnungService.getKombinationsBerechnung().ANWENDUNGSPFAD + kombinationsberechnungService.getKombinationsBerechnung().S + "resources" + kombinationsberechnungService.getKombinationsBerechnung().S + "kopf.lyt");
   //private static final File _TEMPLATE_OBERES_SYSTEM = new File(kombinationsberechnungService.getKombinationsBerechnung().ANWENDUNGSPFAD + kombinationsberechnungService.getKombinationsBerechnung().S + "resources" + kombinationsberechnungService.getKombinationsBerechnung().S + "oberes_system.lyt");
   //private static final File _TEMPLATE_UNTERES_SYSTEM = new File(kombinationsberechnungService.getKombinationsBerechnung().ANWENDUNGSPFAD + kombinationsberechnungService.getKombinationsBerechnung().S + "resources" + kombinationsberechnungService.getKombinationsBerechnung().S + "unteres_system.lyt");
-  //private static final String _OBERES_SYSTEM_PFAD = kombinationsberechnungService.getKombinationsBerechnung().TEMPORAERES_VERZEICHNIS_PFAD + kombinationsberechnungService.getKombinationsBerechnung().S + "oberes_system.temp";
-  //private static final String _UNTERES_SYSTEM_PFAD = kombinationsberechnungService.getKombinationsBerechnung().TEMPORAERES_VERZEICHNIS_PFAD + kombinationsberechnungService.getKombinationsBerechnung().S + "unteres_system.temp";
-  //private static final String _ERGEBNIS_PFAD = kombinationsberechnungService.getKombinationsBerechnung().TEMPORAERES_VERZEICHNIS_PFAD + kombinationsberechnungService.getKombinationsBerechnung().S + "Akkordkombinationen_";
+  //private static final String _OBERES_SYSTEM_PFAD = kombinationsberechnungService.getKombinationsBerechnung().AUSGABEPFAD + kombinationsberechnungService.getKombinationsBerechnung().S + "oberes_system.temp";
+  //private static final String _UNTERES_SYSTEM_PFAD = kombinationsberechnungService.getKombinationsBerechnung().AUSGABEPFAD + kombinationsberechnungService.getKombinationsBerechnung().S + "unteres_system.temp";
+  //private static final String _ERGEBNIS_PFAD = kombinationsberechnungService.getKombinationsBerechnung().AUSGABEPFAD + kombinationsberechnungService.getKombinationsBerechnung().S + "Akkordkombinationen_";
 
   public String getErgebnisSystemPfad() {
-    return Kombinationsberechnung.TEMPORAERES_VERZEICHNIS_PFAD + Kombinationsberechnung.S + "Akkordkombinationen_";
+    return Kombinationsberechnung.AUSGABEPFAD + Kombinationsberechnung.S + "Akkordkombinationen_";
   }
 
   public String getOberesSystemPfad() {
-    return Kombinationsberechnung.TEMPORAERES_VERZEICHNIS_PFAD + Kombinationsberechnung.S + "oberes_system.temp";
+    return Kombinationsberechnung.AUSGABEPFAD + Kombinationsberechnung.S + "oberes_system.temp";
   }
 
   public File getTemplateKopf() {
@@ -64,7 +64,7 @@ public class RenderServiceImpl implements RenderService {
   }
 
   public String getUnteresSystemPfad() {
-    return Kombinationsberechnung.TEMPORAERES_VERZEICHNIS_PFAD + Kombinationsberechnung.S + "unteres_system.temp";
+    return Kombinationsberechnung.AUSGABEPFAD + Kombinationsberechnung.S + "unteres_system.temp";
 
   }
 

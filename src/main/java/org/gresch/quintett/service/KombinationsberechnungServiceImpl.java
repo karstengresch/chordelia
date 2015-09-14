@@ -26,6 +26,7 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
   private KombinationsberechnungDao kombinationsberechnungDao;
   @Resource(name = "akkordKombinationenService")
   private AkkordKombinationenService akkordKombinationenService;
+
   //@Resource(name = "sessionFactory")
   // private SessionFactory sessionFactory;
 
@@ -72,29 +73,30 @@ public class KombinationsberechnungServiceImpl implements Kombinationsberechnung
     // FIXME Services verwenden!
     // TODO Ausgabeformat auswerten
     // Profiling
-    //    if (kombinationsberechnung.renderer.equals(QuintettRenderer.KONSOLEN_RENDERER))
-    //    {
-    //      log.info("Kombinationsberechnung.kombinationenAusgeben(): Starte...");
-    //      // XXX Renderer Akkordkombinationen.loggeKombinationen();
-    //    }
-    //    else if (kombinationsberechnung.renderer.equals(QuintettRenderer.LILYPOND_RENDERER))
-    //    {
-    //      new QuintettRendererLilyPondImpl().rendereKombinationen(kombinationsberechnung.akkordkombinationen);
-    //    }
-    //    else if (kombinationsberechnung.renderer.equals(QuintettRenderer.MIDI_RENDERER))
-    //    {
-    //      new QuintettRendererMidiImpl().rendereKombinationen(kombinationsberechnung.akkordkombinationen);
-    //    }
-    //    else if (kombinationsberechnung.renderer.equals(QuintettRenderer.LILYPOND_AND_MIDI_RENDERER))
-    //    {
-    //      new QuintettRendererLilypondAndMidiImpl().rendereKombinationen(kombinationsberechnung.akkordkombinationen);
-    //    }
+//    kombinationsberechnungDao.get
+//        if (kombinationsberechnung.renderer.equals(QuintettRenderer.KONSOLEN_RENDERER))
+//        {
+//          log.info("Kombinationsberechnung.kombinationenAusgeben(): Starte...");
+//          // XXX Renderer Akkordkombinationen.loggeKombinationen();
+//        }
+//        else if (kombinationsberechnung.renderer.equals(QuintettRenderer.LILYPOND_RENDERER))
+//        {
+//          new QuintettRendererLilyPondImpl().rendereKombinationen(kombinationsberechnung.akkordkombinationen);
+//        }
+//        else if (kombinationsberechnung.renderer.equals(QuintettRenderer.MIDI_RENDERER))
+//        {
+//          new QuintettRendererMidiImpl().rendereKombinationen(kombinationsberechnung.akkordkombinationen);
+//        }
+//        else if (kombinationsberechnung.renderer.equals(QuintettRenderer.LILYPOND_AND_MIDI_RENDERER))
+//        {
+//          new QuintettRendererLilypondAndMidiImpl().rendereKombinationen(kombinationsberechnung.akkordkombinationen);
+//        }
 
   }
 
   public void verzeichnisseVorbereiten() {
     try {
-      FileUtils.forceMkdir(new File(Kombinationsberechnung.TEMPORAERES_VERZEICHNIS_PFAD));
+      FileUtils.forceMkdir(new File(Kombinationsberechnung.AUSGABEPFAD));
     } catch (IOException e) {
       log.error("Kombinationsberechnung.verzeichnisseVorbereiten(): Konnte trotz Commons Verzeichnis nicht anlegen!\n", e);
     }

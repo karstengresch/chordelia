@@ -27,9 +27,9 @@ public class QuintettRendererLilyPondImpl implements QuintettRenderer {
   // Kombinationsberechnung.S + "oberes_system.lyt");
   // private static final File _TEMPLATE_UNTERES_SYSTEM = new File(Kombinationsberechnung.ANWENDUNGSPFAD + Kombinationsberechnung.S + "resources" +
   // Kombinationsberechnung.S + "unteres_system.lyt");
-  // private static final String _OBERES_SYSTEM_PFAD = Kombinationsberechnung.TEMPORAERES_VERZEICHNIS_PFAD + Kombinationsberechnung.S + "oberes_system.temp";
-  // private static final String _UNTERES_SYSTEM_PFAD = Kombinationsberechnung.TEMPORAERES_VERZEICHNIS_PFAD + Kombinationsberechnung.S + "unteres_system.temp";
-  // private static final String _ERGEBNIS_PFAD = Kombinationsberechnung.TEMPORAERES_VERZEICHNIS_PFAD + Kombinationsberechnung.S + "Akkordkombinationen_";
+  // private static final String _OBERES_SYSTEM_PFAD = Kombinationsberechnung.AUSGABEPFAD + Kombinationsberechnung.S + "oberes_system.temp";
+  // private static final String _UNTERES_SYSTEM_PFAD = Kombinationsberechnung.AUSGABEPFAD + Kombinationsberechnung.S + "unteres_system.temp";
+  // private static final String _ERGEBNIS_PFAD = Kombinationsberechnung.AUSGABEPFAD + Kombinationsberechnung.S + "Akkordkombinationen_";
   private static final String _HIDE_NOTES = " \\hideNotes ";
   private static final String _UNHIDE_NOTES = " \\unHideNotes ";
   private static final String _LEERSTRING = "";
