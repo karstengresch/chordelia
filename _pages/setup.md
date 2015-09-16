@@ -11,8 +11,11 @@ This page gives you information on how to setup chordelia so you can let it calc
 
 ###  Prerequisites
   * [http://maven.apache.org Apache Maven (3.x)] needs to be installed. Check the instructions [http://maven.apache.org/download.html#Installation here].
-  * You should use a JDK 1.8+ (latest stable version normally preferred).
-  * MySQL or other index-based locking database (not H2/HSQL-DB, not Derby). To make it easy for you, there's a Vagrantfile, see below.
+<<<<<<< HEAD
+  * You should use a JDK 1.8x (latest stable version normally preferred).
+  * Vagrant OR
+  * MySQL or other index-based locking database (not H2/HSQL-DB, not Derby).
+  * Lilypond (on OS X, Mac Ports comes in handy), in case you want getting Lilypond and/or PDF.
   * Make sure you have enough free disk space (min. ~50 GByte).
   * For Lilypond output, Lilypond needs to be installed. On OS X, I prefer installing it via ports, ```sudo port install lilypond``` 
   * Get a computer that is either superfast or can run for days without being interrupted.
