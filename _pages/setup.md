@@ -12,7 +12,7 @@ This page gives you information on how to setup chordelia so you can let it calc
 ###  Prerequisites
   * [http://maven.apache.org Apache Maven (3.x)] needs to be installed. Check the instructions [http://maven.apache.org/download.html#Installation here].
 <<<<<<< HEAD
-  * You should use a JDK 1.8x (latest stable version normally preferred).
+  * You should use a JDK 1.8x (latest stable version normally preferred, tested for Oracle JDK only, sorry.).
   * Vagrant OR
   * MySQL or other index-based locking database (not H2/HSQL-DB, not Derby).
   * Lilypond (on OS X, Mac Ports comes in handy), in case you want getting Lilypond and/or PDF.
@@ -33,7 +33,7 @@ This page gives you information on how to setup chordelia so you can let it calc
   * Make sure the created jar is fully functional.
 
 ### Move the build to another directory
-  * TO DO: Describe _run.sh_.
+  * TO DO: Describe ```_run.sh_```.
 
 ### Run chordelia
   * TO DO: Describe command line parameters. (In the meantime read the command output.)
