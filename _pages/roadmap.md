@@ -20,6 +20,7 @@ permalink: /roadmap/
   * Support integrity checks.
   * Check performance enhancements (especially batch runs, transactional stuff, parallel actions).
   * Implementation that is not dependend on index based locking.
+. * Implementation w/ document store.
 
 ### Client side
   * Custom UI: Create an UI able to
