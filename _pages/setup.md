@@ -10,14 +10,18 @@ permalink: /setup/
 This page gives you information on how to setup chordelia so you can let it calculate chord permutations based on your individual taste.
 
 ###  Prerequisites
-  * [http://maven.apache.org Apache Maven (2.x)] needs to be installed. Check the instructions [http://maven.apache.org/download.html#Installation here].
-  * You should use a JDK 1.6+ (latest stable version normally preferred).
+  * [http://maven.apache.org Apache Maven (3.x)] needs to be installed. Check the instructions [http://maven.apache.org/download.html#Installation here].
+<<<<<<< HEAD
+  * You should use a JDK 1.8x (latest stable version normally preferred, tested for Oracle JDK only, sorry.).
+  * Vagrant OR
   * MySQL or other index-based locking database (not H2/HSQL-DB, not Derby).
+  * Lilypond (on OS X, Mac Ports comes in handy), in case you want getting Lilypond and/or PDF.
   * Make sure you have enough free disk space (min. ~50 GByte).
+  * For Lilypond output, Lilypond needs to be installed. On OS X, I prefer installing it via ports, ```sudo port install lilypond``` 
   * Get a computer that is either superfast or can run for days without being interrupted.
 
 ### git checkout
-  * Get the repository from .
+  * Get the repository from GitHub (either clone or unzip).
   * Run ```mvn clean compile -Dmaven.test.skip=true```
 
 ### DB Setup (for MySQL)
@@ -29,7 +33,7 @@ This page gives you information on how to setup chordelia so you can let it calc
   * Make sure the created jar is fully functional.
 
 ### Move the build to another directory
-  * TO DO: Describe _run.sh_.
+  * TO DO: Describe ```_run.sh_```.
 
 ### Run chordelia
   * TO DO: Describe command line parameters. (In the meantime read the command output.)
