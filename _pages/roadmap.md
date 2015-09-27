@@ -27,3 +27,5 @@ permalink: /roadmap/
     * play chords
     * select chords and group them for creating material for a composition
     * export material
+      * MusicXML
+      * other?
