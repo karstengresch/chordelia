@@ -5,6 +5,6 @@ permalink: /hints/
 ---
 
 
-## Tips and tricks
+## Tips and tricks (e.g. JVM tweaks)
   
 TO BE DONE
