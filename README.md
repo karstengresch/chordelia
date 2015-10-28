@@ -5,4 +5,4 @@ Chordelia is a tool for generating chord based material for composers not wantin
 
 As of now, 2015, the codebase is in state of transition a) from Google Code b) from old Spring-Hibernate to new Spring-Hibernate-JPA.
 
-Check the wiki when it's ready (again).
+See http://karstengresch.github.io/chordelia/ (not nicely formatted yet).
