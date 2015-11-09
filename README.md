@@ -1,3 +1,8 @@
+<a href="https://scan.coverity.com/projects/karstengresch-chordelia">
+  <img alt="Coverity Scan Build Status"
+       src="https://scan.coverity.com/projects/6711/badge.svg"/>
+</a>
+
 chordelia
 =========
 
