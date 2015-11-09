@@ -1,6 +1,6 @@
 <a href="https://scan.coverity.com/projects/karstengresch-chordelia">
   <img alt="Coverity Scan Build Status"
-       src="https://scan.coverity.com/projects/6711/badge.svg"/>
+       src="https://img.shields.io/coverity/scan/6711.svg?style=flat"/>
 </a>
 
 chordelia
