@@ -62,6 +62,10 @@ local.properties
 ### Java template
 *.class
 
+# Coverity
+.java-version
+cov-int/
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
