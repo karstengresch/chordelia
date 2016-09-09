@@ -24,7 +24,7 @@ In general, the setup process looks like this (on Mac OS X, IntelliJ IDEA):
 
 ## Docker
 For getting the official MySQL docker container (https://hub.docker.com/_/mysql/)
-    d$>docker run -p 0.0.0.0:3306:14572 -e MYSQL_DATABASE=quintett -e MYSQL_USER=quintett -e MYSQL_ROOT_PASSWORD=nonono -d mysql:latest
+    d$>docker run -p 0.0.0.0:14572:3306 -e MYSQL_DATABASE=quintett -e MYSQL_USER=quintett -e MYSQL_ROOT_PASSWORD=nonono -d mysql:latest
 
 
 
