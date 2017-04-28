@@ -10,7 +10,7 @@ permalink: /roadmap/
 
 ### Server side
   * Refactoring: German stuff out, English in.
-  * Refactoring: Use Lambdas/1.8-Java features instead of plain old 1.5+. Move to Scala/Ruby/Clojure later on.
+  * Refactoring: Use Lambdas/1.8-Java features instead of plain old 1.5+. Move to Scala/Ruby/Swift/Go later on.
   * Extract properties of _spring-main.xml_ to _*.properties_ files.
   * Enhance test cases.
   * Introduce code coverage.
